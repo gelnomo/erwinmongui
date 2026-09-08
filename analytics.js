@@ -10,7 +10,7 @@
 
   Events sent (see ANALYTICS.md for the full parameter reference):
     Navigation and clicks
-      nav_click, cta_click, email_click, copy_email, outbound_click,
+      nav_click, cta_click, email_click, outbound_click,
       certificate_click, file_download, anchor_click, link_click,
       skip_link_click, menu_toggle, skills_rail_nav, button_click,
       skill_chip_click, skill_tile_click, metric_click, role_click,
@@ -180,13 +180,6 @@
   }
 
   function trackButton(btn, section) {
-    if (btn.id === 'copy-email') {
-      return track('copy_email', {
-        section: section,
-        email_address: btn.getAttribute('data-email') || '',
-        method: (navigator.clipboard && navigator.clipboard.writeText) ? 'clipboard' : 'mailto_fallback'
-      });
-    }
     if (btn.id === 'menu-btn') {
       return track('menu_toggle', { action: btn.getAttribute('aria-expanded') === 'true' ? 'close' : 'open' });
     }

@@ -21,7 +21,6 @@ Every event carries `section` (the id of the section the interaction happened in
 | `nav_click` | Header link or brand logo | `nav_item`, `target_section`, `link_text` |
 | `cta_click` | Any `.btn` or the nav Contact pill | `cta_style` (primary/ghost/outline/nav), `target_section`, `outbound`, `link_domain` |
 | `email_click` | A `mailto:` link | `email_address`, `is_cta` |
-| `copy_email` | "Copy email address" button | `method` (clipboard / mailto_fallback) |
 | `certificate_click` | A credential link in Certifications | `certificate_name`, `provider`, `issued`, `certificate_group`, `link_domain` |
 | `outbound_click` | Any other link to another domain | `link_text`, `link_url`, `link_domain` |
 | `file_download` | A link with a `download` attribute (CV, when re-enabled) | `file_name`, `file_extension` |
@@ -81,7 +80,6 @@ GA4 allows 50 event-scoped dimensions and 50 metrics per property on the free ti
 Mark as **Key events** (Admin > Events) so they appear as conversions:
 
 - `email_click`
-- `copy_email`
 - `cta_click` (or build an audience on `link_domain = linkedin.com`)
 - `certificate_click`
 - `file_download`
@@ -90,7 +88,7 @@ Enhanced measurement (Admin > Data streams > stream > Enhanced measurement): lea
 
 ## Suggested reports (Explore)
 
-- **Funnel**: `page_view` → `section_view` (experience) → `section_view` (contact) → `email_click` or `copy_email`.
+- **Funnel**: `page_view` → `section_view` (experience) → `section_view` (contact) → `email_click`.
 - **Section engagement**: `section_exit` by `section_name`, summed `time_in_section_sec` and average per session.
 - **Read depth**: `scroll_depth` counts by `percent_scrolled`, split by device category.
 - **What people copy or highlight**: `content_copy` and `text_select` by `text_preview` and `section`.

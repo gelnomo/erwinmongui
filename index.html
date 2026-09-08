@@ -445,9 +445,6 @@ button{font:inherit}
 .stage-light .rail-btn{background:rgba(0,0,0,.08);color:var(--ink)}
 .stage-light .rail-btn:hover{background:rgba(0,0,0,.16)}
 .stage-light .rail-btn:disabled{background:rgba(0,0,0,.08)}
-.stage-light .copy{color:var(--steel);text-decoration-color:rgba(0,0,0,.25)}
-.stage-light .copy:hover{color:var(--ink)}
-.stage-light .copy.done{color:var(--blue)}
 
 /* Dark-stage variants */
 .stage-dark .edu{border-top-color:var(--line-dark)}
@@ -477,13 +474,6 @@ button{font:inherit}
 
 /* Contact */
 .contact-actions{display:flex;gap:14px;justify-content:center;flex-wrap:wrap;margin-top:40px}
-.copy{
-  margin-top:22px;background:transparent;border:0;color:var(--silver);cursor:pointer;
-  font-size:14px;font-weight:600;text-decoration:underline;text-underline-offset:4px;text-decoration-color:rgba(255,255,255,.3);
-  padding:6px 8px;border-radius:6px;transition:color .2s;
-}
-.copy:hover{color:var(--white)}
-.copy.done{color:var(--blue-dark);text-decoration-color:transparent}
 
 /* Footer */
 .foot{background:var(--black);color:var(--silver);border-top:1px solid rgba(255,255,255,.08);padding:26px var(--gutter) 40px;font-size:13px}
@@ -974,7 +964,6 @@ button{font:inherit}
       <a class="btn btn-primary" href="mailto:erwinmongui@gmail.com">Email</a>
       <a class="btn btn-ghost" href="https://www.linkedin.com/in/erwin-mongui/" target="_blank" rel="noopener">LinkedIn profile</a>
     </div>
-    <button class="copy" id="copy-email" data-email="erwinmongui@gmail.com">Copy email address</button>
   </div>
 </section>
 
@@ -1148,21 +1137,6 @@ button{font:inherit}
     sections.forEach(function(s){ sio.observe(s); });
   }
 
-  /* Copy email */
-  var copyBtn = document.getElementById('copy-email');
-  copyBtn.addEventListener('click', function(){
-    var email = copyBtn.getAttribute('data-email');
-    var done = function(){
-      copyBtn.textContent = 'Copied';
-      copyBtn.classList.add('done');
-      setTimeout(function(){ copyBtn.textContent = 'Copy email address'; copyBtn.classList.remove('done'); }, 1800);
-    };
-    if (navigator.clipboard && navigator.clipboard.writeText) {
-      navigator.clipboard.writeText(email).then(done, function(){ window.location.href = 'mailto:' + email; });
-    } else {
-      window.location.href = 'mailto:' + email;
-    }
-  });
 })();
 </script>
 </body>
