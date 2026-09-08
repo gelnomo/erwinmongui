@@ -1,0 +1,18 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9"
+        xmlns:image="http://www.google.com/schemas/sitemap-image/1.1">
+  <url>
+    <loc>https://erwinmongui.com/</loc>
+    <lastmod>2026-09-08</lastmod>
+    <changefreq>monthly</changefreq>
+    <priority>1.0</priority>
+    <image:image>
+      <image:loc>https://erwinmongui.com/og-image.png</image:loc>
+      <image:title>Erwin Mongui, Engineering Leader and Director of Technology, Toronto</image:title>
+    </image:image>
+    <image:image>
+      <image:loc>https://erwinmongui.com/culture-awards-2019.jpg</image:loc>
+      <image:title>Adevinta Culture Awards 2019 finalist diploma awarded to Erwin Mongui</image:title>
+    </image:image>
+  </url>
+</urlset>

@@ -76,7 +76,7 @@
   var SECTION_NAMES = {
     hero: 'Introduction', about: 'About', experience: 'Experience', impact: 'Impact',
     ai: 'AI', skills: 'Skills', education: 'Education', certifications: 'Certifications',
-    contact: 'Contact', nav: 'Navigation', footer: 'Footer'
+    facts: 'Quick facts', contact: 'Contact', nav: 'Navigation', footer: 'Footer'
   };
   function sectionName(id) { return SECTION_NAMES[id] || id; }
 
