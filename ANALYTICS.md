@@ -12,7 +12,7 @@ Open the site with `?ga_debug=1`. Every event is printed to the browser console 
 
 ## Events
 
-Every event carries `section` (the id of the section the interaction happened in: `hero`, `about`, `experience`, `impact`, `ai`, `skills`, `education`, `certifications`, `contact`, `nav`, `footer`) where it makes sense.
+Every event carries `section` (the id of the section the interaction happened in: `hero`, `about`, `experience`, `impact`, `ai`, `skills`, `education`, `certifications`, `facts`, `contact`, `nav`, `footer`) where it makes sense.
 
 ### Clicks
 
