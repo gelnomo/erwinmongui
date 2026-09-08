@@ -56,6 +56,7 @@ button{font:inherit}
 :focus-visible{outline:2px solid var(--blue);outline-offset:3px;border-radius:6px}
 .skip{position:absolute;left:16px;top:-60px;z-index:100;background:var(--white);color:var(--ink);padding:10px 16px;border-radius:999px;font-weight:600;text-decoration:none}
 .skip:focus{top:60px}
+
 /* Navigation */
 .nav{
   position:fixed;top:0;left:0;right:0;height:var(--nav-h);z-index:50;
@@ -155,7 +156,7 @@ button{font:inherit}
 /* Experience: stacked, pinned panels */
 .work{background:var(--black);color:var(--white)}
 .work-head{max-width:1200px;margin:0 auto;padding:clamp(88px,12vw,160px) var(--gutter) 56px}
-.stack{max-width:1200px;margin:0 auto;padding:0 var(--gutter) 140px}
+.stack{max-width:1200px;margin:0 auto;padding:0 var(--gutter) 120px}
 .role{
   position:sticky;top:calc(var(--nav-h) + 20px);
   position:-webkit-sticky;
@@ -185,6 +186,28 @@ button{font:inherit}
 .role-points{display:flex;flex-direction:column;gap:18px;font-size:clamp(16px,1.35vw,19px);line-height:1.45;color:var(--soft);padding-top:6px}
 .role-points li{position:relative;padding-left:22px}
 .role-points li::before{content:"";position:absolute;left:0;top:.58em;width:8px;height:8px;border-radius:50%;background:var(--blue-dark)}
+
+/* Award */
+.award{max-width:1200px;margin:0 auto;padding:0 var(--gutter) clamp(88px,12vw,160px);display:grid;grid-template-columns:1.1fr 1fr;gap:clamp(28px,5vw,72px);align-items:center}
+.award-figure{margin:0;border-radius:24px;overflow:hidden;border:1px solid var(--line-dark);background:#0c1030}
+.award-figure img{display:block;width:100%;height:auto}
+.award-when{color:var(--blue-dark);font-weight:600;font-size:15px;font-variant-numeric:tabular-nums}
+.award-title{margin-top:14px;font-size:clamp(30px,3.6vw,48px);line-height:1.04;letter-spacing:-.035em}
+.award-body{margin-top:18px;color:var(--soft);font-size:clamp(16px,1.3vw,18px);line-height:1.5;max-width:46ch}
+.award-list{margin-top:20px;display:flex;flex-direction:column;gap:12px;color:var(--white);font-size:clamp(16px,1.3vw,18px);line-height:1.45;font-weight:500}
+.award-list li{position:relative;padding-left:22px}
+.award-list li::before{content:"";position:absolute;left:0;top:.58em;width:8px;height:8px;border-radius:50%;background:var(--blue-dark)}
+
+/* Licenses and certifications */
+.cert-grid{display:grid;grid-template-columns:repeat(2,1fr);gap:56px 56px;margin-top:72px}
+.cert-group{border-top:1px solid var(--line-light);padding-top:24px}
+.cert-group h3{font-size:clamp(22px,2.2vw,28px);line-height:1.1;letter-spacing:-.025em;font-weight:700}
+.cert-list{margin-top:14px;display:flex;flex-direction:column}
+.cert-list li{padding:14px 0;border-bottom:1px solid rgba(0,0,0,.08);display:flex;flex-direction:column;gap:3px}
+.cert-list li:last-child{border-bottom:0}
+.cert-list a,.cert-list b{font-weight:600;color:var(--ink);text-decoration:none;font-size:clamp(15px,1.2vw,17px);line-height:1.35}
+.cert-list a:hover{color:var(--blue);text-decoration:underline;text-underline-offset:3px}
+.cert-list span{color:var(--steel);font-size:14px}
 
 /* Impact */
 .metrics{display:grid;grid-template-columns:repeat(3,1fr);gap:56px 40px;margin-top:80px}
@@ -304,6 +327,8 @@ button{font:inherit}
   .role-cap{max-width:none}
   .edu-grid{grid-template-columns:1fr;gap:36px}
   .ai-grid{grid-template-columns:1fr;gap:40px}
+  .award{grid-template-columns:1fr;gap:28px}
+  .cert-grid{grid-template-columns:1fr;gap:40px}
 }
 @media (max-width:480px){
   .metrics{grid-template-columns:1fr;gap:36px}
@@ -344,6 +369,7 @@ button{font:inherit}
       <a href="#ai">AI</a>
       <a href="#skills">Skills</a>
       <a href="#education">Education</a>
+      <a href="#certifications">Certifications</a>
     </nav>
     <div class="nav-right">
       <a class="nav-cta" href="#contact">Contact</a>
@@ -485,6 +511,22 @@ button{font:inherit}
     </article>
 
   </div>
+  <div class="award">
+    <figure class="award-figure">
+      <img src="culture-awards-2019.jpg" width="1510" height="1062" loading="lazy" alt="Adevinta Culture Awards 2019 finalist digital diploma awarded to Erwin Mongui">
+    </figure>
+    <div class="award-text">
+      <p class="award-when">2019</p>
+      <h3 class="award-title">Adevinta Culture Awards finalist.</h3>
+      <p class="award-body">Recognized while I was CTO at Fincaraiz.com.co. The Culture Awards go to the people who build trust within their teams by living Adevinta's Key Behaviours:</p>
+      <ul class="award-list">
+        <li>Say it like it is, and treat feedback as a gift.</li>
+        <li>Win and lose together, and don't be a jerk.</li>
+        <li>Get stuff done and keep your promises.</li>
+        <li>Always be learning, fast. Try stuff, learn from the data, and try again.</li>
+      </ul>
+    </div>
+  </div>
 </section>
 
 <!-- Impact -->
@@ -494,7 +536,7 @@ button{font:inherit}
     <p class="lede">A few of the numbers behind the roles.</p>
     <div class="metrics">
       <div class="metric">
-        <p class="metric-num"><span data-count="16" data-suffix="+">18+</span></p>
+        <p class="metric-num"><span data-count="18" data-suffix="+">18+</span></p>
         <p class="metric-label">years building software and leading the teams that build it</p>
         <p class="metric-src">2010 to today</p>
       </div>
@@ -531,7 +573,7 @@ button{font:inherit}
 <section class="stage stage-dark" id="ai" aria-labelledby="ai-h">
   <div class="wrap">
     <h2 class="h2" id="ai-h">AI, in practice.</h2>
-    <p class="lede">Machine learning built on three years of data-heavy platform work, and AI tools built into how the work gets done.</p>
+    <p class="lede">Machine learning built on eighteen years of data-heavy platform work, and AI tools built into how the work gets done.</p>
     <p class="ai-cert">Certified Artificial Intelligence Engineer, Lambton College, 2024</p>
     <div class="ai-grid">
       <div class="ai">
@@ -645,14 +687,68 @@ button{font:inherit}
   </div>
 </section>
 
+<!-- Licenses and certifications -->
+<section class="stage stage-light" id="certifications" aria-labelledby="certs-h">
+  <div class="wrap">
+    <h2 class="h2" id="certs-h">Licenses and certifications.</h2>
+    <p class="lede">Twenty-four credentials, grouped by what they sharpened. Each title opens the credential.</p>
+    <div class="cert-grid">
+      <div class="cert-group">
+        <h3>Machine learning and data</h3>
+        <ul class="cert-list">
+          <li><a href="https://www.udemy.com/certificate/UC-acd8d736-39d0-4615-96bf-5d6ded227f99/" target="_blank" rel="noopener">Machine Learning: Natural Language Processing in Python (V2)</a><span>Udemy, January 2024</span></li>
+          <li><a href="https://www.udemy.com/certificate/UC-8b88e4dd-ea69-48b6-a6a1-16af160970db/" target="_blank" rel="noopener">Complete Machine Learning and Data Science Bootcamp 2023</a><span>Udemy, September 2023</span></li>
+          <li><a href="https://www.udemy.com/certificate/UC-54b54049-eac4-44ec-8af8-e0934bf1c142/" target="_blank" rel="noopener">Learn Advanced Python Programming</a><span>Udemy, September 2023</span></li>
+          <li><a href="https://www.linkedin.com/learning/certificates/721c06732862d7fafe7edc0560a169e15b9781d2f3a77dac2c70b0495d91f8d3/" target="_blank" rel="noopener">SQL for Statistics Essential Training</a><span>LinkedIn Learning, July 2023</span></li>
+          <li><a href="https://www.linkedin.com/learning/certificates/2ff1df0566614ea2a1dc46d663f8faa49c3c45f52f1b15c679c6c2084eb70d84/" target="_blank" rel="noopener">Python for Data Science Essential Training, Part 1</a><span>LinkedIn Learning, May 2023</span></li>
+        </ul>
+      </div>
+      <div class="cert-group">
+        <h3>Fintech and agile delivery</h3>
+        <ul class="cert-list">
+          <li><a href="https://www.udemy.com/certificate/UC-951e245a-79d9-410a-adba-7b0b36a152c3/" target="_blank" rel="noopener">Future of Fintech: Open Banking, GDPR and PSD2</a><span>Udemy, March 2022</span></li>
+          <li><a href="https://www.udemy.com/certificate/UC-f4b0f65c-f51a-4c2d-8a0e-6a620273af71/" target="_blank" rel="noopener">Fintech Overview: AI, Blockchain, Cloud, Data, Cybersecurity</a><span>Udemy, March 2022</span></li>
+          <li><a href="http://www.scrumstudy.com/scrum-master-certification.asp" target="_blank" rel="noopener">Scrum Master Certified (SMC)</a><span>SCRUMstudy, VMEdu, June 2016</span></li>
+          <li><b>Scrum Fundamentals Certified (SFC)</b><span>SCRUMstudy, VMEdu, June 2016</span></li>
+        </ul>
+      </div>
+      <div class="cert-group">
+        <h3>Software architecture</h3>
+        <ul class="cert-list">
+          <li><a href="https://refactoring.guru/cert/r/MTU1NzAw" target="_blank" rel="noopener">Dive Into Refactoring</a><span>Refactoring.Guru, December 2023</span></li>
+          <li><a href="https://www.udemy.com/certificate/UC-4069857a-4f40-47b9-bb30-93d3c4cc087f/" target="_blank" rel="noopener">Software Architecture Case Studies</a><span>Udemy, November 2023</span></li>
+          <li><a href="https://www.udemy.com/certificate/UC-1cb49347-7b65-4401-a3f8-3842da887d97/" target="_blank" rel="noopener">Software Architecture Security: The Complete Guide</a><span>Udemy, November 2023</span></li>
+          <li><a href="https://www.udemy.com/certificate/UC-0f7a317a-a806-4d45-af35-6473b762f82b/" target="_blank" rel="noopener">Microservices Architecture: The Complete Guide</a><span>Udemy, October 2023</span></li>
+          <li><a href="https://www.udemy.com/certificate/UC-8724c08d-c271-43c7-ab23-0c60b16936d5/" target="_blank" rel="noopener">How to Become an Outstanding Solution Architect</a><span>Udemy, October 2023</span></li>
+          <li><a href="https://www.udemy.com/certificate/UC-4b5354d6-a609-4b99-b666-2a6755a0af97/" target="_blank" rel="noopener">Software Architecture: REST API Design, The Complete Guide</a><span>Udemy, September 2023</span></li>
+          <li><a href="https://www.udemy.com/certificate/UC-1dbf98c5-9ea0-42c8-952a-5a8b3471d227/" target="_blank" rel="noopener">The Complete Guide to Becoming a Software Architect</a><span>Udemy, May 2021</span></li>
+          <li><a href="https://www.udemy.com/certificate/UC-7eddb321-e5de-401d-bb25-88dbafcfd2bf/" target="_blank" rel="noopener">SOLID Principles</a><span>Udemy, May 2021</span></li>
+        </ul>
+      </div>
+      <div class="cert-group">
+        <h3>Data, search and infrastructure</h3>
+        <ul class="cert-list">
+          <li><a href="https://www.udemy.com/certificate/UC-5d16e413-9cbc-43b0-81e3-0d3859db2322/" target="_blank" rel="noopener">Amazon S3 Mastery: The How-To Guides for Amazon S3</a><span>Udemy, March 2022</span></li>
+          <li><a href="https://www.udemy.com/certificate/UC-24f8b785-dcd5-48d9-8134-446a018db2b7/" target="_blank" rel="noopener">Redis, the World's Fastest Database: Beginners to Advanced</a><span>Udemy, February 2022</span></li>
+          <li><a href="https://www.udemy.com/certificate/UC-f1db4ae5-16fa-4d3c-8817-3b8d664de6a7/" target="_blank" rel="noopener">Django with GraphQL</a><span>Udemy, February 2022</span></li>
+          <li><a href="https://www.udemy.com/certificate/UC-271a4826-ff97-4e53-846d-d8d140beeb55/" target="_blank" rel="noopener">RabbitMQ Python</a><span>Udemy, May 2021</span></li>
+          <li><a href="https://www.udemy.com/certificate/UC-e62f892c-822f-4b1e-aa78-517711afd402/" target="_blank" rel="noopener">Data Processing with Logstash and Filebeat</a><span>Udemy, May 2021</span></li>
+          <li><a href="https://www.udemy.com/certificate/UC-72757899-d998-417b-8325-41e38631b1cc/" target="_blank" rel="noopener">Complete Guide to Elasticsearch</a><span>Udemy, May 2021</span></li>
+          <li><a href="https://www.udemy.com/certificate/UC-1283ab54-cabe-458a-b15e-9c8eacce29ff/" target="_blank" rel="noopener">Git and GitHub</a><span>Udemy, May 2021</span></li>
+        </ul>
+      </div>
+    </div>
+  </div>
+</section>
+
 <!-- Contact -->
-<section class="stage stage-light" id="contact" aria-labelledby="contact-h">
+<section class="stage stage-dark" id="contact" aria-labelledby="contact-h">
   <div class="narrow center">
     <h2 class="h2" id="contact-h">Let's talk.</h2>
     <p class="lede">Whether you're scaling a platform or building the team that runs it, I'd like to hear about it.</p>
     <div class="contact-actions">
       <a class="btn btn-primary" href="mailto:erwinmongui@gmail.com">Email erwinmongui@gmail.com</a>
-      <a class="btn btn-outline" href="https://www.linkedin.com/in/erwin-mongui/" target="_blank" rel="noopener">LinkedIn profile</a>
+      <a class="btn btn-ghost" href="https://www.linkedin.com/in/erwin-mongui/" target="_blank" rel="noopener">LinkedIn profile</a>
     </div>
     <button class="copy" id="copy-email" data-email="erwinmongui@gmail.com">Copy email address</button>
   </div>
