@@ -177,11 +177,6 @@
           "@type": "Question",
           "name": "What technologies does Erwin Mongui work with?",
           "acceptedAnswer": { "@type": "Answer", "text": "Python, Django, C#, .NET, Node.js, React and TypeScript for building; AWS, Docker, Kubernetes, Jenkins and Spinnaker for shipping; PostgreSQL, MySQL, MongoDB, Redis, Elasticsearch, OpenSearch, Apache Solr and Apache NiFi for data and search; and TensorFlow, PyTorch, Pandas and NumPy for machine learning, with Cursor and Windsurf for AI-assisted development." }
-        },
-        {
-          "@type": "Question",
-          "name": "How can I contact Erwin Mongui?",
-          "acceptedAnswer": { "@type": "Answer", "text": "Email erwinmongui@gmail.com or connect on LinkedIn at linkedin.com/in/erwin-mongui." }
         }
       ]
     }
@@ -259,7 +254,7 @@ button{font:inherit}
 .brand{display:flex;align-items:center;gap:10px;font-weight:700;font-size:15px;letter-spacing:-.01em;text-decoration:none;color:var(--white);white-space:nowrap}
 .brand svg{display:block;width:26px;height:26px}
 .nav-links{display:flex;gap:28px}
-.nav-links a{font-size:13px;color:rgba(255,255,255,.72);text-decoration:none;transition:color .2s}
+.nav-links a{font-size:13px;color:rgba(255,255,255,.72);text-decoration:none;transition:color .2s;white-space:nowrap}
 .nav-links a:hover,.nav-links a.active{color:var(--white)}
 .nav-right{display:flex;align-items:center;gap:14px}
 .nav-cta{font-size:12px;font-weight:600;color:var(--white);background:var(--blue);padding:7px 14px;border-radius:999px;text-decoration:none;white-space:nowrap;transition:background .2s}
@@ -450,9 +445,6 @@ button{font:inherit}
 .stage-light .rail-btn{background:rgba(0,0,0,.08);color:var(--ink)}
 .stage-light .rail-btn:hover{background:rgba(0,0,0,.16)}
 .stage-light .rail-btn:disabled{background:rgba(0,0,0,.08)}
-.stage-light .copy{color:var(--steel);text-decoration-color:rgba(0,0,0,.25)}
-.stage-light .copy:hover{color:var(--ink)}
-.stage-light .copy.done{color:var(--blue)}
 
 /* Dark-stage variants */
 .stage-dark .edu{border-top-color:var(--line-dark)}
@@ -482,13 +474,6 @@ button{font:inherit}
 
 /* Contact */
 .contact-actions{display:flex;gap:14px;justify-content:center;flex-wrap:wrap;margin-top:40px}
-.copy{
-  margin-top:22px;background:transparent;border:0;color:var(--silver);cursor:pointer;
-  font-size:14px;font-weight:600;text-decoration:underline;text-underline-offset:4px;text-decoration-color:rgba(255,255,255,.3);
-  padding:6px 8px;border-radius:6px;transition:color .2s;
-}
-.copy:hover{color:var(--white)}
-.copy.done{color:var(--blue-dark);text-decoration-color:transparent}
 
 /* Footer */
 .foot{background:var(--black);color:var(--silver);border-top:1px solid rgba(255,255,255,.08);padding:26px var(--gutter) 40px;font-size:13px}
@@ -501,6 +486,9 @@ button{font:inherit}
 /* Responsive */
 @media (max-width:900px){
   .metrics{grid-template-columns:repeat(2,1fr);gap:44px 28px}
+}
+@media (max-width:1000px){
+  .nav-links{gap:18px}
 }
 @media (max-width:760px){
   .facts-grid{grid-template-columns:1fr;gap:36px}
@@ -569,6 +557,7 @@ button{font:inherit}
       <a href="#skills">Skills</a>
       <a href="#education">Education</a>
       <a href="#certifications">Certifications</a>
+      <a href="#facts">Quick facts</a>
     </nav>
     <div class="nav-right">
       <a class="nav-cta" href="#contact">Contact</a>
@@ -966,10 +955,6 @@ button{font:inherit}
         <h3>What technologies does Erwin Mongui work with?</h3>
         <p>Python, Django, C#, .NET, Node.js, React and TypeScript for building; AWS, Docker, Kubernetes, Jenkins and Spinnaker for shipping; PostgreSQL, MySQL, MongoDB, Redis, Elasticsearch, OpenSearch, Apache Solr and Apache NiFi for data and search; and TensorFlow, PyTorch, Pandas and NumPy for machine learning, with Cursor and Windsurf for AI-assisted development.</p>
       </div>
-      <div class="fact">
-        <h3>How can I contact Erwin Mongui?</h3>
-        <p>Email <a href="mailto:erwinmongui@gmail.com">erwinmongui@gmail.com</a> or connect on LinkedIn at <a href="https://www.linkedin.com/in/erwin-mongui/" target="_blank" rel="noopener">linkedin.com/in/erwin-mongui</a>.</p>
-      </div>
     </div>
   </div>
 </section>
@@ -980,10 +965,9 @@ button{font:inherit}
     <h2 class="h2" id="contact-h">Let's talk.</h2>
     <p class="lede">Whether you're scaling a platform or building the team that runs it, I'd like to hear about it.</p>
     <div class="contact-actions">
-      <a class="btn btn-primary" href="mailto:erwinmongui@gmail.com">Email erwinmongui@gmail.com</a>
+      <a class="btn btn-primary" href="mailto:erwinmongui@gmail.com">Email</a>
       <a class="btn btn-ghost" href="https://www.linkedin.com/in/erwin-mongui/" target="_blank" rel="noopener">LinkedIn profile</a>
     </div>
-    <button class="copy" id="copy-email" data-email="erwinmongui@gmail.com">Copy email address</button>
   </div>
 </section>
 
@@ -1157,21 +1141,6 @@ button{font:inherit}
     sections.forEach(function(s){ sio.observe(s); });
   }
 
-  /* Copy email */
-  var copyBtn = document.getElementById('copy-email');
-  copyBtn.addEventListener('click', function(){
-    var email = copyBtn.getAttribute('data-email');
-    var done = function(){
-      copyBtn.textContent = 'Copied';
-      copyBtn.classList.add('done');
-      setTimeout(function(){ copyBtn.textContent = 'Copy email address'; copyBtn.classList.remove('done'); }, 1800);
-    };
-    if (navigator.clipboard && navigator.clipboard.writeText) {
-      navigator.clipboard.writeText(email).then(done, function(){ window.location.href = 'mailto:' + email; });
-    } else {
-      window.location.href = 'mailto:' + email;
-    }
-  });
 })();
 </script>
 </body>
