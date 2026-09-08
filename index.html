@@ -254,7 +254,7 @@ button{font:inherit}
 .brand{display:flex;align-items:center;gap:10px;font-weight:700;font-size:15px;letter-spacing:-.01em;text-decoration:none;color:var(--white);white-space:nowrap}
 .brand svg{display:block;width:26px;height:26px}
 .nav-links{display:flex;gap:28px}
-.nav-links a{font-size:13px;color:rgba(255,255,255,.72);text-decoration:none;transition:color .2s}
+.nav-links a{font-size:13px;color:rgba(255,255,255,.72);text-decoration:none;transition:color .2s;white-space:nowrap}
 .nav-links a:hover,.nav-links a.active{color:var(--white)}
 .nav-right{display:flex;align-items:center;gap:14px}
 .nav-cta{font-size:12px;font-weight:600;color:var(--white);background:var(--blue);padding:7px 14px;border-radius:999px;text-decoration:none;white-space:nowrap;transition:background .2s}
@@ -487,6 +487,9 @@ button{font:inherit}
 @media (max-width:900px){
   .metrics{grid-template-columns:repeat(2,1fr);gap:44px 28px}
 }
+@media (max-width:1000px){
+  .nav-links{gap:18px}
+}
 @media (max-width:760px){
   .facts-grid{grid-template-columns:1fr;gap:36px}
   .nav-links{display:none}
@@ -554,6 +557,7 @@ button{font:inherit}
       <a href="#skills">Skills</a>
       <a href="#education">Education</a>
       <a href="#certifications">Certifications</a>
+      <a href="#facts">Quick facts</a>
     </nav>
     <div class="nav-right">
       <a class="nav-cta" href="#contact">Contact</a>
