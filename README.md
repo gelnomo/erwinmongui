@@ -21,6 +21,10 @@ The site is served by GitHub Pages from the default branch of this repository. T
 | `erwin-mongui-logo.svg`, `erwin-mongui-mark.svg` | Brand assets |
 | `CNAME` | Custom domain for GitHub Pages |
 
+## Google preferred sources
+
+The contact section shows Google's "Add to Preferred Sources" button. Google's script (`news.google.com/swg/js/v1/publisher.js`, loaded in `<head>`) draws it inside the `google-add-preferred-source-btn` element. The button only appears on `erwinmongui.com`, so it stays empty on `localhost`. The footer also has a plain link, `https://www.google.com/preferences/source?q=erwinmongui.com`, that does the same thing without JavaScript. See [Google's guide](https://developers.google.com/search/docs/appearance/preferred-sources).
+
 ## Working locally
 
 Any static file server works. For example:
