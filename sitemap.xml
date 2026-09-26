@@ -41,34 +41,58 @@
   <url>
     <loc>https://erwinmongui.com/writing/</loc>
     <lastmod>2026-09-25</lastmod>
+    <xhtml:link rel="alternate" hreflang="en" href="https://erwinmongui.com/writing/"/>
+    <xhtml:link rel="alternate" hreflang="es" href="https://erwinmongui.com/es/articulos/"/>
+    <xhtml:link rel="alternate" hreflang="x-default" href="https://erwinmongui.com/writing/"/>
   </url>
   <url>
     <loc>https://erwinmongui.com/writing/choose-tools-your-team-can-support/</loc>
     <lastmod>2026-09-21</lastmod>
+    <xhtml:link rel="alternate" hreflang="en" href="https://erwinmongui.com/writing/choose-tools-your-team-can-support/"/>
+    <xhtml:link rel="alternate" hreflang="es" href="https://erwinmongui.com/es/articulos/elegir-herramientas-que-tu-equipo-pueda-sostener/"/>
+    <xhtml:link rel="alternate" hreflang="x-default" href="https://erwinmongui.com/writing/choose-tools-your-team-can-support/"/>
   </url>
   <url>
     <loc>https://erwinmongui.com/writing/from-data-analyst-to-data-engineer/</loc>
     <lastmod>2026-09-22</lastmod>
+    <xhtml:link rel="alternate" hreflang="en" href="https://erwinmongui.com/writing/from-data-analyst-to-data-engineer/"/>
+    <xhtml:link rel="alternate" hreflang="es" href="https://erwinmongui.com/es/articulos/de-analista-de-datos-a-ingeniero-de-datos/"/>
+    <xhtml:link rel="alternate" hreflang="x-default" href="https://erwinmongui.com/writing/from-data-analyst-to-data-engineer/"/>
   </url>
   <url>
     <loc>https://erwinmongui.com/writing/engineering-team-health-metrics/</loc>
     <lastmod>2026-09-24</lastmod>
+    <xhtml:link rel="alternate" hreflang="en" href="https://erwinmongui.com/writing/engineering-team-health-metrics/"/>
+    <xhtml:link rel="alternate" hreflang="es" href="https://erwinmongui.com/es/articulos/metricas-de-salud-de-equipos-de-ingenieria/"/>
+    <xhtml:link rel="alternate" hreflang="x-default" href="https://erwinmongui.com/writing/engineering-team-health-metrics/"/>
   </url>
   <url>
     <loc>https://erwinmongui.com/writing/lead-time-cycle-time-bottlenecks/</loc>
     <lastmod>2026-09-25</lastmod>
+    <xhtml:link rel="alternate" hreflang="en" href="https://erwinmongui.com/writing/lead-time-cycle-time-bottlenecks/"/>
+    <xhtml:link rel="alternate" hreflang="es" href="https://erwinmongui.com/es/articulos/cuellos-de-botella-lead-time-cycle-time/"/>
+    <xhtml:link rel="alternate" hreflang="x-default" href="https://erwinmongui.com/writing/lead-time-cycle-time-bottlenecks/"/>
   </url>
   <url>
     <loc>https://erwinmongui.com/writing/ai-careers-new-graduates/</loc>
     <lastmod>2026-09-23</lastmod>
+    <xhtml:link rel="alternate" hreflang="en" href="https://erwinmongui.com/writing/ai-careers-new-graduates/"/>
+    <xhtml:link rel="alternate" hreflang="es" href="https://erwinmongui.com/es/articulos/carreras-en-ia-para-recien-graduados/"/>
+    <xhtml:link rel="alternate" hreflang="x-default" href="https://erwinmongui.com/writing/ai-careers-new-graduates/"/>
   </url>
   <url>
     <loc>https://erwinmongui.com/writing/ai-applications-json/</loc>
     <lastmod>2026-09-23</lastmod>
+    <xhtml:link rel="alternate" hreflang="en" href="https://erwinmongui.com/writing/ai-applications-json/"/>
+    <xhtml:link rel="alternate" hreflang="es" href="https://erwinmongui.com/es/articulos/json-en-aplicaciones-de-ia/"/>
+    <xhtml:link rel="alternate" hreflang="x-default" href="https://erwinmongui.com/writing/ai-applications-json/"/>
   </url>
   <url>
     <loc>https://erwinmongui.com/writing/rt-pcr-travel-screening-data-driven-selection/</loc>
     <lastmod>2026-09-23</lastmod>
+    <xhtml:link rel="alternate" hreflang="en" href="https://erwinmongui.com/writing/rt-pcr-travel-screening-data-driven-selection/"/>
+    <xhtml:link rel="alternate" hreflang="es" href="https://erwinmongui.com/es/articulos/seleccion-de-viajeros-rt-pcr-basada-en-datos/"/>
+    <xhtml:link rel="alternate" hreflang="x-default" href="https://erwinmongui.com/writing/rt-pcr-travel-screening-data-driven-selection/"/>
   </url>
   <url>
     <loc>https://erwinmongui.com/about/</loc>
@@ -105,5 +129,61 @@
     <xhtml:link rel="alternate" hreflang="en" href="https://erwinmongui.com/work/cedar-planters-data-platform/"/>
     <xhtml:link rel="alternate" hreflang="es" href="https://erwinmongui.com/es/casos/cedar-planters-plataforma-de-datos/"/>
     <xhtml:link rel="alternate" hreflang="x-default" href="https://erwinmongui.com/work/cedar-planters-data-platform/"/>
+  </url>
+  <url>
+    <loc>https://erwinmongui.com/es/articulos/</loc>
+    <lastmod>2026-09-26</lastmod>
+    <xhtml:link rel="alternate" hreflang="en" href="https://erwinmongui.com/writing/"/>
+    <xhtml:link rel="alternate" hreflang="es" href="https://erwinmongui.com/es/articulos/"/>
+    <xhtml:link rel="alternate" hreflang="x-default" href="https://erwinmongui.com/writing/"/>
+  </url>
+  <url>
+    <loc>https://erwinmongui.com/es/articulos/elegir-herramientas-que-tu-equipo-pueda-sostener/</loc>
+    <lastmod>2026-09-26</lastmod>
+    <xhtml:link rel="alternate" hreflang="en" href="https://erwinmongui.com/writing/choose-tools-your-team-can-support/"/>
+    <xhtml:link rel="alternate" hreflang="es" href="https://erwinmongui.com/es/articulos/elegir-herramientas-que-tu-equipo-pueda-sostener/"/>
+    <xhtml:link rel="alternate" hreflang="x-default" href="https://erwinmongui.com/writing/choose-tools-your-team-can-support/"/>
+  </url>
+  <url>
+    <loc>https://erwinmongui.com/es/articulos/de-analista-de-datos-a-ingeniero-de-datos/</loc>
+    <lastmod>2026-09-26</lastmod>
+    <xhtml:link rel="alternate" hreflang="en" href="https://erwinmongui.com/writing/from-data-analyst-to-data-engineer/"/>
+    <xhtml:link rel="alternate" hreflang="es" href="https://erwinmongui.com/es/articulos/de-analista-de-datos-a-ingeniero-de-datos/"/>
+    <xhtml:link rel="alternate" hreflang="x-default" href="https://erwinmongui.com/writing/from-data-analyst-to-data-engineer/"/>
+  </url>
+  <url>
+    <loc>https://erwinmongui.com/es/articulos/metricas-de-salud-de-equipos-de-ingenieria/</loc>
+    <lastmod>2026-09-26</lastmod>
+    <xhtml:link rel="alternate" hreflang="en" href="https://erwinmongui.com/writing/engineering-team-health-metrics/"/>
+    <xhtml:link rel="alternate" hreflang="es" href="https://erwinmongui.com/es/articulos/metricas-de-salud-de-equipos-de-ingenieria/"/>
+    <xhtml:link rel="alternate" hreflang="x-default" href="https://erwinmongui.com/writing/engineering-team-health-metrics/"/>
+  </url>
+  <url>
+    <loc>https://erwinmongui.com/es/articulos/cuellos-de-botella-lead-time-cycle-time/</loc>
+    <lastmod>2026-09-26</lastmod>
+    <xhtml:link rel="alternate" hreflang="en" href="https://erwinmongui.com/writing/lead-time-cycle-time-bottlenecks/"/>
+    <xhtml:link rel="alternate" hreflang="es" href="https://erwinmongui.com/es/articulos/cuellos-de-botella-lead-time-cycle-time/"/>
+    <xhtml:link rel="alternate" hreflang="x-default" href="https://erwinmongui.com/writing/lead-time-cycle-time-bottlenecks/"/>
+  </url>
+  <url>
+    <loc>https://erwinmongui.com/es/articulos/carreras-en-ia-para-recien-graduados/</loc>
+    <lastmod>2026-09-26</lastmod>
+    <xhtml:link rel="alternate" hreflang="en" href="https://erwinmongui.com/writing/ai-careers-new-graduates/"/>
+    <xhtml:link rel="alternate" hreflang="es" href="https://erwinmongui.com/es/articulos/carreras-en-ia-para-recien-graduados/"/>
+    <xhtml:link rel="alternate" hreflang="x-default" href="https://erwinmongui.com/writing/ai-careers-new-graduates/"/>
+  </url>
+  <url>
+    <loc>https://erwinmongui.com/es/articulos/json-en-aplicaciones-de-ia/</loc>
+    <lastmod>2026-09-26</lastmod>
+    <xhtml:link rel="alternate" hreflang="en" href="https://erwinmongui.com/writing/ai-applications-json/"/>
+    <xhtml:link rel="alternate" hreflang="es" href="https://erwinmongui.com/es/articulos/json-en-aplicaciones-de-ia/"/>
+    <xhtml:link rel="alternate" hreflang="x-default" href="https://erwinmongui.com/writing/ai-applications-json/"/>
+  </url>
+  <url>
+    <loc>https://erwinmongui.com/es/articulos/seleccion-de-viajeros-rt-pcr-basada-en-datos/</loc>
+    <lastmod>2026-09-26</lastmod>
+    <xhtml:link rel="alternate" hreflang="en" href="https://erwinmongui.com/writing/rt-pcr-travel-screening-data-driven-selection/"/>
+    <xhtml:link rel="alternate" hreflang="es" href="https://erwinmongui.com/es/articulos/seleccion-de-viajeros-rt-pcr-basada-en-datos/"/>
+    <xhtml:link rel="alternate" hreflang="x-default" href="https://erwinmongui.com/writing/rt-pcr-travel-screening-data-driven-selection/"/>
   </url>
 </urlset>

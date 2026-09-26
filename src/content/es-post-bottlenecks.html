@@ -1,0 +1,66 @@
+<header class="doc-head stage-dark">
+    <nav class="crumbs" aria-label="Ruta de navegación"><a href="/es/">Inicio</a><span>/</span><a href="/es/articulos/">Artículos</a><span>/</span><span>Entrega</span></nav>
+    <p class="eyebrow">Entrega</p>
+    <h1>Encontrar cuellos de botella en la entrega con lead time y cycle time.</h1>
+    <p class="summary">Cuando el trabajo se vuelve lento, la causa casi nunca está donde la gente señala primero. Uso el lead time, el cycle time y algunas métricas de flujo para encontrar exactamente dónde se atascan las historias, confirmo el patrón a lo largo de varios sprints y valido la causa raíz con los ingenieros antes de cambiar algo. Las herramientas de IA hacen el análisis más rápido, y también crean un nuevo cuello de botella que hay que vigilar.</p>
+    <div class="byline"><span>Por Erwin Mongui</span><span>25 de septiembre de 2026</span><span>6 min de lectura</span><a class="link" href="/writing/lead-time-cycle-time-bottlenecks/" hreflang="en" lang="en">Read in English</a></div>
+  </header>
+  <section class="doc">
+    <div class="doc-grid">
+      <div class="prose">
+        <div class="inshort"><b>En resumen</b><p>El <strong>lead time</strong> es cuánto tarda una solicitud desde que se pide hasta que se entrega. El <strong>cycle time</strong> es cuánto tarda desde que alguien empieza a trabajar en ella. Una gran diferencia entre los dos significa que el trabajo está esperando, no avanzando. Mide ambos por etapa, confirma el patrón con el equipo, cambia una sola cosa y vuelve a medir.</p></div>
+
+        <h2>Cuatro números que describen el flujo</h2>
+        <div class="table-wrap">
+          <table>
+            <thead><tr><th>Métrica</th><th>Qué mide</th></tr></thead>
+            <tbody>
+              <tr><td>Lead time</td><td>Desde la solicitud hasta la entrega, incluida toda la espera</td></tr>
+              <tr><td>Cycle time</td><td>Desde que empieza el trabajo hasta la entrega</td></tr>
+              <tr><td>Trabajo en curso (WIP)</td><td>Cuántos elementos están abiertos al mismo tiempo</td></tr>
+              <tr><td>Throughput</td><td>Cuántos elementos se terminan por semana o por sprint</td></tr>
+            </tbody>
+          </table>
+        </div>
+        <p>Están conectados. La ley de Little dice que, en promedio, el cycle time es igual al trabajo en curso dividido por el throughput. En la práctica: si un equipo empieza más trabajo del que termina, todo tarda más, aunque todos estén ocupados. Reducir el trabajo en curso suele ser la forma más rápida de acelerar la entrega.</p>
+        <p>Un quinto número, la <strong>eficiencia de flujo</strong>, es la parte del cycle time en la que alguien está trabajando activamente en un elemento. En muchos equipos es sorprendentemente baja, porque la mayor parte del tiempo se va en esperar una revisión, pruebas, una decisión u otro equipo.</p>
+
+        <h2>Los cinco pasos</h2>
+        <ol>
+          <li><strong>Mide ambos tiempos en cada historia.</strong> Divide el cycle time en las etapas de tu flujo de trabajo, como en progreso, en revisión, en pruebas y esperando despliegue.</li>
+          <li><strong>Encuentra la desviación.</strong> Busca la etapa donde el tiempo crece más respecto a lo normal.</li>
+          <li><strong>Confirma que es un patrón.</strong> Compara a lo largo del sprint o de la versión. Una historia lenta es ruido; la misma etapa volviéndose lenta en cada sprint es un cuello de botella.</li>
+          <li><strong>Habla con los ingenieros involucrados.</strong> Los datos muestran dónde; las personas explican por qué. Las causas comunes son dependencias de otros equipos, requisitos poco claros y revisiones de código lentas.</li>
+          <li><strong>Cambia una sola cosa y vuelve a medir.</strong> Ajusta prioridades, el flujo de trabajo o el proceso de revisión, y luego revisa si los números se mueven.</li>
+        </ol>
+
+        <h2>Causas comunes y soluciones</h2>
+        <div class="table-wrap">
+          <table>
+            <thead><tr><th>Dónde crece el tiempo</th><th>Causa probable</th><th>Qué suele ayudar</th></tr></thead>
+            <tbody>
+              <tr><td>Antes de empezar</td><td>Requisitos poco claros</td><td>Refinar las historias con producto antes del sprint, con criterios de aceptación claros</td></tr>
+              <tr><td>En progreso</td><td>Esperando a otro equipo</td><td>Hacer visibles las dependencias en la planeación y acordar temprano los contratos de las APIs</td></tr>
+              <tr><td>En progreso</td><td>Demasiado trabajo en curso</td><td>Poner límites de WIP y terminar antes de empezar algo nuevo</td></tr>
+              <tr><td>En revisión</td><td>Las revisiones se acumulan</td><td>Pull requests más pequeños, tiempos de revisión acordados y una primera revisión asistida por IA</td></tr>
+              <tr><td>En pruebas</td><td>Pruebas manuales</td><td>Pruebas automatizadas en CI, con asistentes de IA que ayuden a escribirlas</td></tr>
+            </tbody>
+          </table>
+        </div>
+
+        <h2>Dónde ayuda la IA, y el nuevo cuello de botella que crea</h2>
+        <p>Las herramientas de IA ayudan en los dos extremos del proceso:</p>
+        <ul>
+          <li><strong>Análisis.</strong> Exporta el historial de tickets de Jira o los datos de pull requests de GitHub, y un asistente de IA puede calcular el tiempo por etapa, detectar valores atípicos y sugerir patrones en minutos. Trata sus hallazgos como hipótesis por verificar, no como conclusiones.</li>
+          <li><strong>Soluciones.</strong> Los asistentes de programación con IA ayudan a escribir las pruebas que faltan, y las herramientas de revisión con IA pueden hacer una primera pasada sobre los pull requests, para que los revisores humanos se concentren en el diseño y el riesgo.</li>
+        </ul>
+        <p>Pero cuando un equipo adopta asistentes de programación con IA, escribir código se vuelve más rápido, y llega más código a revisión y a pruebas al mismo tiempo. El cuello de botella se mueve hacia adelante. Si el cycle time no mejora después de adoptar IA, mira primero las etapas de revisión y pruebas. La solución suele ser pull requests más pequeños, expectativas de revisión claras y mejores pruebas automatizadas, no generar más código.</p>
+
+        <h2>Por qué validar con las personas</h2>
+        <p>Los números sin contexto llevan a la solución equivocada. Una etapa de revisión larga puede significar que los revisores están sobrecargados, o que los pull requests son demasiado grandes para revisar, y cada caso necesita un cambio distinto. Preguntar primero mantiene la solución enfocada y conserva la confianza del equipo.</p>
+        <p>Mira el conjunto completo de métricas que sigo: <a class="link" href="/es/articulos/metricas-de-salud-de-equipos-de-ingenieria/">Cómo mido la salud de un equipo de ingeniería</a>.</p>
+        <div class="author"><svg aria-hidden="true" viewBox="0 0 189 190"><path fill="#0071e3" d="__MARK__"/></svg><p><b>Erwin Mongui</b>Director de Tecnología en Cedar Planters e ingeniero certificado en Inteligencia Artificial, en Toronto.</p></div>
+      </div>
+      <aside class="aside"><div class="related"><h4>Relacionado</h4><a href="/es/articulos/metricas-de-salud-de-equipos-de-ingenieria/">Cómo mido la salud de un equipo de ingeniería</a><a href="/es/articulos/elegir-herramientas-que-tu-equipo-pueda-sostener/">Elige la herramienta que tu equipo puede sostener</a><a href="/es/casos/cedar-planters-plataforma-de-datos/">Caso: plataforma de datos desde cero</a></div></aside>
+    </div>
+  </section>

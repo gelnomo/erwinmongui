@@ -1,0 +1,71 @@
+<header class="doc-head stage-dark">
+    <nav class="crumbs" aria-label="Ruta de navegación"><a href="/es/">Inicio</a><span>/</span><a href="/es/articulos/">Artículos</a><span>/</span><span>Arquitectura</span></nav>
+    <p class="eyebrow">Arquitectura</p>
+    <h1>Elige la herramienta que tu equipo puede sostener, no la que encabeza la lista.</h1>
+    <p class="summary">Durante una gran migración de plataforma elegimos Keycloak para el inicio de sesión único. En el papel era una herramienta sólida, pero era nueva para el equipo y estaba construida sobre un stack que no conocíamos, y esa parte del trabajo tomó seis veces más de lo planeado. Esto fue lo que salió mal, la matriz de evaluación que usamos después y cómo los asistentes de IA cambian la decisión hoy.</p>
+    <div class="byline"><span>Por Erwin Mongui</span><span>21 de septiembre de 2026</span><span>7 min de lectura</span><a class="link" href="/writing/choose-tools-your-team-can-support/" hreflang="en" lang="en">Read in English</a></div>
+  </header>
+  <section class="doc">
+    <div class="doc-grid">
+      <div class="prose">
+        <div class="inshort"><b>En resumen</b><p>Para sistemas críticos como la autenticación, evalúa cada opción según qué tanto la conoce el equipo, su documentación, su soporte y la carga operativa, no solo por sus funcionalidades. Haz una prueba de concepto corta y con tiempo límite antes de comprometerte. Los asistentes de IA facilitan aprender herramientas desconocidas, pero no eliminan la necesidad de que alguien sea dueño de la herramienta en producción.</p></div>
+
+        <h2>Qué pasó</h2>
+        <p>En Fincaraiz estábamos migrando un monolito ASP.NET heredado a microservicios con Django y React, para una plataforma con más de 5 millones de visitas al mes. El sistema viejo y el nuevo tenían que funcionar en paralelo, así que necesitábamos una sola capa de identidad que ambos pudieran compartir. Keycloak era una elección razonable: código abierto, completo y muy usado para inicio de sesión único.</p>
+        <p>El problema era de encaje, no de calidad. Keycloak era nuevo para el equipo y está construido en Java, que estaba fuera de nuestras habilidades principales. Cuando aparecieron los problemas de integración, nadie podía revisar su funcionamiento interno con confianza, y la documentación tenía vacíos para nuestra configuración exacta. Cada problema se volvía una investigación. Esa parte del proyecto tomó <strong>seis veces más</strong> de lo estimado.</p>
+
+        <h2>Por qué pasó</h2>
+        <p>Evaluamos la herramienta, no el encaje. La comparación de funcionalidades fue minuciosa. Lo que no preguntamos fue: cuando esto falle con tráfico real, ¿quién del equipo puede arreglarlo, cuánto le tomará y dónde buscará respuestas?</p>
+        <blockquote>Una herramienta vale lo que vale la capacidad de tu equipo para operarla cuando falla.</blockquote>
+
+        <h2>La matriz que usamos ahora</h2>
+        <p>Después de una sesión abierta de lecciones aprendidas, agregamos un paso de evaluación para cualquier herramienta crítica. Cada opción recibe una calificación simple de 1 a 5 en estas preguntas:</p>
+        <div class="table-wrap">
+          <table>
+            <thead><tr><th>Criterio</th><th>La pregunta</th></tr></thead>
+            <tbody>
+              <tr><td>Encaje con el stack</td><td>¿Está construida en un lenguaje y una plataforma que el equipo ya conoce?</td></tr>
+              <tr><td>Experiencia del equipo</td><td>¿Alguien del equipo la ha operado en producción?</td></tr>
+              <tr><td>Documentación</td><td>¿La documentación cubre nuestro caso exacto, con ejemplos que funcionan?</td></tr>
+              <tr><td>Soporte</td><td>¿Hay una comunidad activa, soporte pago o ambos? ¿Qué tan rápido se responden los problemas?</td></tr>
+              <tr><td>Carga operativa</td><td>¿Quién la parcha, la actualiza y la monitorea, y cuánto tiempo toma cada mes?</td></tr>
+              <tr><td>Esfuerzo de integración</td><td>¿Cuánto código a la medida necesita para funcionar con nuestros sistemas?</td></tr>
+            </tbody>
+          </table>
+        </div>
+        <p>Una herramienta con puntaje bajo en encaje y experiencia del equipo todavía puede ganar, pero solo si el plan incluye el tiempo y la formación para aprenderla, y un responsable con nombre propio.</p>
+
+        <h2>Construir, alojar o comprar</h2>
+        <p>En el caso de la identidad, las opciones hoy se dividen en dos grupos, y la elección correcta depende tanto de tu equipo como de tus requisitos:</p>
+        <ul>
+          <li><strong>Servicios de identidad administrados</strong> como Auth0, Okta, AWS Cognito o Microsoft Entra ID. Cambias algo de flexibilidad y una factura mensual por mucho menos que operar.</li>
+          <li><strong>Código abierto autoalojado</strong> como Keycloak. Más control y sin licencia por usuario, pero tu equipo lo opera, lo actualiza y lo asegura. Keycloak se ha vuelto más fácil de operar en versiones recientes, pero la pregunta de quién es el dueño no desaparece.</li>
+        </ul>
+        <p>En la práctica, el factor decisivo es la responsabilidad operativa. Autoalojar un proveedor de identidad significa asumir sus objetivos de disponibilidad y turnos de guardia, los parches de seguridad y la respuesta a vulnerabilidades (CVE), las actualizaciones de versión, los respaldos de la base de datos y la rotación de las llaves de firma. Si el equipo no puede comprometerse con eso, un proveedor administrado es la decisión de arquitectura más segura.</p>
+
+        <h2>Cómo cambian la decisión los asistentes de IA</h2>
+        <p>Si enfrentáramos la misma decisión hoy, las herramientas de IA ayudarían en tres frentes y dejarían un problema intacto.</p>
+        <ul>
+          <li><strong>Aprender un stack desconocido es más rápido.</strong> Asistentes como Claude Code, Cursor o GitHub Copilot pueden explicar un código en Java que no conoces, guiarte por la configuración y escribir un primer borrador del código de integración. La penalidad de "no conocemos este lenguaje" es menor que antes.</li>
+          <li><strong>Las pruebas de concepto son más baratas.</strong> Un prototipo funcional muchas veces se puede construir en días en lugar de semanas, así que no hay excusa para saltárselo con una herramienta crítica.</li>
+          <li><strong>Los vacíos de documentación son más fáciles de cubrir.</strong> Un asistente puede leer el código fuente y el registro de incidencias cuando la documentación se queda corta.</li>
+          <li><strong>Pero la responsabilidad sigue siendo humana.</strong> La IA puede ayudarte a configurar una herramienta. No puede estar de guardia por ella, y en configuraciones poco comunes puede equivocarse con total seguridad. En sistemas críticos para la seguridad, cada cambio sugerido por IA necesita la revisión de alguien que lo entienda.</li>
+        </ul>
+
+        <h2>Un proceso simple para tu próxima decisión</h2>
+        <ol>
+          <li>Escribe los requisitos, incluido quién va a operar la herramienta.</li>
+          <li>Preselecciona dos o tres opciones, incluida al menos una que el equipo ya conozca.</li>
+          <li>Califica cada opción con la matriz anterior.</li>
+          <li>Haz una prueba de concepto con tiempo límite sobre la mejor opción, usando asistentes de IA para avanzar rápido.</li>
+          <li>Decide, nombra un responsable y deja por escrito las razones para que el próximo equipo entienda la elección.</li>
+        </ol>
+
+        <h2>Cómo lo manejó el equipo</h2>
+        <p>El sobrecosto de tiempo fácilmente pudo terminar en culpas. En cambio, lo tratamos como una lección compartida y escribimos la matriz juntos. Desde entonces, la gente levantó los riesgos más temprano, y eso valió más que cualquier decisión sobre una herramienta.</p>
+        <p>Lee la historia completa de la migración en <a class="link" href="/es/casos/fincaraiz-monolito-a-microservicios/">De monolito a microservicios en Fincaraiz</a>.</p>
+        <div class="author"><svg aria-hidden="true" viewBox="0 0 189 190"><path fill="#0071e3" d="__MARK__"/></svg><p><b>Erwin Mongui</b>Director de Tecnología en Cedar Planters e ingeniero certificado en Inteligencia Artificial, en Toronto.</p></div>
+      </div>
+      <aside class="aside"><div class="related"><h4>Relacionado</h4><a href="/es/casos/fincaraiz-monolito-a-microservicios/">Caso: de monolito a microservicios</a><a href="/es/articulos/metricas-de-salud-de-equipos-de-ingenieria/">Cómo mido la salud de un equipo de ingeniería</a><a href="/es/articulos/carreras-en-ia-para-recien-graduados/">Lo que necesitan los recién graduados para una carrera en IA</a></div></aside>
+    </div>
+  </section>

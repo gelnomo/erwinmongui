@@ -1,0 +1,91 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<rss version="2.0" xmlns:atom="http://www.w3.org/2005/Atom">
+<channel>
+  <title>Erwin Mongui: casos y artículos</title>
+  <link>https://erwinmongui.com/es/</link>
+  <atom:link href="https://erwinmongui.com/es/feed.xml" rel="self" type="application/rss+xml"/>
+  <description>Casos de estudio y artículos de Erwin Mongui sobre arquitectura de plataformas, datos, IA y liderazgo en ingeniería.</description>
+  <language>es</language>
+  <lastBuildDate>Sat, 26 Sep 2026 12:00:00 +0000</lastBuildDate>
+  <item>
+    <title>Un motor de distribución de leads que se conecta con cualquier CRM</title>
+    <link>https://erwinmongui.com/es/casos/fincaraiz-distribucion-de-leads/</link>
+    <guid isPermaLink="true">https://erwinmongui.com/es/casos/fincaraiz-distribucion-de-leads/</guid>
+    <pubDate>Sat, 26 Sep 2026 12:00:00 +0000</pubDate>
+    <category>Caso de estudio</category>
+    <description>Cómo Erwin Mongui diseñó la distribución de leads B2B de Fincaraiz: GraphQL, reintentos tolerantes a fallos, 100% de conciliación y seis plataformas CRM.</description>
+  </item>
+  <item>
+    <title>Una plataforma de datos desde cero, como primera contratación técnica</title>
+    <link>https://erwinmongui.com/es/casos/cedar-planters-plataforma-de-datos/</link>
+    <guid isPermaLink="true">https://erwinmongui.com/es/casos/cedar-planters-plataforma-de-datos/</guid>
+    <pubDate>Fri, 25 Sep 2026 12:00:00 +0000</pubDate>
+    <category>Caso de estudio</category>
+    <description>Como primera contratación técnica de Cedar Planters, Erwin Mongui reemplazó herramientas de reportes de terceros por una plataforma de datos propia.</description>
+  </item>
+  <item>
+    <title>Encontrar cuellos de botella en la entrega con lead time y cycle time</title>
+    <link>https://erwinmongui.com/es/articulos/cuellos-de-botella-lead-time-cycle-time/</link>
+    <guid isPermaLink="true">https://erwinmongui.com/es/articulos/cuellos-de-botella-lead-time-cycle-time/</guid>
+    <pubDate>Fri, 25 Sep 2026 12:00:00 +0000</pubDate>
+    <category>Entrega</category>
+    <description>Cinco pasos para encontrar dónde se atasca el trabajo de software con lead time, cycle time y métricas de flujo, confirmar la causa con el equipo y resolverla.</description>
+  </item>
+  <item>
+    <title>Cómo mido la salud de un equipo de ingeniería</title>
+    <link>https://erwinmongui.com/es/articulos/metricas-de-salud-de-equipos-de-ingenieria/</link>
+    <guid isPermaLink="true">https://erwinmongui.com/es/articulos/metricas-de-salud-de-equipos-de-ingenieria/</guid>
+    <pubDate>Thu, 24 Sep 2026 12:00:00 +0000</pubDate>
+    <category>Liderazgo</category>
+    <description>Las métricas de entrega, salud e impacto que sigo, cómo se relacionan con DORA y SPACE, y cómo saber si los asistentes de IA realmente ayudan a un equipo.</description>
+  </item>
+  <item>
+    <title>De monolito a microservicios, sin detener una plataforma de 5 millones de visitas</title>
+    <link>https://erwinmongui.com/es/casos/fincaraiz-monolito-a-microservicios/</link>
+    <guid isPermaLink="true">https://erwinmongui.com/es/casos/fincaraiz-monolito-a-microservicios/</guid>
+    <pubDate>Wed, 23 Sep 2026 12:00:00 +0000</pubDate>
+    <category>Caso de estudio</category>
+    <description>Cómo Erwin Mongui llevó Fincaraiz de ASP.NET a Django, React y Kubernetes para más de 5 millones de visitas al mes: sin caídas, 50% menos costos y búsqueda con NLP.</description>
+  </item>
+  <item>
+    <title>De analista de datos a ingeniero de datos, gracias a una buena pregunta</title>
+    <link>https://erwinmongui.com/es/articulos/de-analista-de-datos-a-ingeniero-de-datos/</link>
+    <guid isPermaLink="true">https://erwinmongui.com/es/articulos/de-analista-de-datos-a-ingeniero-de-datos/</guid>
+    <pubDate>Tue, 22 Sep 2026 12:00:00 +0000</pubDate>
+    <category>Liderazgo</category>
+    <description>Cómo pedirle a un analista que cuestionara nuestra herramienta de pipelines llevó a un mejor stack y a un nuevo ingeniero de datos. Descubrimiento guiado, con IA.</description>
+  </item>
+  <item>
+    <title>Elige la herramienta que tu equipo puede sostener, no la que encabeza la lista</title>
+    <link>https://erwinmongui.com/es/articulos/elegir-herramientas-que-tu-equipo-pueda-sostener/</link>
+    <guid isPermaLink="true">https://erwinmongui.com/es/articulos/elegir-herramientas-que-tu-equipo-pueda-sostener/</guid>
+    <pubDate>Mon, 21 Sep 2026 12:00:00 +0000</pubDate>
+    <category>Arquitectura</category>
+    <description>Un proyecto de inicio de sesión único tomó seis veces más de lo planeado. Qué salió mal, la matriz de evaluación que usamos y cómo cambia la decisión con IA.</description>
+  </item>
+  <item>
+    <title>Construir el futuro: lo que necesitan los recién graduados para una carrera en IA</title>
+    <link>https://erwinmongui.com/es/articulos/carreras-en-ia-para-recien-graduados/</link>
+    <guid isPermaLink="true">https://erwinmongui.com/es/articulos/carreras-en-ia-para-recien-graduados/</guid>
+    <pubDate>Tue, 05 Mar 2024 12:00:00 +0000</pubDate>
+    <category>IA</category>
+    <description>La visión de un líder de ingeniería sobre carreras en IA: colaboración, proyectos reales, desarrollo asistido por IA, evaluación, ética y frameworks.</description>
+  </item>
+  <item>
+    <title>Domar la jungla de datos: JSON como contrato entre tus sistemas y la IA</title>
+    <link>https://erwinmongui.com/es/articulos/json-en-aplicaciones-de-ia/</link>
+    <guid isPermaLink="true">https://erwinmongui.com/es/articulos/json-en-aplicaciones-de-ia/</guid>
+    <pubDate>Tue, 06 Feb 2024 12:00:00 +0000</pubDate>
+    <category>IA</category>
+    <description>Por qué JSON se volvió el contrato entre el software y los modelos de IA: salidas estructuradas con JSON Schema y Pydantic, herramientas, MCP y memoria.</description>
+  </item>
+  <item>
+    <title>Reemplazar la selección aleatoria para RT-PCR con una selección de viajeros basada en datos</title>
+    <link>https://erwinmongui.com/es/articulos/seleccion-de-viajeros-rt-pcr-basada-en-datos/</link>
+    <guid isPermaLink="true">https://erwinmongui.com/es/articulos/seleccion-de-viajeros-rt-pcr-basada-en-datos/</guid>
+    <pubDate>Tue, 12 Dec 2023 12:00:00 +0000</pubDate>
+    <category>Investigación</category>
+    <description>Nuestro artículo del STEM Fellowship Big Data and AI Challenge 2023: datos de la OMS y del Gobierno de Canadá para priorizar viajeros para RT-PCR.</description>
+  </item>
+</channel>
+</rss>

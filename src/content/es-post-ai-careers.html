@@ -1,0 +1,87 @@
+<header class="doc-head stage-dark">
+    <nav class="crumbs" aria-label="Ruta de navegación"><a href="/es/">Inicio</a><span>/</span><a href="/es/articulos/">Artículos</a><span>/</span><span>IA</span></nav>
+    <p class="eyebrow">IA · Carreras</p>
+    <h1>Construir el futuro: lo que necesitan los recién graduados para una carrera en IA.</h1>
+    <p class="summary">En 2024 escribí que una carrera en IA dependería de la colaboración, una educación preparada para el futuro, la ética y el aprendizaje continuo. Dos años después, las cuatro siguen vigentes, pero el trabajo del día a día cambió. Los asistentes de IA ya escriben buena parte del primer borrador del código, así que las habilidades que hoy marcan la diferencia son plantear bien los problemas, evaluar los resultados y hacerse responsable de lo que sale a producción.</p>
+    <div class="byline"><span>Por Erwin Mongui</span><span>Publicado el 5 de marzo de 2024</span><span>Actualizado el 23 de septiembre de 2026</span><span>7 min de lectura</span><a class="link" href="/writing/ai-careers-new-graduates/" hreflang="en" lang="en">Read in English</a></div>
+  </header>
+  <section class="doc">
+    <div class="doc-grid">
+      <div class="prose">
+        <div class="inshort"><b>En resumen</b><p>Aprende los fundamentos (Python, datos, PyTorch, estadística), aprende a construir con modelos fundacionales (recuperación de contexto, llamadas a herramientas, salidas estructuradas) y aprende a demostrar que tu sistema funciona con evaluaciones. Usa asistentes de IA todos los días, pero hazte responsable de cada línea que entregas. Construye un proyecto real de punta a punta y escribe sobre él.</p></div>
+
+        <h2>Lo que cambió desde 2024</h2>
+        <p>Cuando escribí la primera versión de este artículo, casi todo el trabajo en IA para recién graduados consistía en entrenar o ajustar modelos. Hoy, muchos productos de IA se construyen sobre grandes modelos fundacionales que otros entrenaron. El trabajo subió de nivel:</p>
+        <ul>
+          <li><strong>De entrenar modelos a construir sistemas.</strong> Buena parte del valor está en conectar un modelo con los datos, las herramientas y las salvaguardas correctas, no en el modelo mismo.</li>
+          <li><strong>De escribir código a dirigirlo y revisarlo.</strong> Asistentes como Cursor, Windsurf, GitHub Copilot y Claude Code pueden armar la base de un servicio, escribir pruebas y refactorizar en minutos. El trabajo del ingeniero es especificar bien la tarea y juzgar el resultado.</li>
+          <li><strong>De "funciona con mi prompt" a la evaluación.</strong> Las respuestas de los modelos varían. Los equipos esperan que los ingenieros midan la calidad con conjuntos de prueba y evaluaciones automáticas, igual que medimos la latencia o la disponibilidad.</li>
+        </ul>
+
+        <h2>1. La colaboración es el trabajo</h2>
+        <p>Los productos de IA tocan datos, software, diseño, temas legales y el negocio al mismo tiempo. Nadie cubre todo eso solo, así que los recién graduados más efectivos son los que trabajan bien con otras disciplinas.</p>
+        <ul>
+          <li><strong>Trabaja en equipos mixtos.</strong> Las mejores funcionalidades de IA suelen salir de ingenieros, diseñadores, expertos del dominio y personas que piensan en la ética trabajando sobre el mismo problema.</li>
+          <li><strong>Comunícate por escrito.</strong> Las notas de diseño claras y las buenas descripciones de pull requests importan más que antes, porque también son lo que le das a un asistente de IA como instrucciones.</li>
+          <li><strong>Aprende de tus pares.</strong> La programación en pareja y la revisión de código siguen siendo la forma más rápida de crecer, con o sin IA de por medio.</li>
+        </ul>
+
+        <h2>2. Una educación basada en proyectos reales</h2>
+        <p>Los cursos no logran seguirle el ritmo al campo, así que los proyectos reales pesan más que las notas. Cuando reviso candidatos, un proyecto de punta a punta me dice más que una lista de cursos. En las entrevistas pido que me lo expliquen: los distintos enfoques que consideraron, por qué eligieron uno y qué harían distinto hoy. Cómo razona alguien sobre esas decisiones me dice más que el resultado final. Un buen proyecto:</p>
+        <ul>
+          <li>resuelve un problema real con datos reales y desordenados;</li>
+          <li>tiene una línea base clara y una forma de medir si la versión con IA es mejor;</li>
+          <li>corre en algún lugar distinto a un notebook, con una API, una interfaz sencilla y monitoreo básico;</li>
+          <li>está documentado por escrito, incluido lo que no funcionó.</li>
+        </ul>
+        <p>Las habilidades blandas siguen importando tanto como las técnicas: el trabajo en equipo, la comunicación y la resolución de problemas son lo que hace que un proyecto funcione dentro de una organización real.</p>
+
+        <h2>3. Los frameworks que vale la pena aprender hoy</h2>
+        <p>Las herramientas cambian rápido, así que aprende primero los conceptos y después las herramientas. Estas son las capas sobre las que se construye la mayoría de las aplicaciones de IA hoy, con ejemplos de herramientas muy usadas:</p>
+        <div class="table-wrap">
+          <table>
+            <thead><tr><th>Capa</th><th>Qué entender</th><th>Herramientas a conocer</th></tr></thead>
+            <tbody>
+              <tr><td>Fundamentos</td><td>Python, manejo de datos, estadística, cómo aprenden las redes neuronales</td><td>Pandas, NumPy, scikit-learn, PyTorch</td></tr>
+              <tr><td>Modelos</td><td>Usar y ajustar modelos preentrenados</td><td>Hugging Face Transformers, APIs de los proveedores de modelos</td></tr>
+              <tr><td>Recuperación de contexto</td><td>Darle al modelo el contexto correcto a partir de tus propios datos</td><td>Búsqueda vectorial en PostgreSQL (pgvector) o Elasticsearch, LlamaIndex</td></tr>
+              <tr><td>Agentes y herramientas</td><td>Permitir que un modelo llame funciones y ejecute acciones de varios pasos de forma segura</td><td>LangGraph, Pydantic AI, Model Context Protocol (MCP)</td></tr>
+              <tr><td>Salidas estructuradas</td><td>Hacer que las respuestas del modelo sean predecibles y legibles por máquinas</td><td>JSON Schema, Pydantic, Zod</td></tr>
+              <tr><td>Evaluación y monitoreo</td><td>Medir la calidad, el costo y las fallas en el tiempo</td><td>Conjuntos de prueba, evaluaciones automáticas, trazabilidad y seguimiento de experimentos como MLflow</td></tr>
+            </tbody>
+          </table>
+        </div>
+
+        <h2>4. Usa asistentes de IA, pero hazte responsable del resultado</h2>
+        <p>Los recién graduados que usan bien los asistentes de IA logran mucho más. Los que aceptan resultados que no entienden crean problemas que alguien más tiene que resolver. Algunos hábitos marcan la diferencia:</p>
+        <ul>
+          <li>Escribe lo que quieres antes de pedirlo: entradas, salidas, casos límite.</li>
+          <li>Pídele al asistente primero las pruebas y después el código.</li>
+          <li>Lee cada cambio como si lo hubiera escrito un colega. Si no puedes explicarlo, no lo integres.</li>
+          <li>Nunca pegues secretos, datos de clientes ni código confidencial en una herramienta que tu empresa no haya aprobado.</li>
+        </ul>
+
+        <h2>5. La ética es parte de la ingeniería</h2>
+        <p>A medida que la IA entra en la vida diaria, crecen sus efectos sobre las personas, y también la regulación, como la Ley de IA de la Unión Europea y leyes de privacidad como PIPEDA en Canadá. Los recién graduados deben tratar la ética como trabajo de ingeniería, no como un tema aparte.</p>
+        <ul>
+          <li><strong>Sesgos y equidad.</strong> Prueba cómo funciona tu sistema con distintos grupos de usuarios, y corrige los datos o el diseño cuando no funciona bien para alguno.</li>
+          <li><strong>Privacidad y seguridad.</strong> Recoge solo los datos que necesitas, protégelos en cada etapa y vigila riesgos nuevos como la inyección de prompts en herramientas que leen contenido externo.</li>
+          <li><strong>Transparencia.</strong> Avisa a los usuarios cuando interactúan con IA, y mantén a una persona en el proceso para las decisiones que afectan seriamente a la gente.</li>
+        </ul>
+
+        <h2>6. Sigue aprendiendo, de forma deliberada</h2>
+        <p>El ritmo del cambio convierte el aprendizaje continuo en parte del trabajo. Lo que me funciona:</p>
+        <ul>
+          <li><strong>Aprendizaje estructurado.</strong> Cursos y certificaciones para los fundamentos. Completé el programa Certified AI Engineer en Lambton College en 2024.</li>
+          <li><strong>Comunidad.</strong> Meetups, conferencias y proyectos de código abierto, para escuchar qué funciona realmente en producción.</li>
+          <li><strong>Investigar y construir.</strong> Experimentos pequeños y proyectos personales. Mi propio proyecto de investigación en Lambton fue <a class="link" href="/es/articulos/seleccion-de-viajeros-rt-pcr-basada-en-datos/">publicado en el STEM Fellowship Journal</a>.</li>
+        </ul>
+
+        <h2>Conclusión</h2>
+        <p>El futuro del desarrollo de aplicaciones con IA trae retos y oportunidades reales. Los recién graduados que colaboran bien, aprenden construyendo, miden sus resultados, tratan la ética como parte del trabajo y siguen aprendiendo harán más que adaptarse al cambio. Lo van a liderar.</p>
+        <p><em>Una primera versión de este artículo se publicó en inglés en <a class="link" href="https://www.linkedin.com/pulse/shaping-future-career-opportunities-ai-next-graduates-erwin-mongui-dsmoc/" target="_blank" rel="noopener">LinkedIn</a>.</em></p>
+        <div class="author"><svg aria-hidden="true" viewBox="0 0 189 190"><path fill="#0071e3" d="__MARK__"/></svg><p><b>Erwin Mongui</b>Director de Tecnología en Cedar Planters e ingeniero certificado en Inteligencia Artificial (Lambton College, 2024), en Toronto.</p></div>
+      </div>
+      <aside class="aside"><div class="related"><h4>Relacionado</h4><a href="/es/articulos/json-en-aplicaciones-de-ia/">JSON como contrato entre tus sistemas y la IA</a><a href="/es/articulos/seleccion-de-viajeros-rt-pcr-basada-en-datos/">Reemplazar la selección aleatoria para RT-PCR con datos</a><a href="/es/articulos/de-analista-de-datos-a-ingeniero-de-datos/">De analista de datos a ingeniero de datos</a></div></aside>
+    </div>
+  </section>

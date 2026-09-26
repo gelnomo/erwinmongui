@@ -15,6 +15,7 @@ Running `python3 src/build.py` from the repository root writes:
                      navigation, footer and tracking scripts
   sitemap.xml        every page, with hreflang alternates
   feed.xml           RSS feed of case studies and articles (English)
+  es/feed.xml        the same feed for the Spanish pages
   llms.txt           short guide to the site for AI assistants
   llms-full.txt      the full text of every page, for AI assistants
 
@@ -48,10 +49,12 @@ MARK_PATH = (ROOT / "src" / "mark.path").read_text().strip()
 TEXT = {
     "en": {"nav": [("Work", "/work/", "work"), ("Writing", "/writing/", "writing"), ("About", "/about/", "about")],
            "contact": ("Contact", "/#contact"), "switch": ("Español", "es"), "skip": "Skip to content",
-           "rights": "All rights reserved.", "pref": "Add as a preferred source on Google", "nav_label": "Main"},
-    "es": {"nav": [("Casos", "/es/#casos", "es"), ("Sobre mí", "/about/", "about")],
+           "rights": "All rights reserved.", "pref": "Add as a preferred source on Google", "nav_label": "Main",
+           "footer_links": '<a href="/work/">Work</a><a href="/writing/">Writing</a><a href="/about/">About</a><a href="/es/" lang="es" hreflang="es">Español</a>'},
+    "es": {"nav": [("Casos", "/es/#casos", "es"), ("Artículos", "/es/articulos/", "es-writing"), ("Sobre mí", "/about/", "about")],
            "contact": ("Contacto", "/es/#contacto"), "switch": ("English", "en"), "skip": "Ir al contenido",
-           "rights": "Todos los derechos reservados.", "pref": "Agregar como fuente preferida en Google", "nav_label": "Principal"},
+           "rights": "Todos los derechos reservados.", "pref": "Agregar como fuente preferida en Google", "nav_label": "Principal",
+           "footer_links": '<a href="/es/#casos">Casos</a><a href="/es/articulos/">Artículos</a><a href="/about/">Sobre mí</a><a href="/" lang="en" hreflang="en">English</a>'},
 }
 LOCALE = {"en": "en_CA", "es": "es_CO"}
 
@@ -176,7 +179,7 @@ def head(p, by_key):
 <meta name="theme-color" content="#000000">
 <link rel="canonical" href="{url}">
 {alternates(p, by_key)}
-<link rel="alternate" type="application/rss+xml" title="Erwin Mongui: case studies and writing" href="{SITE}/feed.xml">
+{feed_link(p)}
 <link rel="me" href="{LINKEDIN}">
 <meta property="og:type" content="{og_type}">
 <meta property="og:site_name" content="Erwin Mongui">
@@ -224,13 +227,21 @@ def head(p, by_key):
 <script defer src="/analytics.js"></script>"""
 
 
+def feed_link(p):
+    if p["lang"] == "es":
+        return f'<link rel="alternate" type="application/rss+xml" title="Erwin Mongui: casos y artículos" href="{SITE}/es/feed.xml">'
+    return f'<link rel="alternate" type="application/rss+xml" title="Erwin Mongui: case studies and writing" href="{SITE}/feed.xml">'
+
+
 def nav(p, by_key):
     t = TEXT[p["lang"]]
     home = "/es/" if p["lang"] == "es" else "/"
     links = []
     for label, href, key in t["nav"]:
         current = key == p["key"] or (key == "work" and p["url"].startswith("/work/")) or \
-                  (key == "writing" and p["url"].startswith("/writing/"))
+                  (key == "writing" and p["url"].startswith("/writing/")) or \
+                  (key == "es-writing" and p["url"].startswith("/es/articulos/")) or \
+                  (key == "es" and p["url"].startswith("/es/casos/"))
         cur = ' aria-current="page"' if current else ""
         links.append(f'<a href="{href}"{cur}>{label}</a>')
     label, other_lang = t["switch"]
@@ -257,7 +268,7 @@ def footer(p):
   <div class="foot-inner">
     <p>&copy; {date.today().year} Erwin Mongui. {t["rights"]}</p>
     <nav aria-label="Footer">
-      <a href="/work/">Work</a><a href="/writing/">Writing</a><a href="/about/">About</a><a href="/es/" lang="es" hreflang="es">Español</a>
+      {t["footer_links"]}
       <a href="{LINKEDIN}" target="_blank" rel="noopener">LinkedIn</a>
       <a href="https://www.google.com/preferences/source?q=erwinmongui.com" target="_blank" rel="noopener">{t["pref"]}</a>
     </nav>
@@ -331,8 +342,15 @@ def rfc822(d):
     return format_datetime(datetime(y, m, dd, 12, 0, tzinfo=timezone.utc))
 
 
-def feed(pages):
-    items = sorted([p for p in pages if p["type"] in ("case", "post") and p["lang"] == "en"],
+FEED = {"en": ("Erwin Mongui: case studies and writing", "/feed.xml", "/",
+                "Case studies and articles by Erwin Mongui on platform architecture, data, AI and engineering leadership."),
+        "es": ("Erwin Mongui: casos y artículos", "/es/feed.xml", "/es/",
+               "Casos de estudio y artículos de Erwin Mongui sobre arquitectura de plataformas, datos, IA y liderazgo en ingeniería.")}
+
+
+def feed(pages, lang="en"):
+    title, path, home, about = FEED[lang]
+    items = sorted([p for p in pages if p["type"] in ("case", "post") and p["lang"] == lang],
                    key=lambda p: p["published"], reverse=True)
     out = []
     for p in items:
@@ -348,11 +366,11 @@ def feed(pages):
     return f"""<?xml version="1.0" encoding="UTF-8"?>
 <rss version="2.0" xmlns:atom="http://www.w3.org/2005/Atom">
 <channel>
-  <title>Erwin Mongui: case studies and writing</title>
-  <link>{SITE}/</link>
-  <atom:link href="{SITE}/feed.xml" rel="self" type="application/rss+xml"/>
-  <description>Case studies and articles by Erwin Mongui on platform architecture, data, AI and engineering leadership.</description>
-  <language>en</language>
+  <title>{title}</title>
+  <link>{SITE}{home}</link>
+  <atom:link href="{SITE}{path}" rel="self" type="application/rss+xml"/>
+  <description>{about}</description>
+  <language>{lang}</language>
   <lastBuildDate>{rfc822(newest)}</lastBuildDate>
 {chr(10).join(out)}
 </channel>
@@ -453,7 +471,7 @@ def llms(pages, by_key):
         ("Case studies", ["case-migration", "case-crm", "case-data"]),
         ("Writing", by_key["writing"]["items"]),
         ("About", ["about"]),
-        ("En español", ["es", "es-case-migration", "es-case-crm", "es-case-data"]),
+        ("En español", ["es", "es-case-migration", "es-case-crm", "es-case-data", "es-writing"] + by_key["es-writing"]["items"]),
     ]
     parts = [intro, "## Pages\n\n- [Erwin Mongui, Engineering Leader in Toronto](https://erwinmongui.com/): full profile with experience, impact metrics, AI work, skills, education and certifications."]
     for title, keys in sections:
@@ -485,10 +503,11 @@ def main():
         out.write_text(render(p, by_key))
         print("wrote", out.relative_to(ROOT))
     (ROOT / "sitemap.xml").write_text(sitemap(pages, by_key))
-    (ROOT / "feed.xml").write_text(feed(pages))
+    (ROOT / "feed.xml").write_text(feed(pages, "en"))
+    (ROOT / "es" / "feed.xml").write_text(feed(pages, "es"))
     (ROOT / "llms.txt").write_text(llms(pages, by_key))
     (ROOT / "llms-full.txt").write_text(llms_full(pages, by_key))
-    print("wrote sitemap.xml, feed.xml, llms.txt, llms-full.txt")
+    print("wrote sitemap.xml, feed.xml, es/feed.xml, llms.txt, llms-full.txt")
 
 
 if __name__ == "__main__":
