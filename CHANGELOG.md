@@ -2,6 +2,20 @@
 
 Notable changes to erwinmongui.com. Each version has a `## vX.Y.Z` heading; pushing a matching tag, or running the Release workflow from the Actions tab with that version, publishes the section as a GitHub release (see `.github/workflows/release.yml`).
 
+## v1.4.0 (2026-09-26)
+
+### Google Analytics
+
+- Every hit now says what kind of page it came from: GA's built-in content group (Home, Case study, Article, Listing, About, Not found), plus `content_id` (the same for the English and Spanish versions of a page) and `site_language`.
+- Contact clicks are one key event, `generate_lead`, with `method` (email or linkedin) and where on the page the click happened. It replaces `email_click` and the contact use of `cta_click`. The email address is no longer sent.
+- New `preferred_source_click` for Google's button at the end of case studies and articles (not tracked before) and the footer link.
+- New `language_switch` event for the English / Español switch.
+- Case studies and articles now report the heading a reader reached (`section_view`) and `article_read` when a reader reaches the end, marked `read` or `skim` by active time against expected reading time.
+- Fewer, clearer events. Removed: right clicks, Tab presses, paste, cut, text selections, print, section exits, time milestones, deep-link arrivals, skills-rail views and arrows, and the custom duplicates of GA's own scroll, outbound click and file download events. The five kinds of clicks on non-links are one `dead_click` event. Scroll depth is 25, 50, 75 and 100 %, and only after a real scroll.
+- `page_exit` is sent once per page view, not every time the tab is hidden.
+- `exception` only reports errors in this site's own scripts, with file and line.
+- ANALYTICS.md lists every event and the exact GA setup: key events, custom definitions and settings.
+
 ## v1.3.1 (2026-09-26)
 
 ### SEO fixes
