@@ -1,11 +1,18 @@
-# Creates a GitHub release when a version tag (v1.0.0, v1.1.0, ...) is pushed.
-# The release notes are the matching "## vX.Y.Z" section of CHANGELOG.md.
+# Publishes a GitHub release whose notes are the matching "## vX.Y.Z" section
+# of CHANGELOG.md. Two ways to run it:
+#   - push a version tag (v1.0.0, v1.1.0, ...), or
+#   - run it from the Actions tab with a version; it tags the current main.
 name: Release
 
 on:
   push:
     tags:
       - "v*"
+  workflow_dispatch:
+    inputs:
+      version:
+        description: "Version to release, for example v1.0.0 (must have a section in CHANGELOG.md)"
+        required: true
 
 permissions:
   contents: write
@@ -13,18 +20,27 @@ permissions:
 jobs:
   release:
     runs-on: ubuntu-latest
+    env:
+      VERSION: ${{ github.event_name == 'workflow_dispatch' && inputs.version || github.ref_name }}
     steps:
       - uses: actions/checkout@v4
 
+      - name: Check the version format
+        run: |
+          if ! printf '%s' "$VERSION" | grep -Eq '^v[0-9]+\.[0-9]+\.[0-9]+$'; then
+            echo "Version must look like v1.2.3, got: $VERSION" >&2
+            exit 1
+          fi
+
       - name: Extract release notes from CHANGELOG.md
         run: |
-          awk -v tag="$GITHUB_REF_NAME" '
+          awk -v tag="$VERSION" '
             $0 ~ "^## " tag "( |$)" { found = 1; next }
             found && /^## / { exit }
             found { print }
           ' CHANGELOG.md > release-notes.md
           if [ ! -s release-notes.md ]; then
-            echo "No section for $GITHUB_REF_NAME in CHANGELOG.md" >&2
+            echo "No section for $VERSION in CHANGELOG.md" >&2
             exit 1
           fi
 
@@ -32,7 +48,9 @@ jobs:
         env:
           GH_TOKEN: ${{ github.token }}
         run: |
-          gh release create "$GITHUB_REF_NAME" \
-            --title "$GITHUB_REF_NAME" \
-            --notes-file release-notes.md \
-            --verify-tag
+          if [ "$GITHUB_EVENT_NAME" = "workflow_dispatch" ]; then
+            # Creates the tag on the commit this run checked out.
+            gh release create "$VERSION" --title "$VERSION" --notes-file release-notes.md --target "$GITHUB_SHA"
+          else
+            gh release create "$VERSION" --title "$VERSION" --notes-file release-notes.md --verify-tag
+          fi
