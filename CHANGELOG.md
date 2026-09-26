@@ -2,7 +2,7 @@
 
 Notable changes to erwinmongui.com. Each version has a `## vX.Y.Z` heading; pushing a matching tag, or running the Release workflow from the Actions tab with that version, publishes the section as a GitHub release (see `.github/workflows/release.yml`).
 
-## v1.3.1
+## v1.3.1 (2026-09-26)
 
 ### SEO fixes
 
