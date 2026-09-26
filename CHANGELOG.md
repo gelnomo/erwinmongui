@@ -2,6 +2,20 @@
 
 Notable changes to erwinmongui.com. Each version has a `## vX.Y.Z` heading; pushing a matching tag, or running the Release workflow from the Actions tab with that version, publishes the section as a GitHub release (see `.github/workflows/release.yml`).
 
+## v1.3.0 (2026-09-26)
+
+### Fixes
+
+- The header on inner pages now matches the homepage: the brand on the left, the section links in the middle, and the language switch and Contact on the right. A leftover mobile rule had pushed the links after Contact.
+- Sections on inner pages have their side padding again. The same leftover code had broken the next CSS rule, so some lists, like the Writing page, touched the screen edges.
+- The build now stops with a clear error if a stylesheet has unbalanced braces, so this kind of mistake can't reach the site again.
+
+### Google preferred sources
+
+- Every case study and article, in English and Spanish, ends with a dark strip: "Get my next case studies and articles in Google Search", with Google's Add to Preferred Sources button. Spanish pages show "Añadir a fuentes preferidas".
+- Google's script loads only on those pages.
+- The Spanish footer link now says "Añadir como fuente preferida en Google", matching Google's own wording.
+
 ## v1.2.0 (2026-09-26)
 
 ### One header and one footer everywhere

@@ -26,9 +26,6 @@ button,select{font:inherit}
 /* Skip link (the header and footer live in chrome.css) */
 .skip{position:absolute;left:16px;top:-60px;z-index:100;background:var(--white);color:var(--ink);padding:10px 16px;border-radius:999px;font-weight:600;text-decoration:none}
 .skip:focus{top:12px}
-  .nav-links{order:3;width:100%;overflow-x:auto;gap:22px;padding-bottom:2px}
-  .nav-links a{font-size:14px}
-}
 
 /* Shared building blocks */
 .stage{padding:clamp(64px,9vw,120px) var(--gut)}
@@ -260,3 +257,9 @@ button,select{font:inherit}
 .nf-contact-es{display:none}
 .nf-es .nf-contact-en{display:none}
 .nf-es .nf-contact-es{display:inline}
+
+/* Google preferred sources strip at the end of case studies and articles */
+.ps-strip{background:var(--black);color:var(--soft);border-top:1px solid var(--line-dark);padding:40px 22px}
+.ps-inner{max-width:1200px;margin:0 auto;display:flex;align-items:center;justify-content:space-between;gap:16px 32px;flex-wrap:wrap}
+.ps-inner p{font-size:18px;font-weight:600;letter-spacing:-.01em;color:var(--white);max-width:44ch}
+.ps-inner .preferred-source{min-height:40px}
