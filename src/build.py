@@ -164,6 +164,18 @@ def alternates(p, by_key):
     return "\n".join(tags)
 
 
+CONTENT_GROUPS = {"case": "Case study", "post": "Article", "collection": "Listing", "about": "About", "home-es": "Home"}
+
+
+def site_context(p):
+    """Page facts sent with every GA4 hit: the built-in content_group, plus
+    content_id (the same for both languages of a page) and site_language."""
+    content_id = p["key"][3:] if p["key"].startswith("es-") else p["key"]
+    return json.dumps({"content_group": CONTENT_GROUPS[p["type"]],
+                       "content_id": "home" if p["type"] == "home-es" else content_id,
+                       "site_language": p["lang"]}, ensure_ascii=False)
+
+
 def head(p, by_key):
     url = abs_url(p["url"])
     is_article = p["type"] in ("case", "post")
@@ -223,7 +235,8 @@ def head(p, by_key):
   window.dataLayer = window.dataLayer || [];
   function gtag(){{dataLayer.push(arguments);}}
   gtag('js', new Date());
-  gtag('config', 'G-LKD2WCNDV1');
+  window.siteContext = {site_context(p)};
+  gtag('config', 'G-LKD2WCNDV1', window.siteContext);
 </script>
 <!-- Clarity tracking code for https://erwinmongui.com/ -->
 <script>
@@ -445,7 +458,8 @@ def render_404(pages, by_key):
   window.dataLayer = window.dataLayer || [];
   function gtag(){{dataLayer.push(arguments);}}
   gtag('js', new Date());
-  gtag('config', 'G-LKD2WCNDV1');
+  window.siteContext = {{content_group: 'Not found', content_id: 'not-found', site_language: location.pathname.indexOf('/es/') === 0 ? 'es' : 'en'}};
+  gtag('config', 'G-LKD2WCNDV1', window.siteContext);
 </script>
 <!-- Clarity tracking code for https://erwinmongui.com/ -->
 <script>

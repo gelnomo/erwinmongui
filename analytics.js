@@ -1,27 +1,29 @@
 /*
   Google Analytics 4 event layer for erwinmongui.com
   --------------------------------------------------
-  Requires the gtag.js snippet in <head> (G-LKD2WCNDV1). Every event goes
-  through track(), so this file is the single place to see what is sent.
+  Requires the gtag.js snippet in <head> (G-LKD2WCNDV1). The snippet also sets
+  window.siteContext (content_group, content_id, site_language), which gtag
+  attaches to every hit. Every event goes through track(), so this file is the
+  single place to see what is sent. ANALYTICS.md has the parameter reference
+  and the GA4 admin setup.
 
   Debugging: open the site with ?ga_debug=1 to print every event to the
   console and flag it for GA4 DebugView (Admin > DebugView). ?ga_debug=0
   turns it off again. The flag is remembered in localStorage.
 
-  Events sent (see ANALYTICS.md for the full parameter reference):
-    Navigation and clicks
-      nav_click, cta_click, email_click, outbound_click,
-      certificate_click, file_download, anchor_click, link_click,
-      skip_link_click, menu_toggle, skills_rail_nav, button_click,
-      skill_chip_click, skill_tile_click, metric_click, role_click,
-      context_menu
-    Reading behaviour
-      scroll_depth (10/25/50/75/90/100), section_view, section_exit,
-      role_view, skill_tile_view, text_select, content_copy, content_cut,
-      content_paste, print_page
+  Events sent:
+    Key events
+      generate_lead            email or LinkedIn click (method, section)
+      preferred_source_click   Google preferred sources button or link
+    Navigation
+      nav_click, cta_click, link_click, outbound_click, certificate_click,
+      language_switch, menu_toggle
+    Reading
+      section_view, role_view, scroll_depth (25/50/75/100), article_read,
+      content_copy, dead_click
     Session quality
-      engaged_time (10/30/60/120/300/600 s active), page_exit,
-      deep_link_arrival, keyboard_navigation, exception
+      page_exit, exception
+  The 404 page also sends page_not_found from its own script.
 */
 (function () {
   'use strict';
@@ -29,6 +31,8 @@
   var win = window;
   var doc = document;
   var t0 = Date.now();
+  var ctx = win.siteContext || {};
+  var lang = (doc.documentElement.lang || 'en').slice(0, 2);
 
   /* ---------- helpers ---------- */
 
@@ -57,7 +61,7 @@
     return target;
   }
 
-  var counts = { clicks: 0, copies: 0, selects: 0 };
+  var counts = { clicks: 0, copies: 0 };
 
   function track(name, params) {
     params = params || {};
@@ -71,30 +75,57 @@
     if (typeof win.gtag === 'function') win.gtag('event', name, params);
   }
 
-  /* ---------- sections ---------- */
+  /* ---------- sections ----------
+     The homepage has <section id> blocks. Case studies and articles have none,
+     so their <h2> headings inside .prose act as sections. */
 
   var SECTION_NAMES = {
     hero: 'Introduction', about: 'About', experience: 'Experience', impact: 'Impact',
     ai: 'AI', skills: 'Skills', education: 'Education', certifications: 'Certifications',
     facts: 'Quick facts', contact: 'Contact', nav: 'Navigation', footer: 'Footer',
-    'case-studies': 'Case studies', writing: 'Writing'
+    'case-studies': 'Case studies', writing: 'Writing', casos: 'Case studies',
+    'preferred-source': 'Preferred sources strip'
   };
-  function sectionName(id) { return SECTION_NAMES[id] || id; }
 
-  function sectionOf(el) {
-    if (!el || !el.closest) return 'page';
-    var s = el.closest('section[id], header#nav, footer');
-    if (!s) return 'page';
-    if (s.tagName === 'FOOTER') return 'footer';
-    return s.id || 'page';
+  function slug(s) {
+    return clip(s, 60).toLowerCase().normalize('NFD').replace(/[̀-ͯ]/g, '')
+      .replace(/[^a-z0-9]+/g, '-').replace(/^-|-$/g, '');
   }
 
   var sections = Array.prototype.slice.call(doc.querySelectorAll('main section[id]'));
-  var currentSection = sections.length ? sections[0].id : 'page';
-  var seen = {};          // section id -> true once viewed
-  var dwell = {};         // section id -> total seconds visible
-  var visibleSince = {};  // section id -> timestamp while visible
-  var paused = {};        // section ids that were visible when the tab was hidden
+  var headingMode = false;
+  if (!sections.length) {
+    sections = Array.prototype.slice.call(doc.querySelectorAll('main .prose h2'));
+    headingMode = sections.length > 0;
+  }
+  function idOf(el) { return el.id || (headingMode ? slug(el.textContent) : ''); }
+  function nameOf(el) { return headingMode ? clip(el.textContent) : (SECTION_NAMES[el.id] || el.id); }
+  function sectionName(id) {
+    for (var i = 0; i < sections.length; i++) if (idOf(sections[i]) === id) return nameOf(sections[i]);
+    return SECTION_NAMES[id] || id;
+  }
+
+  /* Where on the page an element sits: nav, footer, a homepage section, the
+     preferred sources strip, or the article heading it follows. */
+  function sectionOf(el) {
+    if (!el || !el.closest) return 'page';
+    if (el.closest('header#nav, .nav')) return 'nav';
+    if (el.closest('footer')) return 'footer';
+    if (el.closest('.ps-strip')) return 'preferred-source';
+    var s = el.closest('section[id]');
+    if (s) return s.id;
+    if (headingMode) {
+      var last = '';
+      for (var i = 0; i < sections.length; i++) {
+        if (sections[i].compareDocumentPosition(el) & Node.DOCUMENT_POSITION_FOLLOWING) last = idOf(sections[i]);
+      }
+      if (last) return last;
+    }
+    return 'page';
+  }
+
+  var currentSection = 'page';
+  var seen = {};
 
   /* ---------- user context ---------- */
 
@@ -105,10 +136,6 @@
       color_scheme: mq('(prefers-color-scheme: dark)') ? 'dark' : 'light',
       pointer_type: mq('(pointer: coarse)') ? 'coarse' : 'fine'
     });
-  }
-
-  if (location.hash && location.hash.length > 1) {
-    track('deep_link_arrival', { section_id: location.hash.slice(1), section_name: sectionName(location.hash.slice(1)) });
   }
 
   /* ---------- clicks (delegated, capture phase so we see state before other handlers change it) ---------- */
@@ -128,70 +155,53 @@
     };
   }
 
+  /* Card links wrap a whole teaser; their heading is the useful label. */
+  function linkLabel(a) {
+    var h = a.querySelector('h2, h3, h4');
+    return clip(h ? h.textContent : (a.textContent || a.getAttribute('aria-label') || ''));
+  }
+
   function trackLink(a, section) {
     var href = a.getAttribute('href') || '';
-    var text = clip(a.textContent || a.getAttribute('aria-label') || '');
     var isMail = /^mailto:/i.test(href);
-    var isTel = /^tel:/i.test(href);
     var isHash = href.charAt(0) === '#';
-    var outbound = !isMail && !isTel && !isHash && !!a.hostname && a.hostname !== location.hostname;
-    var isCta = a.classList.contains('btn') || a.classList.contains('nav-cta');
+    var host = (a.hostname || '').replace(/^www\./, '');
+    var outbound = !isMail && !isHash && !!a.hostname && a.hostname !== location.hostname;
+    var common = { link_text: linkLabel(a), section: section };
 
-    var common = { link_text: text, link_url: clip(a.href || href), section: section };
-    if (isCta) common.is_cta = true;
-    if (outbound) { common.outbound = true; common.link_domain = a.hostname.replace(/^www\./, ''); }
+    /* Contact: the address itself is never sent. */
+    if (isMail) return track('generate_lead', assign(common, { method: 'email' }));
+    if (host === 'linkedin.com' && /^\/in\//.test(a.pathname)) {
+      return track('generate_lead', assign(common, { method: 'linkedin', link_url: clip(a.href) }));
+    }
+    if (host === 'google.com' && /^\/preferences\/source/.test(a.pathname)) {
+      return track('preferred_source_click', assign(common, { method: 'link' }));
+    }
 
-    if (a.hasAttribute('download')) {
-      var file = (a.pathname || '').split('/').pop();
-      return track('file_download', assign(common, {
-        file_name: file,
-        file_extension: (file.indexOf('.') > -1 ? file.split('.').pop() : '').toLowerCase()
-      }));
+    common.link_url = clip(a.href || href);
+    var hreflang = a.getAttribute('hreflang');
+    if (a.classList.contains('nav-lang') || (hreflang && hreflang.slice(0, 2) !== lang)) {
+      return track('language_switch', assign(common, { from_language: lang, to_language: (hreflang || '').slice(0, 2) }));
     }
-    if (isMail) {
-      return track('email_click', assign(common, {
-        method: 'mailto_link',
-        email_address: href.replace(/^mailto:/i, '').split('?')[0]
-      }));
-    }
-    if (isTel) return track('phone_click', common);
-    if (a.classList.contains('skip')) return track('skip_link_click', common);
+    if (a.classList.contains('skip')) return;
     if (a.closest('#nav-links') || a.classList.contains('brand')) {
       return track('nav_click', assign(common, {
-        target_section: isHash ? href.slice(1) : '',
-        nav_item: a.classList.contains('brand') ? 'brand' : text
+        nav_item: a.classList.contains('brand') ? 'brand' : common.link_text,
+        target_section: isHash ? href.slice(1) : ''
       }));
     }
     if (section === 'certifications' && outbound) {
       return track('certificate_click', assign(common, certificateInfo(a)));
     }
-    if (isCta) {
+    if (a.classList.contains('btn') || a.classList.contains('nav-cta')) {
       var style = a.classList.contains('nav-cta') ? 'nav' :
         a.classList.contains('btn-primary') ? 'primary' :
         a.classList.contains('btn-ghost') ? 'ghost' :
         a.classList.contains('btn-outline') ? 'outline' : 'other';
-      return track('cta_click', assign(common, {
-        cta_style: style,
-        target_section: isHash ? href.slice(1) : ''
-      }));
+      return track('cta_click', assign(common, { cta_style: style, target_section: isHash ? href.slice(1) : '' }));
     }
-    if (outbound) return track('outbound_click', common);
-    if (isHash) return track('anchor_click', assign(common, { target_section: href.slice(1) }));
-    return track('link_click', common);
-  }
-
-  function trackButton(btn, section) {
-    if (btn.id === 'menu-btn') {
-      return track('menu_toggle', { action: btn.getAttribute('aria-expanded') === 'true' ? 'close' : 'open' });
-    }
-    if (btn.classList.contains('rail-btn')) {
-      return track('skills_rail_nav', { direction: btn.id === 'rail-prev' ? 'previous' : 'next', section: section });
-    }
-    return track('button_click', {
-      button_id: btn.id || '',
-      button_text: clip(btn.textContent || btn.getAttribute('aria-label') || ''),
-      section: section
-    });
+    if (outbound) return track('outbound_click', assign(common, { link_domain: host }));
+    return track('link_click', assign(common, { target_section: isHash ? href.slice(1) : '' }));
   }
 
   function headingOf(el) {
@@ -199,54 +209,54 @@
     return h ? clip(h.textContent) : '';
   }
 
+  /* Things that look clickable but are not links. High counts mean they
+     should become links or expanders. */
+  function deadClickLabel(el) {
+    if (el.classList.contains('chip')) return ['skill_chip', clip(el.textContent)];
+    if (el.classList.contains('tile')) return ['skill_tile', headingOf(el)];
+    if (el.classList.contains('metric')) {
+      var num = el.querySelector('.metric-num');
+      var label = el.querySelector('.metric-label');
+      return ['metric', clip((num ? num.textContent : '') + ' ' + (label ? label.textContent : ''))];
+    }
+    if (el.classList.contains('role')) {
+      var co = el.querySelector('.role-company');
+      var ti = el.querySelector('.role-title');
+      return ['role', clip((co ? co.textContent : '') + ' · ' + (ti ? ti.textContent : ''))];
+    }
+    return [el.classList.contains('edu') ? 'education' : 'ai_card', headingOf(el)];
+  }
+
   doc.addEventListener('click', function (e) {
     var target = e.target;
     if (!target || !target.closest) return;
+
+    /* Google's button renders in a shadow root; the click reaches us on its host. */
+    var ps = target.closest('[google-add-preferred-source-btn]');
+    if (ps) {
+      counts.clicks++;
+      return track('preferred_source_click', { method: 'button', section: sectionOf(ps) });
+    }
+
     var el = target.closest('a, button, .chip, .tile, .metric, .role, .edu, .ai');
     if (!el) return;
     counts.clicks++;
     var section = sectionOf(el);
 
     if (el.tagName === 'A') return trackLink(el, section);
-    if (el.tagName === 'BUTTON') return trackButton(el, section);
-
-    /* Non-interactive things people click anyway. Useful for spotting "dead clicks". */
-    if (el.classList.contains('chip')) {
-      var card = el.closest('.tile, .ai');
-      return track('skill_chip_click', { chip_text: clip(el.textContent), card_title: headingOf(card), section: section });
+    if (el.tagName === 'BUTTON') {
+      if (el.id === 'menu-btn') {
+        return track('menu_toggle', { action: el.getAttribute('aria-expanded') === 'true' ? 'close' : 'open' });
+      }
+      return;
     }
-    if (el.classList.contains('tile')) {
-      return track('skill_tile_click', { tile_name: headingOf(el), section: section });
-    }
-    if (el.classList.contains('metric')) {
-      var num = el.querySelector('.metric-num');
-      var label = el.querySelector('.metric-label');
-      return track('metric_click', { metric_value: num ? clip(num.textContent) : '', metric_label: label ? clip(label.textContent) : '', section: section });
-    }
-    if (el.classList.contains('role')) {
-      var co = el.querySelector('.role-company');
-      var ti = el.querySelector('.role-title');
-      return track('role_click', { company: co ? clip(co.textContent) : '', role_title: ti ? clip(ti.textContent) : '', section: section });
-    }
-    if (el.classList.contains('edu') || el.classList.contains('ai')) {
-      return track('card_click', { card_title: headingOf(el), section: section });
-    }
+    var info = deadClickLabel(el);
+    track('dead_click', { element_type: info[0], element_label: info[1], section: section });
   }, true);
-
-  doc.addEventListener('contextmenu', function (e) {
-    var t = e.target;
-    var link = t && t.closest ? t.closest('a') : null;
-    track('context_menu', {
-      section: sectionOf(t),
-      target_element: t && t.tagName ? t.tagName.toLowerCase() : '',
-      on_link: !!link,
-      link_url: link ? clip(link.href) : ''
-    });
-  });
 
   /* ---------- scroll depth ---------- */
 
-  var MARKS = [10, 25, 50, 75, 90, 100];
+  var MARKS = [25, 50, 75, 100];
   var marksFired = {};
   var maxScroll = 0;
 
@@ -259,6 +269,7 @@
   }
 
   var scrollTick = false;
+  var scrolled = false;
   function onScroll() {
     if (scrollTick) return;
     scrollTick = true;
@@ -266,64 +277,42 @@
       scrollTick = false;
       var p = scrollPercent();
       if (p > maxScroll) maxScroll = p;
+      /* Wait for a real scroll, so short pages don't report 100% on load. */
+      if (!scrolled) return;
       for (var i = 0; i < MARKS.length; i++) {
         var m = MARKS[i];
         if (!marksFired[m] && p >= m) {
           marksFired[m] = true;
-          track('scroll_depth', { percent_scrolled: m, seconds_since_load: since(), section: currentSection, section_name: sectionName(currentSection) });
+          track('scroll_depth', { percent_scrolled: m, seconds_since_load: since(), section: currentSection });
         }
       }
     });
   }
-  win.addEventListener('scroll', onScroll, { passive: true });
+  win.addEventListener('scroll', function () { scrolled = true; onScroll(); }, { passive: true });
   onScroll();
 
-  /* ---------- section view and dwell time ---------- */
-
-  function closeDwell(id, sendExit) {
-    if (!visibleSince[id]) return;
-    var sec = (Date.now() - visibleSince[id]) / 1000;
-    delete visibleSince[id];
-    dwell[id] = (dwell[id] || 0) + sec;
-    if (sendExit && sec >= 1) {
-      track('section_exit', {
-        section_id: id,
-        section_name: sectionName(id),
-        time_in_section_sec: Math.round(sec),
-        total_time_in_section_sec: Math.round(dwell[id]),
-        scroll_percent: scrollPercent()
-      });
-    }
-  }
+  /* ---------- section views ---------- */
 
   var supportsIO = 'IntersectionObserver' in win;
 
   if (supportsIO && sections.length) {
-    /* A section counts as "current" while it crosses the middle band of the viewport,
-       so tall sections still register and only one section is current at a time. */
+    /* Homepage sections count while they cross the middle band of the viewport.
+       Article headings count once they reach the upper half. */
     var sectionIO = new IntersectionObserver(function (entries) {
       entries.forEach(function (en) {
-        var id = en.target.id;
-        if (en.isIntersecting) {
-          currentSection = id;
-          if (doc.visibilityState !== 'hidden') visibleSince[id] = Date.now();
-          else paused[id] = true;
-          if (!seen[id]) {
-            seen[id] = true;
-            track('section_view', {
-              section_id: id,
-              section_name: sectionName(id),
-              section_index: sections.indexOf(en.target) + 1,
-              seconds_since_load: since(),
-              scroll_percent: scrollPercent()
-            });
-          }
-        } else {
-          delete paused[id];
-          closeDwell(id, true);
-        }
+        if (!en.isIntersecting) return;
+        var id = idOf(en.target);
+        currentSection = id;
+        if (seen[id]) return;
+        seen[id] = true;
+        track('section_view', {
+          section_id: id,
+          section_name: nameOf(en.target),
+          section_index: sections.indexOf(en.target) + 1,
+          seconds_since_load: since()
+        });
       });
-    }, { rootMargin: '-45% 0px -45% 0px', threshold: 0 });
+    }, { rootMargin: headingMode ? '0px 0px -50% 0px' : '-45% 0px -45% 0px', threshold: 0 });
     sections.forEach(function (s) { sectionIO.observe(s); });
   }
 
@@ -337,125 +326,36 @@
         roleIO.unobserve(en.target);
         var co = en.target.querySelector('.role-company');
         var ti = en.target.querySelector('.role-title');
-        var when = en.target.querySelector('.role-when');
         track('role_view', {
           company: co ? clip(co.textContent) : '',
           role_title: ti ? clip(ti.textContent) : '',
-          role_period: when ? clip(when.textContent) : '',
-          role_index: roles.indexOf(en.target) + 1,
-          seconds_since_load: since()
+          role_index: roles.indexOf(en.target) + 1
         });
       });
     }, { rootMargin: '-40% 0px -40% 0px', threshold: 0 });
     roles.forEach(function (r) { roleIO.observe(r); });
   }
 
-  /* ---------- skills rail tiles ---------- */
+  /* ---------- copy ---------- */
 
-  var rail = doc.getElementById('rail');
-  var skillsSection = doc.getElementById('skills');
-  if (supportsIO && rail && skillsSection) {
-    var tiles = Array.prototype.slice.call(rail.querySelectorAll('.tile'));
-    var tileSeen = [];
-    var skillsOnScreen = false;
-    var tileIO = null;
-
-    function checkTiles(entries) {
-      if (!skillsOnScreen) return;
-      entries.forEach(function (en) {
-        if (!en.isIntersecting) return;
-        tileIO.unobserve(en.target);
-        if (tileSeen.indexOf(en.target) > -1) return;
-        tileSeen.push(en.target);
-        track('skill_tile_view', {
-          tile_name: headingOf(en.target),
-          tile_index: tiles.indexOf(en.target) + 1,
-          section: 'skills'
-        });
-      });
-    }
-
-    var skillsIO = new IntersectionObserver(function (entries) {
-      entries.forEach(function (en) {
-        skillsOnScreen = en.isIntersecting;
-        if (skillsOnScreen && !tileIO) {
-          tileIO = new IntersectionObserver(checkTiles, { root: rail, threshold: 0.6 });
-          tiles.forEach(function (t) { tileIO.observe(t); });
-        } else if (skillsOnScreen && tileIO) {
-          /* Re-evaluate tiles that are in view when the section scrolls back in. */
-          tiles.forEach(function (t) {
-            if (tileSeen.indexOf(t) > -1) return;
-            tileIO.unobserve(t); tileIO.observe(t);
-          });
-        }
-      });
-    }, { threshold: 0.4 });
-    skillsIO.observe(rail);
-  }
-
-  /* ---------- copy, cut, paste, selection ---------- */
-
-  function selectionInfo() {
+  doc.addEventListener('copy', function () {
     var sel = win.getSelection ? win.getSelection() : null;
-    var text = sel ? String(sel) : '';
+    var text = sel ? String(sel).replace(/\s+/g, ' ').trim() : '';
     var node = sel && sel.anchorNode;
     var el = node ? (node.nodeType === 1 ? node : node.parentElement) : null;
-    return { text: text.replace(/\s+/g, ' ').trim(), section: sectionOf(el) };
-  }
-
-  function clipboardHandler(name) {
-    return function () {
-      var info = selectionInfo();
-      counts.copies++;
-      track(name, {
-        section: info.section,
-        section_name: sectionName(info.section),
-        text_length: info.text.length,
-        word_count: info.text ? info.text.split(' ').length : 0,
-        text_preview: clip(info.text),
-        contains_email: /@/.test(info.text)
-      });
-    };
-  }
-  doc.addEventListener('copy', clipboardHandler('content_copy'));
-  doc.addEventListener('cut', clipboardHandler('content_cut'));
-  doc.addEventListener('paste', function (e) {
-    var t = e.target;
-    /* Never send the pasted content itself: it comes from the visitor's clipboard. */
-    track('content_paste', {
-      section: sectionOf(t),
-      target_element: t && t.tagName ? t.tagName.toLowerCase() : ''
+    counts.copies++;
+    track('content_copy', {
+      section: sectionOf(el),
+      text_length: text.length,
+      text_preview: clip(text)
     });
   });
 
-  var selTimer = null;
-  var lastSelection = '';
-  var SELECT_MIN_CHARS = 20;
-  var SELECT_MAX_EVENTS = 15;
-  doc.addEventListener('selectionchange', function () {
-    clearTimeout(selTimer);
-    selTimer = setTimeout(function () {
-      var info = selectionInfo();
-      if (info.text.length < SELECT_MIN_CHARS || info.text === lastSelection || counts.selects >= SELECT_MAX_EVENTS) return;
-      lastSelection = info.text;
-      counts.selects++;
-      track('text_select', {
-        section: info.section,
-        section_name: sectionName(info.section),
-        text_length: info.text.length,
-        word_count: info.text.split(' ').length,
-        text_preview: clip(info.text)
-      });
-    }, 900);
-  });
-
-  /* ---------- engaged time (only while the tab is visible and the visitor is not idle) ---------- */
+  /* ---------- active time (tab visible and the visitor not idle for a minute) ---------- */
 
   var activeSeconds = 0;
   var lastInput = Date.now();
   var IDLE_MS = 60000;
-  var MILESTONES = [10, 30, 60, 120, 300, 600];
-  var milestonesFired = {};
 
   ['pointerdown', 'keydown', 'scroll', 'touchstart', 'mousemove', 'wheel'].forEach(function (ev) {
     doc.addEventListener(ev, function () { lastInput = Date.now(); }, { passive: true, capture: true });
@@ -465,77 +365,64 @@
     if (doc.visibilityState === 'hidden') return;
     if (Date.now() - lastInput > IDLE_MS) return;
     activeSeconds++;
-    for (var i = 0; i < MILESTONES.length; i++) {
-      var m = MILESTONES[i];
-      if (!milestonesFired[m] && activeSeconds >= m) {
-        milestonesFired[m] = true;
-        track('engaged_time', { seconds: m, max_scroll_percent: maxScroll, section: currentSection, section_name: sectionName(currentSection) });
-      }
-    }
   }, 1000);
 
-  /* ---------- page exit summary ---------- */
+  /* ---------- article read ----------
+     Sent once when a case study or article reader reaches the end of the text.
+     read_type is "read" when the active time is at least 40% of the expected
+     reading time (230 words a minute), otherwise "skim". */
 
-  var hiddenCount = 0;
+  var prose = doc.querySelector('main .prose');
+  if (supportsIO && prose && /^(Case study|Article)$/.test(ctx.content_group || '')) {
+    var words = (prose.textContent || '').trim().split(/\s+/).length;
+    var expected = Math.round(words / 230 * 60);
+    var end = doc.createElement('span');
+    end.setAttribute('aria-hidden', 'true');
+    prose.appendChild(end);
+    var endIO = new IntersectionObserver(function (entries) {
+      if (!entries[0].isIntersecting) return;
+      endIO.disconnect();
+      track('article_read', {
+        read_type: activeSeconds >= expected * 0.4 ? 'read' : 'skim',
+        word_count: words,
+        active_seconds: activeSeconds,
+        expected_seconds: expected
+      });
+    });
+    endIO.observe(end);
+  }
+
+  /* ---------- page exit summary (once per page view) ---------- */
+
   var exitSent = false;
-
   function pageExit(reason) {
     if (exitSent) return;
     exitSent = true;
-    var currentDwell = visibleSince[currentSection] ? (Date.now() - visibleSince[currentSection]) / 1000 : 0;
     track('page_exit', {
       reason: reason,
       max_scroll_percent: maxScroll,
       active_seconds: activeSeconds,
-      seconds_since_load: since(),
       sections_viewed: Object.keys(seen).length,
       exit_section: currentSection,
       exit_section_name: sectionName(currentSection),
-      time_in_exit_section_sec: Math.round((dwell[currentSection] || 0) + currentDwell),
-      hidden_count: hiddenCount,
       click_count: counts.clicks,
-      copy_count: counts.copies,
-      select_count: counts.selects
+      copy_count: counts.copies
     });
   }
-
   doc.addEventListener('visibilitychange', function () {
-    if (doc.visibilityState === 'hidden') {
-      hiddenCount++;
-      Object.keys(visibleSince).forEach(function (id) { paused[id] = true; closeDwell(id, false); });
-      pageExit('tab_hidden');
-    } else {
-      Object.keys(paused).forEach(function (id) { visibleSince[id] = Date.now(); });
-      paused = {};
-      exitSent = false;
-    }
+    if (doc.visibilityState === 'hidden') pageExit('tab_hidden');
   });
   win.addEventListener('pagehide', function () { pageExit('pagehide'); });
 
-  /* ---------- misc signals ---------- */
-
-  win.addEventListener('beforeprint', function () {
-    track('print_page', { section: currentSection, max_scroll_percent: maxScroll });
-  });
-
-  var keyboardTracked = false;
-  doc.addEventListener('keydown', function (e) {
-    if (keyboardTracked || e.key !== 'Tab') return;
-    keyboardTracked = true;
-    track('keyboard_navigation', { section: currentSection });
-  });
+  /* ---------- script errors on this site ----------
+     Errors from other origins (ads, Clarity, Google's button) arrive as a bare
+     "Script error." with no file, and we cannot fix them, so they are skipped. */
 
   win.addEventListener('error', function (e) {
-    var where = (e.filename || '').split('/').pop();
+    var file = e.filename || '';
+    if (!file || file.indexOf(location.origin) !== 0) return;
     track('exception', {
-      description: clip((e.message || 'Script error') + ' @ ' + where + ':' + (e.lineno || 0)),
-      fatal: false
-    });
-  });
-  win.addEventListener('unhandledrejection', function (e) {
-    var r = e.reason;
-    track('exception', {
-      description: clip('Unhandled promise rejection: ' + ((r && r.message) || r)),
+      description: clip((e.message || 'Script error') + ' @ ' + file.split('/').pop() + ':' + (e.lineno || 0)),
       fatal: false
     });
   });

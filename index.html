@@ -382,8 +382,8 @@
   window.dataLayer = window.dataLayer || [];
   function gtag(){dataLayer.push(arguments);}
   gtag('js', new Date());
-
-  gtag('config', 'G-LKD2WCNDV1');
+  window.siteContext = {content_group: 'Home', content_id: 'home', site_language: document.documentElement.lang === 'es' ? 'es' : 'en'};
+  gtag('config', 'G-LKD2WCNDV1', window.siteContext);
 </script>
 <!-- Clarity tracking code for https://erwinmongui.com/ -->
 <script type="text/javascript">
@@ -395,7 +395,7 @@
 </script>
 <!-- Google preferred sources button (https://developers.google.com/search/docs/appearance/preferred-sources) -->
 <script async src="https://news.google.com/swg/js/v1/publisher.js"></script>
-<!-- Site event tracking (clicks, scroll depth, sections, copy/paste, engagement) -->
+<!-- Site event tracking (contact clicks, navigation, sections, scroll depth, reading) -->
 <script defer src="/analytics.js"></script>
 <link rel="preconnect" href="https://www.googletagmanager.com">
 <link rel="preconnect" href="https://fonts.googleapis.com">

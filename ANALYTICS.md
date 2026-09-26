@@ -2,96 +2,112 @@
 
 erwinmongui.com sends events to Google Analytics 4 property `G-LKD2WCNDV1`.
 
-- The gtag.js snippet lives in the `<head>` of `index.html`.
-- All custom events are defined in `analytics.js`. Nothing else on the page calls `gtag`.
-- No personal data from visitors is collected. The only text sent is text that already appears on the page (what a visitor copied or selected), truncated to 100 characters. Pasted content is never sent.
+- The gtag.js snippet is in the `<head>` of every page: `index.html` for the homepage (the Spanish homepage is generated from it), and `src/build.py` for every other page.
+- The snippet defines `window.siteContext` and passes it to `gtag('config')`, so every hit carries three page facts:
+  - `content_group`: GA's built-in content group. It is `Home`, `Case study`, `Article`, `Listing` (the case study and writing indexes), `About` or `Not found`.
+  - `content_id`: the page, the same in both languages (`case-crm` for the English and Spanish CRM case study, `home` for both homepages).
+  - `site_language`: `en` or `es`.
+- All custom events are defined in `analytics.js`. The only other `gtag` call is `page_not_found`, on the 404 page.
+- No personal data is sent. Email links send `method: email`, never the address. The only page text sent is text that already appears on the page, truncated to 100 characters.
 
 ## Testing
 
 Open the site with `?ga_debug=1`. Every event is printed to the browser console as `[ga4] event_name {…}` and flagged with `debug_mode`, so it shows up in real time in GA4 under **Admin > DebugView**. Open with `?ga_debug=0` to turn it off. The flag is remembered in `localStorage`.
 
+Automated browser tests must block `google-analytics.com` and `/g/collect` requests, or their visits count as real traffic.
+
 ## Events
 
-Every event carries `section` (the id of the section the interaction happened in: `hero`, `about`, `experience`, `impact`, `ai`, `skills`, `education`, `certifications`, `facts`, `contact`, `case-studies`, `writing`, `nav`, `footer`) where it makes sense.
+Most events carry `section`: where on the page it happened.
+- `nav` or `footer`.
+- On the homepage, the id of its section: `hero`, `about`, `experience`, `impact`, `ai`, `skills`, `education`, `certifications`, `case-studies`, `writing`, `facts` or `contact`.
+- On case studies and articles, the heading the reader was under, e.g. `the-problem`.
+- `preferred-source` for the strip at the end of case studies and articles.
 
-### Clicks
+### Key events
 
-| Event | When | Key parameters |
+| Event | When | Parameters |
 |---|---|---|
-| `nav_click` | Header link or brand logo | `nav_item`, `target_section`, `link_text` |
-| `cta_click` | Any `.btn` or the nav Contact pill | `cta_style` (primary/ghost/outline/nav), `target_section`, `outbound`, `link_domain` |
-| `email_click` | A `mailto:` link | `email_address`, `is_cta` |
-| `certificate_click` | A credential link in Certifications | `certificate_name`, `provider`, `issued`, `certificate_group`, `link_domain` |
-| `outbound_click` | Any other link to another domain | `link_text`, `link_url`, `link_domain` |
-| `file_download` | A link with a `download` attribute (CV, when re-enabled) | `file_name`, `file_extension` |
-| `anchor_click` / `link_click` | Other in-page or same-site links | `link_text`, `link_url`, `target_section` |
-| `skip_link_click` | Accessibility "Skip to content" link | |
+| `generate_lead` | A click on an email link or a LinkedIn profile link, anywhere on the site | `method` (email / linkedin), `section`, `link_text` |
+| `preferred_source_click` | Google's "Add to preferred sources" button, or the footer link | `method` (button / link), `section` |
+
+### Navigation
+
+| Event | When | Parameters |
+|---|---|---|
+| `nav_click` | Header link or logo | `nav_item`, `target_section`, `link_url` |
+| `cta_click` | A button-style link (`.btn`) or the header Contact button, unless it is a lead | `cta_style` (primary / ghost / outline / nav), `target_section`, `link_url` |
+| `language_switch` | The English / Español switch, in the header, footer or page | `from_language`, `to_language`, `section` |
+| `link_click` | Any other link on the site. Card links report their title | `link_text`, `link_url`, `target_section`, `section` |
+| `outbound_click` | Any other link to another site | `link_domain`, `link_url`, `link_text` |
+| `certificate_click` | A credential link in Certifications | `certificate_name`, `provider`, `issued`, `certificate_group` |
 | `menu_toggle` | Mobile menu button | `action` (open / close) |
-| `skills_rail_nav` | Skills rail arrows | `direction` (previous / next) |
-| `button_click` | Any other button | `button_id`, `button_text` |
-| `skill_chip_click` | A technology chip (not a link, so this shows intent) | `chip_text`, `card_title` |
-| `skill_tile_click`, `metric_click`, `role_click`, `card_click` | Clicks on non-interactive cards. Useful for spotting "dead clicks" where people expect something to happen | `tile_name`, `metric_value`, `metric_label`, `company`, `role_title`, `card_title` |
-| `context_menu` | Right click or long press | `on_link`, `link_url`, `target_element` |
 
-### Reading behaviour
+### Reading
 
-| Event | When | Key parameters |
+| Event | When | Parameters |
 |---|---|---|
-| `scroll_depth` | Once each at 10, 25, 50, 75, 90 and 100 % of the page | `percent_scrolled`, `seconds_since_load`, `section` |
-| `section_view` | First time a section reaches the middle of the viewport | `section_id`, `section_name`, `section_index`, `seconds_since_load`, `scroll_percent` |
-| `section_exit` | A section leaves the middle of the viewport after at least 1 s | `section_id`, `time_in_section_sec`, `total_time_in_section_sec` |
-| `role_view` | Each Experience card reaches the middle of the viewport (once) | `company`, `role_title`, `role_period`, `role_index` |
-| `skill_tile_view` | Each skills tile becomes 60 % visible inside the rail while the section is on screen (once) | `tile_name`, `tile_index` |
-| `text_select` | Visitor selects 20+ characters (debounced, max 15 per page) | `text_preview`, `text_length`, `word_count`, `section` |
-| `content_copy` / `content_cut` | Visitor copies or cuts text | `text_preview`, `text_length`, `word_count`, `contains_email`, `section` |
-| `content_paste` | Visitor pastes (content is not sent) | `section`, `target_element` |
-| `print_page` | Browser print dialog opens | `section`, `max_scroll_percent` |
+| `section_view` | First time a homepage section crosses the middle of the screen, or an article heading reaches the top half | `section_id`, `section_name`, `section_index`, `seconds_since_load` |
+| `role_view` | Each Experience card crosses the middle of the screen (once) | `company`, `role_title`, `role_index` |
+| `scroll_depth` | Once each at 25, 50, 75 and 100 % of the page, after the visitor scrolls | `percent_scrolled`, `seconds_since_load`, `section` |
+| `article_read` | Once, when a case study or article reader reaches the end of the text | `read_type` (read / skim), `word_count`, `active_seconds`, `expected_seconds` |
+| `content_copy` | Visitor copies text | `text_preview`, `text_length`, `section` |
+| `dead_click` | A click on something that looks clickable but isn't a link: skill chips and tiles, metrics, roles, education and AI cards | `element_type`, `element_label`, `section` |
+
+`article_read` uses 230 words a minute for `expected_seconds`. `read_type` is `read` when `active_seconds` is at least 40 % of that, otherwise `skim`.
+
+Active time only counts while the tab is visible and the visitor moved, scrolled or typed in the last 60 seconds.
 
 ### Session quality
 
-| Event | When | Key parameters |
+| Event | When | Parameters |
 |---|---|---|
-| `engaged_time` | Once each at 10, 30, 60, 120, 300 and 600 s of active time. Time only counts while the tab is visible and the visitor moved, scrolled or typed in the last 60 s | `seconds`, `max_scroll_percent`, `section` |
-| `page_exit` | Tab hidden or page unloaded (once per hide) | `reason`, `max_scroll_percent`, `active_seconds`, `sections_viewed`, `exit_section`, `time_in_exit_section_sec`, `click_count`, `copy_count`, `select_count`, `hidden_count` |
-| `deep_link_arrival` | Page opened with a `#section` hash | `section_id` |
-| `keyboard_navigation` | First Tab key press | `section` |
-| `exception` | Uncaught JS error or unhandled promise rejection | `description`, `fatal` |
+| `page_exit` | Once per page view, when the tab is hidden or the page unloads | `reason`, `max_scroll_percent`, `active_seconds`, `sections_viewed`, `exit_section`, `exit_section_name`, `click_count`, `copy_count` |
+| `exception` | A script error in this site's own files. Errors from ads, Clarity and Google's button are skipped | `description` (message, file and line), `fatal` |
+| `page_not_found` | The 404 page | `page_path`, `page_referrer` |
 
 ### User properties
 
 Set once per visitor: `reduced_motion` (true / false), `color_scheme` (dark / light), `pointer_type` (coarse / fine).
 
+### Left to Enhanced measurement
+
+Keep Enhanced measurement on (Admin > Data streams > stream > Enhanced measurement). It adds `page_view`, `session_start`, `first_visit`, `user_engagement` (engagement time), `scroll` at 90 %, `click` for outbound links and `file_download`. `analytics.js` doesn't send its own versions of these.
+
 ## GA4 admin setup
 
-Custom parameters are only visible in standard reports after they are registered. Do this once in **Admin > Data display > Custom definitions**.
+### Key events
 
-Custom dimensions (event scope), in priority order:
+Admin > Data display > Events > **Recent events**: star `generate_lead` and `preferred_source_click`. Unstar `email_click` and `cta_click` if they were starred; `generate_lead` replaces them. Events appear in this list only after GA receives one, which can take 24 to 48 hours.
 
-`section`, `section_name`, `link_text`, `link_url`, `link_domain`, `target_section`, `cta_style`, `nav_item`, `certificate_name`, `provider`, `certificate_group`, `company`, `role_title`, `tile_name`, `chip_text`, `text_preview`, `method`, `direction`, `action`, `reason`, `exit_section`, `percent_scrolled`, `outbound`
+### Custom definitions
 
-Custom metrics (event scope):
+Custom parameters are only visible in reports after they are registered, in **Admin > Data display > Custom definitions > Create custom dimension** (scope: Event). `content_group` needs no registration: it is GA's built-in **Content group** dimension.
 
-`text_length`, `word_count`, `time_in_section_sec`, `total_time_in_section_sec`, `active_seconds`, `seconds_since_load`, `sections_viewed`, `click_count`, `copy_count`, `max_scroll_percent`
+Custom dimensions (event scope). Use the parameter name as the dimension name:
 
-Custom user properties: `reduced_motion`, `color_scheme`, `pointer_type`.
+`content_id`, `site_language`, `section`, `method`, `link_text`, `link_url`, `link_domain`, `nav_item`, `target_section`, `cta_style`, `from_language`, `to_language`, `section_name`, `read_type`, `percent_scrolled`, `element_type`, `element_label`, `certificate_name`, `provider`, `certificate_group`, `company`, `role_title`, `exit_section_name`, `reason`, `text_preview`, `description`, `page_path`
 
-GA4 allows 50 event-scoped dimensions and 50 metrics per property on the free tier, so the list above fits.
+Custom metrics (event scope, unit Standard):
 
-Mark as **Key events** (Admin > Events) so they appear as conversions:
+`word_count`, `active_seconds`, `expected_seconds`, `max_scroll_percent`, `sections_viewed`, `click_count`, `seconds_since_load`, `text_length`
 
-- `email_click`
-- `cta_click` (or build an audience on `link_domain = linkedin.com`)
-- `certificate_click`
-- `file_download`
+Custom dimensions (user scope): `reduced_motion`, `color_scheme`, `pointer_type`.
 
-Enhanced measurement (Admin > Data streams > stream > Enhanced measurement): leave it on. It adds `page_view`, `user_engagement`, `scroll` at 90 % and `click` for outbound links. Those overlap with `scroll_depth` and `outbound_click`, so use the custom events for reporting and keep the built-in ones as a sanity check.
+That is 27 event-scoped dimensions, 8 metrics and 3 user-scoped dimensions. A standard property allows 50 event-scoped dimensions, 50 metrics and 25 user-scoped dimensions.
+
+### Other settings
+
+- Admin > Data collection and modification > **Data retention**: 14 months.
+- Admin > Data streams > stream > Configure tag settings > **Define internal traffic**, then Admin > Data collection and modification > **Data filters** > Internal Traffic > Active.
+- Admin > Product links: link **Search Console** and **AdSense**.
 
 ## Suggested reports (Explore)
 
-- **Funnel**: `page_view` → `section_view` (experience) → `section_view` (contact) → `email_click`.
-- **Section engagement**: `section_exit` by `section_name`, summed `time_in_section_sec` and average per session.
-- **Read depth**: `scroll_depth` counts by `percent_scrolled`, split by device category.
-- **What people copy or highlight**: `content_copy` and `text_select` by `text_preview` and `section`.
-- **Credential interest**: `certificate_click` by `certificate_group` and `provider`.
-- **Dead clicks**: `metric_click`, `role_click`, `skill_tile_click`, `skill_chip_click`. High counts suggest those elements should become links or expanders.
-- **Recruiter signals**: `print_page`, `role_view` sequence, `time_in_exit_section_sec` for `experience`.
+- **Leads by page**: `generate_lead` by Content group and `content_id`, split by `method`. Which pages turn readers into contacts.
+- **Article performance**: `article_read` by `content_id` and `read_type`, next to `page_view` for the same pages. Read-through rate per case study and article.
+- **Where articles lose readers**: `section_view` by `content_id` and `section_index`. The heading where counts drop is where readers leave.
+- **English vs Spanish**: any of the above split by `site_language`. `content_id` lines up the two versions of a page.
+- **Preferred sources**: `preferred_source_click` by `method` and `content_id`.
+- **Homepage funnel**: `page_view` → `section_view` (experience) → `section_view` (contact) → `generate_lead`.
+- **Dead clicks**: `dead_click` by `element_type` and `element_label`. High counts suggest those elements should become links.
