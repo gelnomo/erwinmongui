@@ -19,6 +19,7 @@ The site is served by GitHub Pages from the default branch of this repository. T
 | `src/llms-intro.md` | The fixed introduction at the top of `llms.txt` and `llms-full.txt` |
 | `assets/site.css` | Shared styles for the inner pages |
 | `work/`, `writing/`, `about/`, `es/` | Generated inner pages, including the Spanish case studies (`es/casos/`) and articles (`es/articulos/`). Do not edit by hand |
+| `404.html` | The page shown for a missing address: bilingual, not indexed, suggests matching pages and records a `page_not_found` event in GA4 (generated) |
 | `feed.xml`, `es/feed.xml` | RSS feeds of case studies and articles, in English and Spanish (generated) |
 | `llms-full.txt` | Full text of every case study and article for AI assistants (generated) |
 | `analytics.js` | Custom GA4 events. Documented in [ANALYTICS.md](ANALYTICS.md) |

@@ -13,6 +13,7 @@ Running `python3 src/build.py` from the repository root writes:
 
   <url>/index.html   every page in pages.json, with head tags, structured data,
                      navigation, footer and tracking scripts
+  404.html           the page GitHub Pages shows for a missing address
   sitemap.xml        every page, with hreflang alternates
   feed.xml           RSS feed of case studies and articles (English)
   es/feed.xml        the same feed for the Spanish pages
@@ -308,6 +309,52 @@ def render(p, by_key):
 """
 
 
+# ---------- 404 page ----------
+
+def render_404(pages, by_key):
+    """The page GitHub Pages serves for any missing address. Bilingual, not indexed,
+    and it suggests real pages that match words in the requested address."""
+    index = [{"url": p["url"], "title": p["headline"], "lang": p["lang"]} for p in [HOME] + pages]
+    body = ((SRC / "content" / "404.html").read_text()
+            .replace("__MARK__", MARK_PATH)
+            .replace("__PAGES__", json.dumps(index, ensure_ascii=False).replace("</", "<\\/")))
+    p = {"key": "404", "lang": "en", "url": "/404.html"}
+    return f"""<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Page not found | Erwin Mongui</title>
+<meta name="robots" content="noindex, follow">
+<meta name="theme-color" content="#000000">
+<link rel="icon" href="/favicon.ico" sizes="16x16 32x32 48x48">
+<link rel="icon" type="image/svg+xml" href="/favicon.svg">
+<link rel="apple-touch-icon" sizes="180x180" href="/apple-touch-icon.png">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Manrope:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="/assets/site.css">
+<!-- Google tag (gtag.js) -->
+<script async src="https://www.googletagmanager.com/gtag/js?id=G-LKD2WCNDV1"></script>
+<script>
+  window.dataLayer = window.dataLayer || [];
+  function gtag(){{dataLayer.push(arguments);}}
+  gtag('js', new Date());
+  gtag('config', 'G-LKD2WCNDV1');
+</script>
+<script defer src="/analytics.js"></script>
+</head>
+<body>
+{nav(p, by_key)}
+<main id="main">
+{body}
+</main>
+{footer(p)}
+</body>
+</html>
+"""
+
+
 # ---------- sitemap, feed ----------
 
 def sitemap(pages, by_key):
@@ -502,12 +549,13 @@ def main():
         out.parent.mkdir(parents=True, exist_ok=True)
         out.write_text(render(p, by_key))
         print("wrote", out.relative_to(ROOT))
+    (ROOT / "404.html").write_text(render_404(pages, by_key))
     (ROOT / "sitemap.xml").write_text(sitemap(pages, by_key))
     (ROOT / "feed.xml").write_text(feed(pages, "en"))
     (ROOT / "es" / "feed.xml").write_text(feed(pages, "es"))
     (ROOT / "llms.txt").write_text(llms(pages, by_key))
     (ROOT / "llms-full.txt").write_text(llms_full(pages, by_key))
-    print("wrote sitemap.xml, feed.xml, es/feed.xml, llms.txt, llms-full.txt")
+    print("wrote 404.html, sitemap.xml, feed.xml, es/feed.xml, llms.txt, llms-full.txt")
 
 
 if __name__ == "__main__":

@@ -258,3 +258,22 @@ button,select{font:inherit}
 .foot nav{display:flex;flex-wrap:wrap;gap:8px 20px}
 .foot a{color:var(--silver);text-decoration:none}
 .foot a:hover{color:var(--white)}
+
+/* 404 page */
+.nf{min-height:72vh;display:grid;align-items:center;padding:clamp(56px,9vw,120px) var(--gut)}
+.nf-inner{width:100%;max-width:760px;display:flex;flex-direction:column;gap:40px}
+.nf-code{display:flex;align-items:center;gap:18px;font-size:clamp(72px,12vw,140px);font-weight:800;letter-spacing:-.06em;line-height:1;color:var(--mint)}
+.nf-code svg{width:.72em;height:.72em;flex:none}
+.nf-block{display:flex;flex-direction:column;gap:18px}
+.nf-block + .nf-block{padding-top:36px;border-top:1px solid var(--line-dark)}
+.nf-block h1,.nf-block > h2:first-child{font-size:clamp(32px,4.6vw,56px);line-height:1.05;letter-spacing:-.04em}
+.nf-block .lede{margin-top:0}
+.nf-path{font-family:ui-monospace,SFMono-Regular,Menlo,monospace;font-size:.85em;color:var(--white);background:rgba(255,255,255,.08);padding:2px 8px;border-radius:6px;overflow-wrap:anywhere}
+.nf-suggest{display:flex;flex-direction:column;gap:10px}
+.nf-suggest h2{font-size:15px;font-weight:700;letter-spacing:.02em;color:var(--silver)}
+.nf-list{display:flex;flex-direction:column;border-top:1px solid var(--line-dark)}
+.nf-list li{border-bottom:1px solid var(--line-dark)}
+.nf-list a{display:block;padding:14px 0;color:var(--white);font-weight:600;text-decoration:none}
+.nf-list a:hover{color:var(--mint)}
+.nf-list a::after{content:" \2192";color:var(--blue-dark)}
+.nf-contact{font-size:14px;color:var(--silver)}
