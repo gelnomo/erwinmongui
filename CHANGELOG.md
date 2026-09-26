@@ -2,6 +2,19 @@
 
 Notable changes to erwinmongui.com. Each version has a `## vX.Y.Z` heading; pushing a matching tag, or running the Release workflow from the Actions tab with that version, publishes the section as a GitHub release (see `.github/workflows/release.yml`).
 
+## v1.1.0 (2026-09-26)
+
+### Spanish homepage
+
+- `/es/` is now a full Spanish translation of the homepage, with the same sections and scroll effects as the English one:
+  - the hero fade;
+  - the word-by-word reveal of the About paragraph;
+  - the stacking experience cards, the counters and the skills rail;
+  - education, all 24 certifications, the FAQ and contact.
+- It's generated from `index.html` with the pairs in `src/home_es.py`, so both versions keep the same design and scripts. The build warns when English text has no translation.
+- Spanish structured data: ProfilePage and FAQPage in Spanish.
+- The homepage now loads `analytics.js` and the award image from absolute paths, so the copy under `/es/` works.
+
 ## v1.0.0 (2026-09-26)
 
 The site grows from a single page into a 26-page site in English and Spanish, built for search engines and AI assistants.

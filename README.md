@@ -19,6 +19,7 @@ The site is served by GitHub Pages from the default branch of this repository. T
 | `src/llms-intro.md` | The fixed introduction at the top of `llms.txt` and `llms-full.txt` |
 | `assets/site.css` | Shared styles for the inner pages |
 | `work/`, `writing/`, `about/`, `es/` | Generated inner pages, including the Spanish case studies (`es/casos/`) and articles (`es/articulos/`). Do not edit by hand |
+| `src/home_es.py` | English → Spanish pairs for the homepage. The build turns `index.html` into `es/index.html` with them, keeping the same design and scroll effects |
 | `404.html` | The page shown for a missing address: bilingual, not indexed, suggests matching pages and records a `page_not_found` event in GA4 (generated) |
 | `feed.xml`, `es/feed.xml` | RSS feeds of case studies and articles, in English and Spanish (generated) |
 | `llms-full.txt` | Full text of every case study and article for AI assistants (generated) |
@@ -42,6 +43,10 @@ The contact section shows Google's "Add to Preferred Sources" button. Google's s
 4. Commit the source changes and the generated files together.
 
 Links inside page bodies use the final URLs (for example `/work/fincaraiz-lead-distribution/`). The Spanish pages declare their English versions through `alternate` in `pages.json`, which drives the `hreflang` tags and the language switch in the navigation.
+
+## Changing the homepage
+
+`index.html` is the English homepage, and `es/index.html` is generated from it. After editing `index.html`, run `python3 src/build.py`. If a changed or new piece of English text has no Spanish version, the build prints a warning naming it: add or update the pair in `src/home_es.py` and build again.
 
 ## Working locally
 
