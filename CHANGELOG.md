@@ -2,6 +2,14 @@
 
 Notable changes to erwinmongui.com. Each version has a `## vX.Y.Z` heading; pushing a matching tag, or running the Release workflow from the Actions tab with that version, publishes the section as a GitHub release (see `.github/workflows/release.yml`).
 
+## v1.3.1
+
+### SEO fixes
+
+- Every page's meta description now fits the 25 to 160 characters that Google and Bing show in search results. Four descriptions were slightly too long (the Spanish homepage, the Spanish migration case study, the Spanish analyst article and the RT-PCR paper), and the 404 page had none. Bing Webmaster Tools flagged this as "Meta Description too long or too short".
+- The Spanish homepage's social preview text (Open Graph and X) is also shorter.
+- The build now stops with a clear error if any description is missing or out of range, so this can't come back.
+
 ## v1.3.0 (2026-09-26)
 
 ### Fixes

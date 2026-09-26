@@ -428,6 +428,7 @@ def render_404(pages, by_key):
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1">
 <title>Page not found | Erwin Mongui</title>
+<meta name="description" content="This page does not exist or has moved. Find Erwin Mongui's case studies, articles and profile on erwinmongui.com.">
 <meta name="robots" content="noindex, follow">
 <meta name="theme-color" content="#000000">
 <link rel="icon" href="/favicon.ico" sizes="16x16 32x32 48x48">
@@ -673,6 +674,22 @@ def check_css():
             raise SystemExit(f"CSS error in {name}: unbalanced braces. Fix it before building.")
 
 
+def check_descriptions():
+    """Stops the build if a page's description is missing or outside the 25 to
+    160 characters that Google and Bing show in search results."""
+    for out in sorted(ROOT.glob("**/*.html")):
+        if out.parts[len(ROOT.parts)] in ("src", ".git"):
+            continue
+        text = out.read_text()
+        name = str(out.relative_to(ROOT))
+        if 'name="description"' not in text:
+            raise SystemExit(f"SEO error in {name}: no meta description.")
+        for m in re.finditer(r'<meta (?:name|property)="((?:og:|twitter:)?description)" content="([^"]*)"', text):
+            n = len(html.unescape(m.group(2)))
+            if not 25 <= n <= 160:
+                raise SystemExit(f"SEO error in {name}: {m.group(1)} has {n} characters, keep it between 25 and 160.")
+
+
 def main():
     check_css()
     pages, by_key = load_pages()
@@ -700,6 +717,7 @@ def main():
     (ROOT / "llms.txt").write_text(llms(pages, by_key))
     (ROOT / "llms-full.txt").write_text(llms_full(pages, by_key))
     print("wrote 404.html, sitemap.xml, feed.xml, es/feed.xml, llms.txt, llms-full.txt")
+    check_descriptions()
 
 
 if __name__ == "__main__":

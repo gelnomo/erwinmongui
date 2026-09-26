@@ -401,7 +401,7 @@
     "lang": "en",
     "url": "/writing/rt-pcr-travel-screening-data-driven-selection/",
     "title": "Replacing random RT-PCR checks with data-driven traveller selection | Erwin Mongui",
-    "description": "Our STEM Fellowship Big Data and AI Challenge 2023 paper: using WHO and Government of Canada data to prioritize travellers for RT-PCR checks instead of at random.",
+    "description": "Our STEM Fellowship Big Data and AI Challenge 2023 paper: using WHO and Government of Canada data to prioritize travellers for RT-PCR checks, not at random.",
     "headline": "Replacing random RT-PCR checks with data-driven traveller selection",
     "section": "Research",
     "keywords": [
@@ -502,7 +502,7 @@
     "lang": "es",
     "url": "/es/casos/fincaraiz-monolito-a-microservicios/",
     "title": "Fincaraiz: de monolito a microservicios sin caídas | Erwin Mongui",
-    "description": "Cómo Erwin Mongui llevó Fincaraiz de ASP.NET a Django, React y Kubernetes para más de 5 millones de visitas al mes: sin caídas, 50% menos costos y búsqueda con NLP.",
+    "description": "Erwin Mongui migró Fincaraiz de ASP.NET a Django, React y Kubernetes con más de 5 millones de visitas al mes: sin caídas, 50% menos costos y búsqueda con NLP.",
     "headline": "De monolito a microservicios, sin detener una plataforma de 5 millones de visitas",
     "section": "Caso de estudio",
     "about": {
@@ -687,7 +687,7 @@
     "lang": "es",
     "url": "/es/articulos/de-analista-de-datos-a-ingeniero-de-datos/",
     "title": "De analista de datos a ingeniero de datos: mentoría con una decisión real | Erwin Mongui",
-    "description": "Cómo pedirle a un analista que cuestionara nuestra herramienta de pipelines llevó a un mejor stack y a un nuevo ingeniero de datos. Descubrimiento guiado, con IA.",
+    "description": "Pedirle a un analista que cuestionara nuestra herramienta de pipelines nos dio un mejor stack y un nuevo ingeniero de datos. Descubrimiento guiado, con IA.",
     "headline": "De analista de datos a ingeniero de datos, gracias a una buena pregunta",
     "section": "Liderazgo",
     "keywords": [
