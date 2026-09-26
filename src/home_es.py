@@ -32,20 +32,8 @@ PAIRS = [
     ('content="Erwin Mongui logo with the words Engineering leader, Director of Technology, Toronto, Canada"',
      'content="Logo de Erwin Mongui con las palabras Engineering leader, Director of Technology, Toronto, Canada"'),
 
-    # ---------- navigation ----------
+    # ---------- skip link and menu script (the header and footer come from build.py) ----------
     ('<a class="skip" href="#about">Skip to content</a>', '<a class="skip" href="#about">Ir al contenido</a>'),
-    ('aria-label="Sections"', 'aria-label="Secciones"'),
-    ('<a href="#about">About</a>', '<a href="#about">Sobre mí</a>'),
-    ('<a href="#experience">Experience</a>', '<a href="#experience">Experiencia</a>'),
-    ('<a href="#impact">Impact</a>', '<a href="#impact">Impacto</a>'),
-    ('<a href="#ai">AI</a>', '<a href="#ai">IA</a>'),
-    ('<a href="#skills">Skills</a>', '<a href="#skills">Habilidades</a>'),
-    ('      <a href="/work/">Case studies</a>\n', '      <a href="#casos">Casos</a>\n'),
-    ('      <a href="/writing/">Writing</a>\n', '      <a href="/es/articulos/">Artículos</a>\n'),
-    ('<a href="#facts">Quick facts</a>', '<a href="#facts">Preguntas</a>'),
-    ('<a class="nav-lang" href="/es/" hreflang="es" lang="es">Español</a>', '<a class="nav-lang" href="/" hreflang="en" lang="en">English</a>'),
-    ('<a class="nav-cta" href="#contact">Contact</a>', '<a class="nav-cta" href="#contacto">Contacto</a>'),
-    ('aria-label="Open menu"', 'aria-label="Abrir menú"'),
     ("open ? 'Close menu' : 'Open menu'", "open ? 'Cerrar menú' : 'Abrir menú'"),
 
     # ---------- hero ----------
@@ -322,9 +310,6 @@ PAIRS = [
     ('google-add-preferred-source-btn data-theme="dark" data-lang="en"', 'google-add-preferred-source-btn data-theme="dark" data-lang="es"'),
 
     # ---------- footer ----------
-    ('<p class="foot-copy">&copy; 2026 Erwin Mongui. All rights reserved.</p>', '<p class="foot-copy">&copy; 2026 Erwin Mongui. Todos los derechos reservados.</p>'),
-    ('<p><a href="/work/">Case studies</a> &middot; <a href="/writing/">Writing</a> &middot; <a href="/about/">About</a> &middot; <a href="/es/" lang="es" hreflang="es">Español</a> &middot; <a href="https://www.google.com/preferences/source?q=erwinmongui.com" target="_blank" rel="noopener">Add as a preferred source on Google</a>',
-     '<p><a href="#casos">Casos</a> &middot; <a href="/es/articulos/">Artículos</a> &middot; <a href="/about/">Sobre mí</a> &middot; <a href="/" lang="en" hreflang="en">English</a> &middot; <a href="https://www.google.com/preferences/source?q=erwinmongui.com" target="_blank" rel="noopener">Agregar como fuente preferida en Google</a>'),
 ]
 
 # Person description and ProfilePage text for the Spanish structured data.

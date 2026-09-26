@@ -18,6 +18,7 @@ The site is served by GitHub Pages from the default branch of this repository. T
 | `src/build.py` | Generates the inner pages, `sitemap.xml`, `feed.xml`, `llms.txt` and `llms-full.txt` |
 | `src/llms-intro.md` | The fixed introduction at the top of `llms.txt` and `llms-full.txt` |
 | `assets/site.css` | Shared styles for the inner pages |
+| `assets/chrome.css`, `assets/chrome.js` | The header and footer every page shares (styles, and the mobile menu for inner pages). Their markup comes from `site_header()` and `site_footer()` in `src/build.py` |
 | `work/`, `writing/`, `about/`, `es/` | Generated inner pages, including the Spanish case studies (`es/casos/`) and articles (`es/articulos/`). Do not edit by hand |
 | `src/home_es.py` | English → Spanish pairs for the homepage. The build turns `index.html` into `es/index.html` with them, keeping the same design and scroll effects |
 | `404.html` | The page shown for a missing address: bilingual, not indexed, suggests matching pages and records a `page_not_found` event in GA4 (generated) |

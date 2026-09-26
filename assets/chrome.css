@@ -1,0 +1,56 @@
+/*
+  Shared header and footer for every page of erwinmongui.com (homepage, inner
+  pages, Spanish pages and the 404 page). The markup is written by
+  src/build.py, so change it there and the styles here.
+*/
+.nav{
+  position:fixed;top:0;left:0;right:0;height:48px;z-index:50;
+  background:rgba(22,22,23,.8);
+  -webkit-backdrop-filter:saturate(180%) blur(20px);
+  backdrop-filter:saturate(180%) blur(20px);
+  border-bottom:1px solid rgba(255,255,255,.06);
+  font-family:"Manrope",-apple-system,BlinkMacSystemFont,"Segoe UI",Helvetica,Arial,sans-serif;
+}
+/* Inner pages keep the header in the page flow instead of overlaying the content. */
+.chrome-sticky .nav{position:sticky;top:env(safe-area-inset-top,0px)}
+.nav-inner{max-width:1200px;margin:0 auto;height:100%;padding:0 22px;display:flex;align-items:center;justify-content:space-between;gap:24px}
+.brand{display:flex;align-items:center;gap:10px;font-weight:700;font-size:15px;letter-spacing:-.01em;text-decoration:none;color:#fff;white-space:nowrap}
+.brand svg{display:block;width:26px;height:26px}
+.nav-links{display:flex;gap:28px}
+.nav-links a{font-size:13px;color:rgba(255,255,255,.72);text-decoration:none;transition:color .2s;white-space:nowrap}
+.nav-links a:hover,.nav-links a.active,.nav-links a[aria-current="page"]{color:#fff}
+.nav-right{display:flex;align-items:center;gap:14px}
+.nav-lang{font-size:13px;color:rgba(255,255,255,.72);text-decoration:none;white-space:nowrap}
+.nav-lang:hover{color:#fff}
+.nav-cta{font-size:12px;font-weight:600;color:#fff;background:#0071e3;padding:7px 14px;border-radius:999px;text-decoration:none;white-space:nowrap;transition:background .2s}
+.nav-cta:hover{background:#0077ed}
+.menu-btn{display:none;width:36px;height:36px;border:0;border-radius:50%;background:transparent;color:#fff;cursor:pointer;place-items:center}
+.menu-btn svg{display:block}
+.menu-btn .x{display:none}
+.nav.open .menu-btn .bars{display:none}
+.nav.open .menu-btn .x{display:block}
+@media (max-width:1000px){
+  .nav-links{gap:18px}
+}
+@media (max-width:760px){
+  .nav-links{display:none}
+  .menu-btn{display:grid}
+  .nav.open .nav-links{
+    display:flex;flex-direction:column;gap:20px;
+    position:absolute;top:48px;left:0;right:0;
+    padding:20px 22px 28px;
+    background:rgba(0,0,0,.97);
+    -webkit-backdrop-filter:blur(20px);backdrop-filter:blur(20px);
+    border-bottom:1px solid rgba(255,255,255,.08);
+  }
+  .nav.open .nav-links a{font-size:19px;font-weight:600}
+}
+
+.foot{background:#000;color:#a1a1a6;border-top:1px solid rgba(255,255,255,.08);padding:26px 22px 40px;font-size:13px;font-family:"Manrope",-apple-system,BlinkMacSystemFont,"Segoe UI",Helvetica,Arial,sans-serif;line-height:1.5}
+.foot p{margin:0}
+.foot-inner{max-width:1200px;margin:0 auto;display:flex;justify-content:space-between;gap:16px;flex-wrap:wrap}
+.foot-copy{color:#6e6e73}
+.foot-brand{display:flex;align-items:center;gap:8px}
+.foot-brand svg{width:18px;height:18px}
+.foot a{text-decoration:none;color:#a1a1a6}
+.foot a:hover{color:#fff}
