@@ -342,6 +342,14 @@ def render_404(pages, by_key):
   gtag('js', new Date());
   gtag('config', 'G-LKD2WCNDV1');
 </script>
+<!-- Clarity tracking code for https://erwinmongui.com/ -->
+<script>
+    (function(c,l,a,r,i,t,y){{
+        c[a]=c[a]||function(){{(c[a].q=c[a].q||[]).push(arguments)}};
+        t=l.createElement(r);t.async=1;t.src="https://www.clarity.ms/tag/"+i;
+        y=l.getElementsByTagName(r)[0];y.parentNode.insertBefore(t,y);
+    }})(window, document, "clarity", "script", "ygo6nehxdb");
+</script>
 <script defer src="/analytics.js"></script>
 </head>
 <body>
