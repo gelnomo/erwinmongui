@@ -318,6 +318,7 @@ def render_home_es():
     (see home_es.py), so both languages share the same design, scroll effects
     and tracking. Returns the page and the English strings that no longer match."""
     import sys
+    sys.dont_write_bytecode = True
     sys.path.insert(0, str(SRC))
     import home_es
 
