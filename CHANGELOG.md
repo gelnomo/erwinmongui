@@ -2,6 +2,13 @@
 
 Notable changes to erwinmongui.com. Each version has a `## vX.Y.Z` heading; pushing a matching tag, or running the Release workflow from the Actions tab with that version, publishes the section as a GitHub release (see `.github/workflows/release.yml`).
 
+## v1.4.1 (2026-09-26)
+
+### Search engines
+
+- IndexNow: after every push to main, a GitHub Actions workflow waits for GitHub Pages to publish the change, then tells Bing (and the other IndexNow search engines) exactly which pages changed. Bing re-crawls them within days instead of weeks. Running the workflow from the Actions tab submits every URL in the sitemap.
+- Case studies, articles, the indexes, About and the 404 page now link the same PNG icons (48, 96 and 192 px) as the homepage.
+
 ## v1.4.0 (2026-09-26)
 
 ### Google Analytics
