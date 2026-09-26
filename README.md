@@ -28,6 +28,7 @@ The site is served by GitHub Pages from the default branch of this repository. T
 | `ads.txt` | Authorised seller entry for Google AdSense |
 | `robots.txt`, `sitemap.xml`, `llms.txt` | Crawler and search metadata (`sitemap.xml` and `llms.txt` are generated) |
 | `site.webmanifest`, `favicon*`, `apple-touch-icon.png` | Icons and web app manifest |
+| `d46b406b6191401581ebdfd128403f44.txt` | IndexNow key. `.github/workflows/indexnow.yml` tells Bing and other IndexNow search engines which pages changed after every push to main; run it from the Actions tab to submit the whole sitemap. Don't delete or rename the file |
 | `og-image.png` | Social sharing preview image |
 | `erwin-mongui-logo.svg`, `erwin-mongui-mark.svg` | Brand assets |
 | `CNAME` | Custom domain for GitHub Pages |
