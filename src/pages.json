@@ -1,0 +1,914 @@
+[
+  {
+    "key": "work",
+    "type": "collection",
+    "lang": "en",
+    "url": "/work/",
+    "title": "Case studies: migrations, integrations and data | Erwin Mongui",
+    "description": "Engineering case studies by Erwin Mongui: a zero-downtime microservices migration, a lead distribution engine for any CRM, and a data platform built from zero.",
+    "headline": "Case studies",
+    "items": [
+      "case-migration",
+      "case-crm",
+      "case-data"
+    ],
+    "breadcrumbs": [
+      [
+        "Home",
+        "/"
+      ],
+      [
+        "Work",
+        "/work/"
+      ]
+    ],
+    "published": "2026-09-23",
+    "modified": "2026-09-26"
+  },
+  {
+    "key": "case-migration",
+    "type": "case",
+    "lang": "en",
+    "url": "/work/fincaraiz-monolith-to-microservices/",
+    "title": "Fincaraiz: monolith to microservices with zero downtime | Erwin Mongui",
+    "description": "How Erwin Mongui moved Fincaraiz from ASP.NET to Django, React and Kubernetes for 5M+ monthly visits: zero downtime, 50% lower costs and NLP search.",
+    "headline": "Monolith to microservices, without stopping a 5M-visit platform",
+    "section": "Case study",
+    "about": {
+      "@type": "Organization",
+      "name": "Fincaraiz.com.co",
+      "url": "https://www.fincaraiz.com.co/"
+    },
+    "keywords": [
+      "monolith to microservices",
+      "strangler fig pattern",
+      "Django",
+      "Kubernetes",
+      "Kong API Gateway",
+      "Elasticsearch",
+      "geospatial search",
+      "zero-downtime migration"
+    ],
+    "alternate": "es-case-migration",
+    "breadcrumbs": [
+      [
+        "Home",
+        "/"
+      ],
+      [
+        "Work",
+        "/work/"
+      ],
+      [
+        "Fincaraiz migration",
+        "/work/fincaraiz-monolith-to-microservices/"
+      ]
+    ],
+    "published": "2026-09-23",
+    "modified": "2026-09-23"
+  },
+  {
+    "key": "case-crm",
+    "type": "case",
+    "lang": "en",
+    "url": "/work/fincaraiz-lead-distribution/",
+    "title": "A lead distribution engine that works with any CRM | Erwin Mongui",
+    "description": "How Erwin Mongui designed Fincaraiz's B2B lead distribution: GraphQL, fault-tolerant retries, 100% data parity and a Connector service for six CRM platforms.",
+    "headline": "A lead distribution engine that connects to any CRM",
+    "section": "Case study",
+    "about": {
+      "@type": "Organization",
+      "name": "Fincaraiz.com.co",
+      "url": "https://www.fincaraiz.com.co/"
+    },
+    "keywords": [
+      "lead distribution",
+      "CRM integration",
+      "Salesforce",
+      "HubSpot",
+      "Zoho",
+      "Microsoft Dynamics",
+      "exponential backoff",
+      "GraphQL"
+    ],
+    "alternate": "es-case-crm",
+    "breadcrumbs": [
+      [
+        "Home",
+        "/"
+      ],
+      [
+        "Work",
+        "/work/"
+      ],
+      [
+        "Lead distribution",
+        "/work/fincaraiz-lead-distribution/"
+      ]
+    ],
+    "published": "2026-09-26",
+    "modified": "2026-09-26"
+  },
+  {
+    "key": "case-data",
+    "type": "case",
+    "lang": "en",
+    "url": "/work/cedar-planters-data-platform/",
+    "title": "Building a data platform from zero at Cedar Planters | Erwin Mongui",
+    "description": "As Cedar Planters' first technical hire, Erwin Mongui replaced third-party reporting tools with one data platform. New reports went from months to hours.",
+    "headline": "A data platform from zero, as the first technical hire",
+    "section": "Case study",
+    "about": {
+      "@type": "Organization",
+      "name": "Cedar Planters",
+      "url": "https://cedarplanters.com/"
+    },
+    "keywords": [
+      "data platform",
+      "first technical hire",
+      "central reporting",
+      "data engineering",
+      "e-commerce data",
+      "AI-assisted analytics"
+    ],
+    "alternate": "es-case-data",
+    "breadcrumbs": [
+      [
+        "Home",
+        "/"
+      ],
+      [
+        "Work",
+        "/work/"
+      ],
+      [
+        "Cedar Planters data platform",
+        "/work/cedar-planters-data-platform/"
+      ]
+    ],
+    "published": "2026-09-25",
+    "modified": "2026-09-25"
+  },
+  {
+    "key": "writing",
+    "type": "collection",
+    "lang": "en",
+    "url": "/writing/",
+    "title": "Writing on architecture and engineering leadership | Erwin Mongui",
+    "description": "Articles by Erwin Mongui on choosing tools, growing engineers, measuring team health, delivery bottlenecks and building with AI, from 18 years of shipping.",
+    "headline": "Writing",
+    "items": [
+      "post-bottlenecks",
+      "post-metrics",
+      "post-analyst",
+      "post-tools",
+      "post-ai-careers",
+      "post-json",
+      "post-rtpcr"
+    ],
+    "breadcrumbs": [
+      [
+        "Home",
+        "/"
+      ],
+      [
+        "Writing",
+        "/writing/"
+      ]
+    ],
+    "published": "2026-09-21",
+    "modified": "2026-09-25",
+    "alternate": "es-writing"
+  },
+  {
+    "key": "post-tools",
+    "type": "post",
+    "lang": "en",
+    "url": "/writing/choose-tools-your-team-can-support/",
+    "title": "How to choose mission-critical tools: a Keycloak lesson | Erwin Mongui",
+    "description": "A single sign-on project took six times longer than planned. What went wrong, the tool-selection scorecard we use now, and how AI assistants change it.",
+    "headline": "Pick the tool your team can support, not the one on the shortlist",
+    "section": "Architecture",
+    "keywords": [
+      "technology selection",
+      "Keycloak",
+      "single sign-on",
+      "identity provider",
+      "build vs buy",
+      "AI coding assistants"
+    ],
+    "breadcrumbs": [
+      [
+        "Home",
+        "/"
+      ],
+      [
+        "Writing",
+        "/writing/"
+      ],
+      [
+        "Pick the tool your team can support",
+        "/writing/choose-tools-your-team-can-support/"
+      ]
+    ],
+    "published": "2026-09-21",
+    "modified": "2026-09-21",
+    "alternate": "es-post-tools"
+  },
+  {
+    "key": "post-analyst",
+    "type": "post",
+    "lang": "en",
+    "url": "/writing/from-data-analyst-to-data-engineer/",
+    "title": "From data analyst to data engineer: mentoring through a real decision | Erwin Mongui",
+    "description": "How asking a data analyst to challenge our pipeline tool led to a better stack and a new data engineer. A guided discovery approach to mentoring, with AI.",
+    "headline": "From data analyst to data engineer, through one good question",
+    "section": "Leadership",
+    "keywords": [
+      "mentoring",
+      "data analyst to data engineer",
+      "guided discovery",
+      "data pipelines",
+      "engineering leadership"
+    ],
+    "breadcrumbs": [
+      [
+        "Home",
+        "/"
+      ],
+      [
+        "Writing",
+        "/writing/"
+      ],
+      [
+        "From data analyst to data engineer",
+        "/writing/from-data-analyst-to-data-engineer/"
+      ]
+    ],
+    "published": "2026-09-22",
+    "modified": "2026-09-22",
+    "alternate": "es-post-analyst"
+  },
+  {
+    "key": "post-metrics",
+    "type": "post",
+    "lang": "en",
+    "url": "/writing/engineering-team-health-metrics/",
+    "title": "How I measure engineering team health, including AI's impact | Erwin Mongui",
+    "description": "The delivery, health and impact metrics I track, how they map to DORA and SPACE, and how to tell whether AI coding assistants are really helping a team.",
+    "headline": "How I measure engineering team health",
+    "section": "Leadership",
+    "keywords": [
+      "engineering metrics",
+      "DORA metrics",
+      "SPACE framework",
+      "developer productivity",
+      "AI coding assistants",
+      "DX",
+      "LinearB",
+      "Swarmia"
+    ],
+    "breadcrumbs": [
+      [
+        "Home",
+        "/"
+      ],
+      [
+        "Writing",
+        "/writing/"
+      ],
+      [
+        "How I measure engineering team health",
+        "/writing/engineering-team-health-metrics/"
+      ]
+    ],
+    "published": "2026-09-24",
+    "modified": "2026-09-24",
+    "alternate": "es-post-metrics"
+  },
+  {
+    "key": "post-bottlenecks",
+    "type": "post",
+    "lang": "en",
+    "url": "/writing/lead-time-cycle-time-bottlenecks/",
+    "title": "Finding delivery bottlenecks with lead time and cycle time | Erwin Mongui",
+    "description": "A five-step way to find where software work gets stuck using lead time, cycle time and flow metrics, confirm the cause with the team, and fix it.",
+    "headline": "Finding delivery bottlenecks with lead time and cycle time",
+    "section": "Delivery",
+    "keywords": [
+      "lead time",
+      "cycle time",
+      "flow efficiency",
+      "Little's Law",
+      "WIP limits",
+      "code review bottleneck"
+    ],
+    "breadcrumbs": [
+      [
+        "Home",
+        "/"
+      ],
+      [
+        "Writing",
+        "/writing/"
+      ],
+      [
+        "Finding delivery bottlenecks",
+        "/writing/lead-time-cycle-time-bottlenecks/"
+      ]
+    ],
+    "published": "2026-09-25",
+    "modified": "2026-09-25",
+    "alternate": "es-post-bottlenecks"
+  },
+  {
+    "key": "post-ai-careers",
+    "type": "post",
+    "lang": "en",
+    "url": "/writing/ai-careers-new-graduates/",
+    "title": "What new graduates need for a career in AI (2026 update) | Erwin Mongui",
+    "description": "An engineering manager's view of AI careers for new graduates: collaboration, real projects, AI-assisted development, evaluation, ethics and frameworks.",
+    "headline": "Shaping the future: what new graduates need for a career in AI",
+    "section": "AI",
+    "keywords": [
+      "AI careers",
+      "new graduates",
+      "AI engineering skills",
+      "AI frameworks",
+      "AI ethics",
+      "AI coding assistants"
+    ],
+    "sameAs": "https://www.linkedin.com/pulse/shaping-future-career-opportunities-ai-next-graduates-erwin-mongui-dsmoc/",
+    "breadcrumbs": [
+      [
+        "Home",
+        "/"
+      ],
+      [
+        "Writing",
+        "/writing/"
+      ],
+      [
+        "What new graduates need for a career in AI",
+        "/writing/ai-careers-new-graduates/"
+      ]
+    ],
+    "published": "2024-03-05",
+    "modified": "2026-09-23",
+    "alternate": "es-post-ai-careers"
+  },
+  {
+    "key": "post-json",
+    "type": "post",
+    "lang": "en",
+    "url": "/writing/ai-applications-json/",
+    "title": "JSON in AI applications: structured outputs, tools and memory | Erwin Mongui",
+    "description": "Why JSON became the contract between software and AI models: structured outputs with JSON Schema and Pydantic, tool calling, MCP, memory and model configs.",
+    "headline": "Taming the data jungle: JSON as the contract between your systems and AI",
+    "section": "AI",
+    "keywords": [
+      "JSON",
+      "structured outputs",
+      "JSON Schema",
+      "Pydantic",
+      "tool calling",
+      "Model Context Protocol",
+      "PyTorch",
+      "Hugging Face"
+    ],
+    "sameAs": "https://www.linkedin.com/pulse/taming-data-jungle-my-journey-ai-applications-json-erwin-mongui-vhcgc/",
+    "breadcrumbs": [
+      [
+        "Home",
+        "/"
+      ],
+      [
+        "Writing",
+        "/writing/"
+      ],
+      [
+        "JSON as the contract between your systems and AI",
+        "/writing/ai-applications-json/"
+      ]
+    ],
+    "published": "2024-02-06",
+    "modified": "2026-09-23",
+    "alternate": "es-post-json"
+  },
+  {
+    "key": "post-rtpcr",
+    "type": "post",
+    "lang": "en",
+    "url": "/writing/rt-pcr-travel-screening-data-driven-selection/",
+    "title": "Replacing random RT-PCR checks with data-driven traveller selection | Erwin Mongui",
+    "description": "Our STEM Fellowship Big Data and AI Challenge 2023 paper: using WHO and Government of Canada data to prioritize travellers for RT-PCR checks instead of at random.",
+    "headline": "Replacing random RT-PCR checks with data-driven traveller selection",
+    "section": "Research",
+    "keywords": [
+      "COVID-19",
+      "RT-PCR",
+      "travel screening",
+      "risk segmentation",
+      "open data",
+      "STEM Fellowship",
+      "Lambton College"
+    ],
+    "sameAs": "https://www.linkedin.com/pulse/enhancing-international-passengers-selection-rt-pcr-erwin-mongui-yllle/",
+    "coauthors": [
+      "Umid Ghimire",
+      "Dharmik Limbani",
+      "Sairam Kilari"
+    ],
+    "citation": {
+      "@type": "ScholarlyArticle",
+      "name": "Eliminating Randomness in Selecting International Passengers for RT-PCR",
+      "author": [
+        "Umid Ghimire",
+        "Dharmik Limbani",
+        "Erwin Mongui",
+        "Sairam Kilari"
+      ],
+      "datePublished": "2023",
+      "isPartOf": "STEM Fellowship Journal: Proceedings from the 2023 Inter-University Big Data and AI Challenge",
+      "sameAs": "https://doi.org/10.17975/sfj-2023-007",
+      "url": "https://journal.stemfellowship.org/doi/abs/10.17975/sfj-2023-007"
+    },
+    "code": "https://github.com/gelnomo/ART.-National-Inter-University-Big-Data-And-AI-Challenge-2023",
+    "breadcrumbs": [
+      [
+        "Home",
+        "/"
+      ],
+      [
+        "Writing",
+        "/writing/"
+      ],
+      [
+        "Replacing random RT-PCR checks with data",
+        "/writing/rt-pcr-travel-screening-data-driven-selection/"
+      ]
+    ],
+    "published": "2023-12-12",
+    "modified": "2026-09-23",
+    "alternate": "es-post-rtpcr"
+  },
+  {
+    "key": "about",
+    "type": "about",
+    "lang": "en",
+    "url": "/about/",
+    "title": "About Erwin Mongui: engineering leader from Bogotá to Toronto",
+    "description": "Erwin Mongui's story: 18+ years across real estate, e-commerce and fintech, from junior engineer in Bogotá to CTO and Director of Technology in Toronto.",
+    "headline": "From junior engineer in Bogotá to Director of Technology in Toronto",
+    "breadcrumbs": [
+      [
+        "Home",
+        "/"
+      ],
+      [
+        "About",
+        "/about/"
+      ]
+    ],
+    "published": "2026-09-23",
+    "modified": "2026-09-26"
+  },
+  {
+    "key": "es",
+    "type": "home-es",
+    "lang": "es",
+    "url": "/es/",
+    "title": "Erwin Mongui, líder de ingeniería y Director de Tecnología en Toronto",
+    "description": "Erwin Mongui, líder de ingeniería de software colombiano en Toronto: Director de Tecnología en Cedar Planters, ingeniero certificado en IA, más de 18 años.",
+    "headline": "Erwin Mongui",
+    "alternate": "home",
+    "items": [
+      "es-case-migration",
+      "es-case-crm",
+      "es-case-data"
+    ],
+    "breadcrumbs": [
+      [
+        "Inicio",
+        "/es/"
+      ]
+    ],
+    "published": "2026-09-26",
+    "modified": "2026-09-26"
+  },
+  {
+    "key": "es-case-migration",
+    "type": "case",
+    "lang": "es",
+    "url": "/es/casos/fincaraiz-monolito-a-microservicios/",
+    "title": "Fincaraiz: de monolito a microservicios sin caídas | Erwin Mongui",
+    "description": "Cómo Erwin Mongui llevó Fincaraiz de ASP.NET a Django, React y Kubernetes para más de 5 millones de visitas al mes: sin caídas, 50% menos costos y búsqueda con NLP.",
+    "headline": "De monolito a microservicios, sin detener una plataforma de 5 millones de visitas",
+    "section": "Caso de estudio",
+    "about": {
+      "@type": "Organization",
+      "name": "Fincaraiz.com.co",
+      "url": "https://www.fincaraiz.com.co/"
+    },
+    "keywords": [
+      "migración a microservicios",
+      "patrón strangler fig",
+      "Django",
+      "Kubernetes",
+      "Elasticsearch",
+      "búsqueda geoespacial"
+    ],
+    "alternate": "case-migration",
+    "breadcrumbs": [
+      [
+        "Inicio",
+        "/es/"
+      ],
+      [
+        "Casos",
+        "/es/#casos"
+      ],
+      [
+        "Migración de Fincaraiz",
+        "/es/casos/fincaraiz-monolito-a-microservicios/"
+      ]
+    ],
+    "published": "2026-09-23",
+    "modified": "2026-09-26"
+  },
+  {
+    "key": "es-case-crm",
+    "type": "case",
+    "lang": "es",
+    "url": "/es/casos/fincaraiz-distribucion-de-leads/",
+    "title": "Un motor de distribución de leads para cualquier CRM | Erwin Mongui",
+    "description": "Cómo Erwin Mongui diseñó la distribución de leads B2B de Fincaraiz: GraphQL, reintentos tolerantes a fallos, 100% de conciliación y seis plataformas CRM.",
+    "headline": "Un motor de distribución de leads que se conecta con cualquier CRM",
+    "section": "Caso de estudio",
+    "about": {
+      "@type": "Organization",
+      "name": "Fincaraiz.com.co",
+      "url": "https://www.fincaraiz.com.co/"
+    },
+    "keywords": [
+      "distribución de leads",
+      "integración con CRM",
+      "inmobiliarias",
+      "constructoras",
+      "Salesforce",
+      "HubSpot",
+      "Zoho"
+    ],
+    "alternate": "case-crm",
+    "breadcrumbs": [
+      [
+        "Inicio",
+        "/es/"
+      ],
+      [
+        "Casos",
+        "/es/#casos"
+      ],
+      [
+        "Distribución de leads",
+        "/es/casos/fincaraiz-distribucion-de-leads/"
+      ]
+    ],
+    "published": "2026-09-26",
+    "modified": "2026-09-26"
+  },
+  {
+    "key": "es-case-data",
+    "type": "case",
+    "lang": "es",
+    "url": "/es/casos/cedar-planters-plataforma-de-datos/",
+    "title": "Una plataforma de datos desde cero en Cedar Planters | Erwin Mongui",
+    "description": "Como primera contratación técnica de Cedar Planters, Erwin Mongui reemplazó herramientas de reportes de terceros por una plataforma de datos propia.",
+    "headline": "Una plataforma de datos desde cero, como primera contratación técnica",
+    "section": "Caso de estudio",
+    "about": {
+      "@type": "Organization",
+      "name": "Cedar Planters",
+      "url": "https://cedarplanters.com/"
+    },
+    "keywords": [
+      "plataforma de datos",
+      "primera contratación técnica",
+      "reportes centralizados",
+      "ingeniería de datos"
+    ],
+    "alternate": "case-data",
+    "breadcrumbs": [
+      [
+        "Inicio",
+        "/es/"
+      ],
+      [
+        "Casos",
+        "/es/#casos"
+      ],
+      [
+        "Plataforma de datos de Cedar Planters",
+        "/es/casos/cedar-planters-plataforma-de-datos/"
+      ]
+    ],
+    "published": "2026-09-25",
+    "modified": "2026-09-26"
+  },
+  {
+    "key": "es-writing",
+    "type": "collection",
+    "lang": "es",
+    "url": "/es/articulos/",
+    "title": "Artículos sobre arquitectura, IA y liderazgo en ingeniería | Erwin Mongui",
+    "description": "Artículos de Erwin Mongui sobre cómo elegir herramientas, formar ingenieros, medir la salud de los equipos, cuellos de botella y construir con IA.",
+    "headline": "Artículos",
+    "items": [
+      "es-post-bottlenecks",
+      "es-post-metrics",
+      "es-post-analyst",
+      "es-post-tools",
+      "es-post-ai-careers",
+      "es-post-json",
+      "es-post-rtpcr"
+    ],
+    "alternate": "writing",
+    "breadcrumbs": [
+      [
+        "Inicio",
+        "/es/"
+      ],
+      [
+        "Artículos",
+        "/es/articulos/"
+      ]
+    ],
+    "published": "2026-09-26",
+    "modified": "2026-09-26"
+  },
+  {
+    "key": "es-post-tools",
+    "type": "post",
+    "lang": "es",
+    "url": "/es/articulos/elegir-herramientas-que-tu-equipo-pueda-sostener/",
+    "title": "Cómo elegir herramientas críticas: la lección de Keycloak | Erwin Mongui",
+    "description": "Un proyecto de inicio de sesión único tomó seis veces más de lo planeado. Qué salió mal, la matriz de evaluación que usamos y cómo cambia la decisión con IA.",
+    "headline": "Elige la herramienta que tu equipo puede sostener, no la que encabeza la lista",
+    "section": "Arquitectura",
+    "keywords": [
+      "selección de tecnología",
+      "Keycloak",
+      "inicio de sesión único",
+      "proveedor de identidad",
+      "construir o comprar",
+      "asistentes de IA"
+    ],
+    "alternate": "post-tools",
+    "breadcrumbs": [
+      [
+        "Inicio",
+        "/es/"
+      ],
+      [
+        "Artículos",
+        "/es/articulos/"
+      ],
+      [
+        "Elige la herramienta que tu equipo puede sostener, no la que encabeza la lista",
+        "/es/articulos/elegir-herramientas-que-tu-equipo-pueda-sostener/"
+      ]
+    ],
+    "published": "2026-09-21",
+    "modified": "2026-09-26"
+  },
+  {
+    "key": "es-post-analyst",
+    "type": "post",
+    "lang": "es",
+    "url": "/es/articulos/de-analista-de-datos-a-ingeniero-de-datos/",
+    "title": "De analista de datos a ingeniero de datos: mentoría con una decisión real | Erwin Mongui",
+    "description": "Cómo pedirle a un analista que cuestionara nuestra herramienta de pipelines llevó a un mejor stack y a un nuevo ingeniero de datos. Descubrimiento guiado, con IA.",
+    "headline": "De analista de datos a ingeniero de datos, gracias a una buena pregunta",
+    "section": "Liderazgo",
+    "keywords": [
+      "mentoría",
+      "de analista a ingeniero de datos",
+      "descubrimiento guiado",
+      "pipelines de datos",
+      "liderazgo en ingeniería"
+    ],
+    "alternate": "post-analyst",
+    "breadcrumbs": [
+      [
+        "Inicio",
+        "/es/"
+      ],
+      [
+        "Artículos",
+        "/es/articulos/"
+      ],
+      [
+        "De analista de datos a ingeniero de datos, gracias a una buena pregunta",
+        "/es/articulos/de-analista-de-datos-a-ingeniero-de-datos/"
+      ]
+    ],
+    "published": "2026-09-22",
+    "modified": "2026-09-26"
+  },
+  {
+    "key": "es-post-metrics",
+    "type": "post",
+    "lang": "es",
+    "url": "/es/articulos/metricas-de-salud-de-equipos-de-ingenieria/",
+    "title": "Cómo mido la salud de un equipo de ingeniería, incluido el impacto de la IA | Erwin Mongui",
+    "description": "Las métricas de entrega, salud e impacto que sigo, cómo se relacionan con DORA y SPACE, y cómo saber si los asistentes de IA realmente ayudan a un equipo.",
+    "headline": "Cómo mido la salud de un equipo de ingeniería",
+    "section": "Liderazgo",
+    "keywords": [
+      "métricas de ingeniería",
+      "métricas DORA",
+      "marco SPACE",
+      "productividad de desarrolladores",
+      "asistentes de IA"
+    ],
+    "alternate": "post-metrics",
+    "breadcrumbs": [
+      [
+        "Inicio",
+        "/es/"
+      ],
+      [
+        "Artículos",
+        "/es/articulos/"
+      ],
+      [
+        "Cómo mido la salud de un equipo de ingeniería",
+        "/es/articulos/metricas-de-salud-de-equipos-de-ingenieria/"
+      ]
+    ],
+    "published": "2026-09-24",
+    "modified": "2026-09-26"
+  },
+  {
+    "key": "es-post-bottlenecks",
+    "type": "post",
+    "lang": "es",
+    "url": "/es/articulos/cuellos-de-botella-lead-time-cycle-time/",
+    "title": "Cuellos de botella en la entrega de software con lead time y cycle time | Erwin Mongui",
+    "description": "Cinco pasos para encontrar dónde se atasca el trabajo de software con lead time, cycle time y métricas de flujo, confirmar la causa con el equipo y resolverla.",
+    "headline": "Encontrar cuellos de botella en la entrega con lead time y cycle time",
+    "section": "Entrega",
+    "keywords": [
+      "lead time",
+      "cycle time",
+      "eficiencia de flujo",
+      "ley de Little",
+      "límites de WIP",
+      "revisión de código"
+    ],
+    "alternate": "post-bottlenecks",
+    "breadcrumbs": [
+      [
+        "Inicio",
+        "/es/"
+      ],
+      [
+        "Artículos",
+        "/es/articulos/"
+      ],
+      [
+        "Encontrar cuellos de botella en la entrega con lead time y cycle time",
+        "/es/articulos/cuellos-de-botella-lead-time-cycle-time/"
+      ]
+    ],
+    "published": "2026-09-25",
+    "modified": "2026-09-26"
+  },
+  {
+    "key": "es-post-ai-careers",
+    "type": "post",
+    "lang": "es",
+    "url": "/es/articulos/carreras-en-ia-para-recien-graduados/",
+    "title": "Lo que necesitan los recién graduados para una carrera en IA (2026) | Erwin Mongui",
+    "description": "La visión de un líder de ingeniería sobre carreras en IA: colaboración, proyectos reales, desarrollo asistido por IA, evaluación, ética y frameworks.",
+    "headline": "Construir el futuro: lo que necesitan los recién graduados para una carrera en IA",
+    "section": "IA",
+    "keywords": [
+      "carreras en IA",
+      "recién graduados",
+      "habilidades de ingeniería de IA",
+      "frameworks de IA",
+      "ética en IA"
+    ],
+    "alternate": "post-ai-careers",
+    "breadcrumbs": [
+      [
+        "Inicio",
+        "/es/"
+      ],
+      [
+        "Artículos",
+        "/es/articulos/"
+      ],
+      [
+        "Construir el futuro: lo que necesitan los recién graduados para una carrera en IA",
+        "/es/articulos/carreras-en-ia-para-recien-graduados/"
+      ]
+    ],
+    "published": "2024-03-05",
+    "modified": "2026-09-26",
+    "sameAs": "https://www.linkedin.com/pulse/shaping-future-career-opportunities-ai-next-graduates-erwin-mongui-dsmoc/"
+  },
+  {
+    "key": "es-post-json",
+    "type": "post",
+    "lang": "es",
+    "url": "/es/articulos/json-en-aplicaciones-de-ia/",
+    "title": "JSON en aplicaciones de IA: salidas estructuradas, herramientas y memoria | Erwin Mongui",
+    "description": "Por qué JSON se volvió el contrato entre el software y los modelos de IA: salidas estructuradas con JSON Schema y Pydantic, herramientas, MCP y memoria.",
+    "headline": "Domar la jungla de datos: JSON como contrato entre tus sistemas y la IA",
+    "section": "IA",
+    "keywords": [
+      "JSON",
+      "salidas estructuradas",
+      "JSON Schema",
+      "Pydantic",
+      "llamadas a herramientas",
+      "Model Context Protocol"
+    ],
+    "alternate": "post-json",
+    "breadcrumbs": [
+      [
+        "Inicio",
+        "/es/"
+      ],
+      [
+        "Artículos",
+        "/es/articulos/"
+      ],
+      [
+        "Domar la jungla de datos: JSON como contrato entre tus sistemas y la IA",
+        "/es/articulos/json-en-aplicaciones-de-ia/"
+      ]
+    ],
+    "published": "2024-02-06",
+    "modified": "2026-09-26",
+    "sameAs": "https://www.linkedin.com/pulse/taming-data-jungle-my-journey-ai-applications-json-erwin-mongui-vhcgc/"
+  },
+  {
+    "key": "es-post-rtpcr",
+    "type": "post",
+    "lang": "es",
+    "url": "/es/articulos/seleccion-de-viajeros-rt-pcr-basada-en-datos/",
+    "title": "Selección de viajeros para RT-PCR basada en datos, no al azar | Erwin Mongui",
+    "description": "Nuestro artículo del STEM Fellowship Big Data and AI Challenge 2023: datos de la OMS y del Gobierno de Canadá para priorizar viajeros para RT-PCR.",
+    "headline": "Reemplazar la selección aleatoria para RT-PCR con una selección de viajeros basada en datos",
+    "section": "Investigación",
+    "keywords": [
+      "COVID-19",
+      "RT-PCR",
+      "control sanitario de viajeros",
+      "segmentación de riesgo",
+      "datos abiertos",
+      "Lambton College"
+    ],
+    "alternate": "post-rtpcr",
+    "breadcrumbs": [
+      [
+        "Inicio",
+        "/es/"
+      ],
+      [
+        "Artículos",
+        "/es/articulos/"
+      ],
+      [
+        "Reemplazar la selección aleatoria para RT-PCR con una selección de viajeros basada en datos",
+        "/es/articulos/seleccion-de-viajeros-rt-pcr-basada-en-datos/"
+      ]
+    ],
+    "published": "2023-12-12",
+    "modified": "2026-09-26",
+    "sameAs": "https://www.linkedin.com/pulse/enhancing-international-passengers-selection-rt-pcr-erwin-mongui-yllle/",
+    "coauthors": [
+      "Umid Ghimire",
+      "Dharmik Limbani",
+      "Sairam Kilari"
+    ],
+    "citation": {
+      "@type": "ScholarlyArticle",
+      "name": "Eliminating Randomness in Selecting International Passengers for RT-PCR",
+      "author": [
+        "Umid Ghimire",
+        "Dharmik Limbani",
+        "Erwin Mongui",
+        "Sairam Kilari"
+      ],
+      "datePublished": "2023",
+      "isPartOf": "STEM Fellowship Journal: Proceedings from the 2023 Inter-University Big Data and AI Challenge",
+      "sameAs": "https://doi.org/10.17975/sfj-2023-007",
+      "url": "https://journal.stemfellowship.org/doi/abs/10.17975/sfj-2023-007"
+    },
+    "code": "https://github.com/gelnomo/ART.-National-Inter-University-Big-Data-And-AI-Challenge-2023"
+  }
+]

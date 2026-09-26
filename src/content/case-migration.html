@@ -1,0 +1,163 @@
+<header class="doc-head stage-dark">
+    <nav class="crumbs" aria-label="Breadcrumb"><a href="/">Home</a><span>/</span><a href="/work/">Work</a><span>/</span><span>Fincaraiz migration</span></nav>
+    <p class="eyebrow">Case study · Fincaraiz.com.co · 2019 to 2022</p>
+    <h1>Monolith to microservices, without stopping a 5M-visit platform.</h1>
+    <p class="summary">As CTO of Fincaraiz.com.co, one of Colombia's leading real estate portals, I led the move from a legacy ASP.NET monolith to Django and React microservices on Kubernetes. We migrated in four tiers behind a Kong API gateway, kept old and new data in sync with AWS Lambda, and rebuilt search so it understands how people really describe places. The platform never went down, stayed as fast as before, and hosting and maintenance costs fell by 50%.</p>
+    <div class="byline"><span>By Erwin Mongui</span><span>Published September 23, 2026</span><span>11 min read</span><a class="link" href="/es/casos/fincaraiz-monolito-a-microservicios/" hreflang="es" lang="es">Leer en español</a></div>
+    <div class="kpi-row">
+      <div><b>50%</b><span>lower hosting and maintenance cost</span></div>
+      <div><b>100%</b><span>availability through the migration, for 5M+ monthly visits</span></div>
+      <div><b>&lt;3s</b><span>Largest Contentful Paint, same as legacy</span></div>
+      <div><b>30 min</b><span>listing publication time, kept through the switch</span></div>
+    </div>
+  </header>
+  <section class="doc">
+    <div class="doc-grid">
+      <div class="prose">
+        <h2>The situation</h2>
+        <p>Fincaraiz.com.co is one of Colombia's leading real estate portals, part of the Adevinta group at the time. More than 5 million people visited it every month to search for lots, apartments, houses and commercial property, and agents published and updated listings on it every day.</p>
+        <p>All of that ran on a legacy ASP.NET monolith, served by Windows IIS on VM-based Amazon EC2 instances, with Microsoft SQL Server for data and Apache Solr for search. Four problems had built up:</p>
+        <ul>
+          <li><strong>A monolith that was hard to change.</strong> Everything was tightly coupled, so every deployment carried risk for the whole site, and servers were patched by hand.</li>
+          <li><strong>High running costs.</strong> Virtual machines and Microsoft licenses made hosting and maintenance expensive.</li>
+          <li><strong>Search that matched keywords, not intent.</strong> The Solr setup couldn't handle the variety of real estate searches well, across very different property types.</li>
+          <li><strong>Coarse location matching.</strong> People search with informal neighborhood names, local nicknames and conversational phrases. The search engine missed most of them.</li>
+        </ul>
+        <p>And one constraint above all: the site had to keep running. No downtime, no data inconsistencies, no latency spikes, and no drop in search rankings.</p>
+
+        <h2>The goal</h2>
+        <ul>
+          <li>Replace the monolith with Django and React services the team could change and deploy independently.</li>
+          <li>Move off licensed software and hand-managed servers to cut costs.</li>
+          <li>Keep the site up the whole time, for users and for agents.</li>
+          <li>Keep Core Web Vitals at or better than the legacy site, and keep listing publication at its 30-minute benchmark.</li>
+          <li>Make search understand what people mean, including how they name places.</li>
+        </ul>
+
+        <h2>The approach: four tiers, one layer at a time</h2>
+        <p>A big-bang rewrite was never an option. I used the strangler fig pattern: build the new system around the old one, move traffic over piece by piece, and retire the monolith once nothing depends on it. To make that manageable, I split the work into four tiers, each one making the next possible.</p>
+        <div class="table-wrap">
+          <table>
+            <thead><tr><th>Tier</th><th>Before</th><th>After</th></tr></thead>
+            <tbody>
+              <tr><td><strong>1. Platform</strong></td><td>VM-based EC2, Windows IIS, manual patching</td><td>Docker containers on Kubernetes, NGINX, automated CI/CD</td></tr>
+              <tr><td><strong>2. Edge and identity</strong></td><td>Traffic straight into the monolith</td><td>Kong API Gateway routing every request, Keycloak for identity and access</td></tr>
+              <tr><td><strong>3. Data and search</strong></td><td>Microsoft SQL Server, Apache Solr</td><td>PostgreSQL for transactions, Elasticsearch for search, Lambda keeping both worlds in sync</td></tr>
+              <tr><td><strong>4. Services and frontend</strong></td><td>One ASP.NET codebase</td><td>Django services split by business domain, React frontend</td></tr>
+            </tbody>
+          </table>
+        </div>
+        <figure class="flow" aria-label="Architecture during the migration">
+          <p class="flow-cap">Architecture during the migration</p>
+          <div class="flow-row c1"><div class="node"><b>Users and agents</b><span>5M+ visits a month</span></div></div>
+          <div class="arrow" aria-hidden="true"><svg viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round"><path d="M8 2v12M3 9l5 5 5-5"/></svg></div>
+          <div class="flow-row c2">
+            <div class="node key"><b>Kong API Gateway</b><span>Tier 2: sends each route to the old or new system</span></div>
+            <div class="node key"><b>Keycloak</b><span>Tier 2: one identity and access layer for both</span></div>
+          </div>
+          <div class="arrow" aria-hidden="true"><svg viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round"><path d="M8 2v12M3 9l5 5 5-5"/></svg></div>
+          <div class="flow-row c3">
+            <div class="node old"><b>Legacy ASP.NET monolith</b><span>IIS on EC2, SQL Server and Solr. Retired piece by piece</span></div>
+            <div class="node key"><b>AWS Lambda sync</b><span>Tier 3: event-driven, keeps both datastores identical</span></div>
+            <div class="node new"><b>Django services and React</b><span>Tier 4: take over one domain at a time</span></div>
+          </div>
+          <div class="arrow" aria-hidden="true"><svg viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round"><path d="M8 2v12M3 9l5 5 5-5"/></svg></div>
+          <div class="flow-row c3">
+            <div class="node new"><b>PostgreSQL</b><span>Tier 3: transactions and data integrity</span></div>
+            <div class="node new"><b>Elasticsearch</b><span>Tier 3: search, with NLP and geographic polygons</span></div>
+            <div class="node new"><b>Celery and RabbitMQ</b><span>High-volume listing publication</span></div>
+          </div>
+          <div class="arrow" aria-hidden="true"><svg viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round"><path d="M8 2v12M3 9l5 5 5-5"/></svg></div>
+          <div class="flow-row c1"><div class="node new"><b>Kubernetes, Docker, NGINX and CI/CD on AWS</b><span>Tier 1: the platform everything new runs on</span></div></div>
+          <div class="flow-legend"><span><i style="border-style:dashed;background:#2a2a2d"></i>Legacy</span><span><i style="border-color:rgba(129,255,217,.6);background:#2a2a2d"></i>New</span><span><i style="background:#10263a;border-color:rgba(41,151,255,.6)"></i>Migration glue</span></div>
+        </figure>
+
+        <h3>Tier 1: a platform for the new system</h3>
+        <p>Before moving any code, the new services needed somewhere to run. We replaced hand-managed EC2 virtual machines with Docker containers orchestrated by Kubernetes, swapped Windows IIS for NGINX as the web server and reverse proxy, and put automated CI/CD pipelines in front of every deployment. Shipping went from a risky manual event to a routine one, and the new stack used fewer resources for more traffic.</p>
+
+        <h3>Tier 2: one front door, one identity</h3>
+        <p>Next, we put Kong API Gateway in front of both systems. From then on, every request went through one place that decided whether the old or the new system answered it. That let us move traffic route by route, and send a route back to the old system if something looked wrong. Keycloak gave both systems one shared identity and access layer.</p>
+
+        <h3>Tier 3: data and search, kept in sync</h3>
+        <p>We moved transactional data from Microsoft SQL Server to PostgreSQL, which improved integrity and performance and removed the license cost. Search moved from Apache Solr to Elasticsearch, built for fast, high-volume reads. PostgreSQL handled what had to be correct; Elasticsearch handled what had to be fast.</p>
+        <p>The hardest part was running two systems at once. Event-driven AWS Lambda functions copied every change between the legacy and new datastores in real time, so the two never disagreed while services were cut over one by one. A listing published on either side still appeared within the same 30-minute window as before.</p>
+
+        <h3>Tier 4: services by domain, and a new frontend</h3>
+        <p>With the platform, the gateway and the data in place, we split the monolith into Django services, one per business domain, with a React frontend. Each service took over its part of the site behind Kong, one domain at a time. Heavy work like publishing listings at high volume moved to background tasks with Celery and RabbitMQ, so a spike of agent uploads no longer slowed the site down for everyone else.</p>
+
+        <h2>Search that understands how people describe places</h2>
+        <p>Moving search to Elasticsearch was also a chance to make it smarter. This was early AI work, years before the current wave of generative AI.</p>
+        <ul>
+          <li><strong>Natural language queries.</strong> We added natural language understanding, so the search could read intent from a conversational query, for example a property type, a size and a place in one sentence, instead of needing filters.</li>
+          <li><strong>A map of the whole country.</strong> We acquired cartographic and street-network data for Colombia: cities, municipalities, neighborhoods and local landmarks.</li>
+          <li><strong>Official names and local nicknames.</strong> We mapped official place names alongside the informal names and aliases people actually use, and turned boundaries and areas of interest into geographic polygons and vectors inside Elasticsearch.</li>
+        </ul>
+        <p>For example, many people in Bogotá call one area "Zona T", but no official map uses that name. This is how the search resolved it:</p>
+        <figure class="flow" aria-label="Example: from a local nickname to an official neighbourhood">
+          <p class="flow-cap">Example: from a local nickname to an official neighbourhood</p>
+          <div class="flow-row c1"><div class="node"><b>User search</b><span>"apartamentos en Zona T" (apartments in Zona T)</span></div></div>
+          <div class="arrow" aria-hidden="true"><svg viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round"><path d="M8 2v12M3 9l5 5 5-5"/></svg></div>
+          <div class="flow-row c1"><div class="node"><b>Candidate matches</b><span>Zona T · Zona Rosa · El Retiro · Chapinero · nearby landmarks</span></div></div>
+          <div class="arrow" aria-hidden="true"><svg viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round"><path d="M8 2v12M3 9l5 5 5-5"/></svg></div>
+          <div class="flow-row c1"><div class="node key"><b>Normalization</b><span>Nickname and aliases resolved against the official polygons</span></div></div>
+          <div class="arrow" aria-hidden="true"><svg viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round"><path d="M8 2v12M3 9l5 5 5-5"/></svg></div>
+          <div class="flow-row c1"><div class="node new"><b>Official neighbourhood: EL RETIRO</b><span>Code 008310 · Locality: CHAPINERO</span></div></div>
+          <div class="arrow" aria-hidden="true"><svg viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round"><path d="M8 2v12M3 9l5 5 5-5"/></svg></div>
+          <div class="flow-row c1"><div class="node new"><b>Property results</b><span>Listings inside that exact boundary</span></div></div>
+        </figure>
+        <p>Search moved from matching keywords to understanding places.</p>
+
+        <h2>What went wrong: single sign-on</h2>
+        <p>Not every decision worked. Keycloak was the right idea, one identity layer for both systems, but it was new to the team and built on Java, which was outside our core skills. We hit integration problems we had not planned for, and gaps in the documentation made them slow to solve. That part of the project took <strong>six times longer</strong> than estimated.</p>
+        <blockquote>For mission-critical tools, the team's familiarity and the support around the tool matter as much as its features.</blockquote>
+        <p>We ran an open lessons-learned session instead of looking for someone to blame, and we added a vetting step for mission-critical tools: does the team know the stack, how good are the docs and community, and who do we call when it breaks? I wrote about that checklist in <a class="link" href="/writing/choose-tools-your-team-can-support/">Pick the tool your team can support</a>.</p>
+
+        <h2>Leading 30 engineers through it</h2>
+        <p>I led a team of 30 during the migration. A few things made the difference:</p>
+        <ul>
+          <li><strong>Ownership for seniors.</strong> I designed the high-level architecture and gave senior engineers full ownership of implementing it. That grew our leadership capacity from inside the team, and kept me from becoming a bottleneck.</li>
+          <li><strong>Scrum across departments.</strong> We rolled out Scrum beyond engineering and agreed on one Definition of Done and one format for sprint reviews, so product, engineering and the business saw the same progress.</li>
+          <li><strong>Getting hands-on when it mattered.</strong> When the new stack overwhelmed the team, I learned it fast enough to unblock people directly, until they were confident on their own.</li>
+          <li><strong>Growing people.</strong> I coached a junior engineer to own a critical module and defend their design choices, like PostgreSQL over NoSQL. They were promoted to mid-level after five months.</li>
+        </ul>
+
+        <h2>Results</h2>
+        <div class="table-wrap">
+          <table>
+            <thead><tr><th>Measure</th><th>Before</th><th>After</th></tr></thead>
+            <tbody>
+              <tr><td>Hosting and maintenance cost</td><td>VM instances and Microsoft licenses</td><td><strong>50% lower</strong></td></tr>
+              <tr><td>Availability during the migration</td><td>n/a</td><td><strong>100%, zero downtime</strong></td></tr>
+              <tr><td>Deployments</td><td>Manual patching, high risk</td><td><strong>Automated CI/CD</strong>, containerized</td></tr>
+              <tr><td>Largest Contentful Paint</td><td>Under 3 s</td><td><strong>Under 3 s</strong>, despite a more complex system</td></tr>
+              <tr><td>Listing publication time</td><td>30 minutes</td><td><strong>30 minutes</strong>, with two systems running</td></tr>
+              <tr><td>Search</td><td>Keyword matching in Apache Solr</td><td><strong>Natural language and geographic matching</strong> in Elasticsearch</td></tr>
+              <tr><td>Web server</td><td>Windows IIS on EC2</td><td><strong>NGINX on Kubernetes</strong>, smaller footprint, higher throughput</td></tr>
+              <tr><td>REST APIs on the new backend</td><td>n/a</td><td><strong>15+</strong>, with 25% lower latency</td></tr>
+                          </tbody>
+          </table>
+        </div>
+
+        <h2>What I'd take to the next migration</h2>
+        <ul>
+          <li>Build the platform and the gateway first. After that, every move is a routing decision you can undo.</li>
+          <li>Budget real time for keeping two systems in sync. It is the hardest part, and the one that protects the business.</li>
+          <li>Choose tools the team already knows for anything security-critical.</li>
+          <li>Measure what users feel, like page speed, from day one, so "no regressions" is a number and not a hope.</li>
+        </ul>
+        <div class="author"><svg aria-hidden="true" viewBox="0 0 189 190"><path fill="#0071e3" d="M9.8 184.5C4.8 181.7 2.6 174.6 5.1 169.7C5.7 168.5 10.3 163.3 15.3 158.2L24.5 149.0L15.3 139.8C10.3 134.7 5.7 129.5 5.1 128.3C2.4 123.0 5.3 115.4 10.9 113.1C17.0 110.5 19.5 112.0 33.7 126.3C41.0 133.5 47.4 140.8 48.0 142.3C49.4 146.2 49.3 152.5 47.6 156.3C46.8 158.1 40.4 165.3 33.3 172.3C21.9 183.6 19.9 185.2 16.4 185.6C14.0 185.9 11.5 185.4 9.8 184.5ZM70.7 158.0C65.1 153.6 65.1 144.4 70.7 140.0C73.0 138.2 74.7 138.0 89.6 138.0C107.4 138.0 110.2 138.6 112.6 143.1C115.5 148.8 113.5 156.5 108.5 158.8C106.8 159.6 100.1 160.0 89.6 160.0C74.7 160.0 73.0 159.8 70.7 158.0ZM136.9 158.6C135.4 157.7 133.5 155.4 132.5 153.4C131.1 150.3 131.0 149.1 131.9 145.9C133.5 140.5 137.1 138.0 143.4 138.0C153.7 138.0 160.3 134.0 161.9 126.9C162.3 125.0 162.3 113.4 161.9 101.0C160.7 67.7 157.5 46.5 151.4 32.9L148.7 27.0L145.2 29.0C138.8 32.8 133.0 38.2 129.2 44.0L125.3 49.8L122.4 48.0C109.4 39.8 87.5 39.6 73.2 47.5L69.0 49.9L67.1 46.1C65.0 42.0 54.3 31.6 49.1 28.7L46.0 26.9L43.0 33.2C39.2 41.3 36.3 54.6 34.4 72.4C32.7 89.3 32.7 89.3 28.9 92.5C24.3 96.3 18.8 96.0 14.4 91.6C11.2 88.4 11.0 87.8 11.0 81.2C11.0 63.5 16.4 36.0 22.4 23.5C28.7 10.1 35.8 4.6 46.6 4.6C53.6 4.6 60.0 7.7 70.7 16.2L77.0 21.1L82.5 20.0C89.6 18.5 105.5 18.5 112.5 20.0L117.9 21.1L124.2 16.1C138.1 4.8 148.3 2.1 158.3 6.9C174.9 15.0 184.2 50.4 184.4 107.0C184.5 137.6 184.3 138.6 174.9 148.5C167.2 156.6 160.9 159.4 149.0 159.7C142.0 160.0 138.8 159.6 136.9 158.6ZM64.3 102.5C62.6 101.8 60.4 99.8 59.6 98.1C55.5 90.3 59.6 82.2 68.3 81.3C72.6 80.8 73.2 81.0 76.5 84.3C79.4 87.2 80.0 88.5 80.0 92.2C80.0 97.4 77.9 100.7 73.4 102.6C69.3 104.3 68.4 104.3 64.3 102.5ZM121.3 102.5C117.0 100.7 114.5 96.6 114.6 91.6C114.7 88.4 115.4 87.0 118.4 84.3C120.8 82.1 123.0 81.0 125.0 81.0C137.3 81.0 141.5 97.2 130.6 102.4C126.5 104.3 125.5 104.3 121.3 102.5Z"/></svg><p><b>Erwin Mongui</b>Director of Technology at Cedar Planters and Certified AI Engineer, based in Toronto. 18+ years building customer-facing platforms and the teams that run them. <a class="link" href="/about/">More about me</a></p></div>
+      </div>
+      <aside class="aside">
+        <dl class="facts-box">
+          <div><dt>Company</dt><dd>Fincaraiz.com.co, Adevinta group</dd></div>
+          <div><dt>My role</dt><dd>CTO and Software Engineering Team Lead</dd></div>
+          <div><dt>When</dt><dd>2019 to 2022</dd></div>
+          <div><dt>Team</dt><dd>30 engineers</dd></div>
+          <div><dt>Pattern</dt><dd>Strangler fig, in four tiers</dd></div>
+          <div><dt>New stack</dt><dd><div class="chips" style="margin-top:6px"><span class="chip" style="border-color:var(--line-light);color:var(--ink)">Django</span><span class="chip" style="border-color:var(--line-light);color:var(--ink)">React</span><span class="chip" style="border-color:var(--line-light);color:var(--ink)">Kubernetes</span><span class="chip" style="border-color:var(--line-light);color:var(--ink)">Docker</span><span class="chip" style="border-color:var(--line-light);color:var(--ink)">NGINX</span><span class="chip" style="border-color:var(--line-light);color:var(--ink)">Kong</span><span class="chip" style="border-color:var(--line-light);color:var(--ink)">Keycloak</span><span class="chip" style="border-color:var(--line-light);color:var(--ink)">PostgreSQL</span><span class="chip" style="border-color:var(--line-light);color:var(--ink)">Elasticsearch</span><span class="chip" style="border-color:var(--line-light);color:var(--ink)">AWS Lambda</span><span class="chip" style="border-color:var(--line-light);color:var(--ink)">Celery</span><span class="chip" style="border-color:var(--line-light);color:var(--ink)">RabbitMQ</span><span class="chip" style="border-color:var(--line-light);color:var(--ink)">NLP</span></div></dd></div>
+          <div><dt>Retired</dt><dd>ASP.NET, Windows IIS, Microsoft SQL Server, Apache Solr, VM-based EC2</dd></div>
+        </dl>
+        <div class="related"><h4>Related</h4><a href="/writing/choose-tools-your-team-can-support/">Pick the tool your team can support</a><a href="/work/fincaraiz-lead-distribution/">Case study: lead distribution for any CRM</a><a href="/writing/engineering-team-health-metrics/">How I measure engineering team health</a></div>
+      </aside>
+    </div>
+  </section>

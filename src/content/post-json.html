@@ -1,0 +1,80 @@
+<header class="doc-head stage-dark">
+    <nav class="crumbs" aria-label="Breadcrumb"><a href="/">Home</a><span>/</span><a href="/writing/">Writing</a><span>/</span><span>AI</span></nav>
+    <p class="eyebrow">AI · Data</p>
+    <h1>Taming the data jungle: JSON as the contract between your systems and AI.</h1>
+    <p class="summary">AI runs on data that rarely fits neatly into rows and columns. In 2024 I wrote about JSON as a practical tool for that problem. Since then it has become more than that: JSON is now how software and AI models talk to each other, from structured outputs and tool calls to memory and model configuration.</p>
+    <div class="byline"><span>By Erwin Mongui</span><span>First published February 6, 2024</span><span>Updated September 23, 2026</span><span>7 min read</span><span>Originally on <a class="link" href="https://www.linkedin.com/pulse/taming-data-jungle-my-journey-ai-applications-json-erwin-mongui-vhcgc/" target="_blank" rel="noopener">LinkedIn</a></span><a class="link" href="/es/articulos/json-en-aplicaciones-de-ia/" hreflang="es" lang="es">Leer en español</a></div>
+  </header>
+  <section class="doc">
+    <div class="doc-grid">
+      <div class="prose">
+        <div class="inshort"><b>In short</b><p>Define a JSON Schema for what you expect from a model, ask the model to follow it, and validate every response before using it. The same pattern powers structured outputs, tool calling and agent protocols like MCP. Keep conversational memory and model settings in versioned JSON too, so your AI system stays predictable and easy to debug.</p></div>
+
+        <h2>Beyond rows and columns</h2>
+        <p>Edgar F. Codd's relational model still underpins most business systems, and for good reason. But AI applications work with much more than tables:</p>
+        <ul>
+          <li><strong>Structured data:</strong> orders, customers and listings in relational databases.</li>
+          <li><strong>Semi-structured data:</strong> JSON from APIs, events and logs, where fields vary from record to record.</li>
+          <li><strong>Unstructured data:</strong> free text, documents and images.</li>
+        </ul>
+        <p>Real-world data also breaks the assumptions relational design relies on. In areas like biometrics or online advertising, there is often no reliable unique identifier, so records have to be matched by probability instead of by key. Handling this well takes solid data wrangling, and increasingly, AI models that can read and structure messy input.</p>
+
+        <h2>Why JSON became the language of AI applications</h2>
+        <p>JSON is lightweight, human-readable and supported everywhere. Those qualities made it the default for web APIs. For AI, it solves a bigger problem: turning a model's free-form text into something software can rely on.</p>
+
+        <h3>1. Structured outputs</h3>
+        <p>Major model providers can now constrain a model's answer to a JSON Schema you supply. Instead of parsing text and hoping, you get a response in the shape you defined, which you then validate in code. In Python, Pydantic is the usual way to define the schema and check the result; in TypeScript, Zod plays the same role.</p>
+
+        <h3>2. Tool calling and agents</h3>
+        <p>When a model decides to call a function, such as searching a database or creating a ticket, it produces the arguments as JSON that matches the tool's schema. Agent frameworks like LangGraph and Pydantic AI are built around this. The Model Context Protocol (MCP), now a common way to connect AI assistants to tools and data, uses JSON-RPC messages under the hood.</p>
+
+        <h3>3. Conversational memory</h3>
+        <p>A useful assistant remembers context: your preferences, the last thing you asked, what is still unresolved. Storing that as a small, well-defined JSON object per user or session keeps memory explicit and easy to inspect. For long histories, pair it with vector search (for example pgvector in PostgreSQL, or Elasticsearch) to retrieve only the relevant pieces.</p>
+
+        <h3>4. Model configuration and reproducibility</h3>
+        <p>Deep learning models run on tensors, but everything around them is configuration: architecture settings, training hyperparameters, fine-tuning parameters and evaluation results. Keeping these in JSON makes experiments transparent and repeatable. The Hugging Face ecosystem works this way: a model ships its settings in a <code>config.json</code> file next to its weights, usually stored as safetensors. Tools like MLflow track runs and parameters in the same spirit.</p>
+
+        <h2>A worked example: natural language search</h2>
+        <p>At Fincaraiz we built search that understood conversational queries and local place names (I describe it in the <a class="link" href="/work/fincaraiz-monolith-to-microservices/">migration case study</a>). With today's models, the first step of that kind of search, turning a sentence into filters, takes a few lines. First, define what a search looks like:</p>
+<pre><code>from typing import Literal
+from pydantic import BaseModel, Field
+
+class PropertySearch(BaseModel):
+    operation: Literal["buy", "rent"]
+    property_type: Literal["apartment", "house", "lot", "commercial"]
+    bedrooms: int | None = None
+    location: str = Field(description="Neighborhood, city or landmark, as the user wrote it")
+    max_price_cop: int | None = Field(None, description="Maximum price in Colombian pesos")
+
+schema = PropertySearch.model_json_schema()  # send this to the model as the required output format</code></pre>
+        <p>A user types: <em>"3-bedroom apartment to buy in Chapinero, under 500 million"</em>. With structured outputs, the model returns:</p>
+<pre><code>{
+  "operation": "buy",
+  "property_type": "apartment",
+  "bedrooms": 3,
+  "location": "Chapinero",
+  "max_price_cop": 500000000
+}</code></pre>
+        <p>Then validate it before it touches your search engine:</p>
+<pre><code>search = PropertySearch.model_validate_json(model_response)
+# raises a clear error if a field is missing or has the wrong type</code></pre>
+        <p>The model handles the language. Your code and your data still handle the rest: resolving "Chapinero" to its exact boundary on the map, applying the filters and ranking the results. That split is what makes AI features reliable.</p>
+
+        <h2>Practices that keep it reliable</h2>
+        <ul>
+          <li><strong>Schema first.</strong> Agree on the JSON shape before writing prompts or code.</li>
+          <li><strong>Validate everything.</strong> Treat model output like user input: check it, and have a fallback when it fails.</li>
+          <li><strong>Version your schemas.</strong> Changing a field is a breaking change for anything downstream.</li>
+          <li><strong>Keep sensitive data out.</strong> Don't store personal data in memory objects or logs unless you need it and protect it.</li>
+          <li><strong>Log inputs and outputs.</strong> Real examples become the test set for your evaluations.</li>
+        </ul>
+        <p>AI coding assistants help here too. They are good at drafting schemas, sample payloads, test fixtures and transformation scripts from a short description, which removes much of the tedious work. The design decisions, and the review, stay with the engineer.</p>
+
+        <h2>The takeaway</h2>
+        <p>Handling diverse data well was the foundation of AI work in 2024, and it still is. What has changed is that JSON now sits at the center of it, as the contract between your systems and the models they use. Whether you are building an assistant, a recommendation system or an agent, getting that contract right is what turns an impressive demo into software people can depend on.</p>
+        <div class="chips"><span class="chip" style="border-color:var(--line-light);color:var(--ink)">AI</span><span class="chip" style="border-color:var(--line-light);color:var(--ink)">JSON Schema</span><span class="chip" style="border-color:var(--line-light);color:var(--ink)">Pydantic</span><span class="chip" style="border-color:var(--line-light);color:var(--ink)">Structured outputs</span><span class="chip" style="border-color:var(--line-light);color:var(--ink)">MCP</span><span class="chip" style="border-color:var(--line-light);color:var(--ink)">PyTorch</span><span class="chip" style="border-color:var(--line-light);color:var(--ink)">Hugging Face</span></div>
+        <div class="author"><svg aria-hidden="true" viewBox="0 0 189 190"><path fill="#0071e3" d="M9.8 184.5C4.8 181.7 2.6 174.6 5.1 169.7C5.7 168.5 10.3 163.3 15.3 158.2L24.5 149.0L15.3 139.8C10.3 134.7 5.7 129.5 5.1 128.3C2.4 123.0 5.3 115.4 10.9 113.1C17.0 110.5 19.5 112.0 33.7 126.3C41.0 133.5 47.4 140.8 48.0 142.3C49.4 146.2 49.3 152.5 47.6 156.3C46.8 158.1 40.4 165.3 33.3 172.3C21.9 183.6 19.9 185.2 16.4 185.6C14.0 185.9 11.5 185.4 9.8 184.5ZM70.7 158.0C65.1 153.6 65.1 144.4 70.7 140.0C73.0 138.2 74.7 138.0 89.6 138.0C107.4 138.0 110.2 138.6 112.6 143.1C115.5 148.8 113.5 156.5 108.5 158.8C106.8 159.6 100.1 160.0 89.6 160.0C74.7 160.0 73.0 159.8 70.7 158.0ZM136.9 158.6C135.4 157.7 133.5 155.4 132.5 153.4C131.1 150.3 131.0 149.1 131.9 145.9C133.5 140.5 137.1 138.0 143.4 138.0C153.7 138.0 160.3 134.0 161.9 126.9C162.3 125.0 162.3 113.4 161.9 101.0C160.7 67.7 157.5 46.5 151.4 32.9L148.7 27.0L145.2 29.0C138.8 32.8 133.0 38.2 129.2 44.0L125.3 49.8L122.4 48.0C109.4 39.8 87.5 39.6 73.2 47.5L69.0 49.9L67.1 46.1C65.0 42.0 54.3 31.6 49.1 28.7L46.0 26.9L43.0 33.2C39.2 41.3 36.3 54.6 34.4 72.4C32.7 89.3 32.7 89.3 28.9 92.5C24.3 96.3 18.8 96.0 14.4 91.6C11.2 88.4 11.0 87.8 11.0 81.2C11.0 63.5 16.4 36.0 22.4 23.5C28.7 10.1 35.8 4.6 46.6 4.6C53.6 4.6 60.0 7.7 70.7 16.2L77.0 21.1L82.5 20.0C89.6 18.5 105.5 18.5 112.5 20.0L117.9 21.1L124.2 16.1C138.1 4.8 148.3 2.1 158.3 6.9C174.9 15.0 184.2 50.4 184.4 107.0C184.5 137.6 184.3 138.6 174.9 148.5C167.2 156.6 160.9 159.4 149.0 159.7C142.0 160.0 138.8 159.6 136.9 158.6ZM64.3 102.5C62.6 101.8 60.4 99.8 59.6 98.1C55.5 90.3 59.6 82.2 68.3 81.3C72.6 80.8 73.2 81.0 76.5 84.3C79.4 87.2 80.0 88.5 80.0 92.2C80.0 97.4 77.9 100.7 73.4 102.6C69.3 104.3 68.4 104.3 64.3 102.5ZM121.3 102.5C117.0 100.7 114.5 96.6 114.6 91.6C114.7 88.4 115.4 87.0 118.4 84.3C120.8 82.1 123.0 81.0 125.0 81.0C137.3 81.0 141.5 97.2 130.6 102.4C126.5 104.3 125.5 104.3 121.3 102.5Z"/></svg><p><b>Erwin Mongui</b>Director of Technology at Cedar Planters and Certified AI Engineer (Lambton College, 2024), based in Toronto. <a class="link" href="/about/">More about me</a></p></div>
+      </div>
+      <aside class="aside"><div class="related"><h4>Related</h4><a href="/work/fincaraiz-monolith-to-microservices/">Case study: NLP and map-aware search at Fincaraiz</a><a href="/writing/ai-careers-new-graduates/">What new graduates need for a career in AI</a><a href="/work/cedar-planters-data-platform/">Case study: data platform from zero</a></div></aside>
+    </div>
+  </section>

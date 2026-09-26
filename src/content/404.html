@@ -1,0 +1,117 @@
+<section class="nf stage-dark" aria-labelledby="nf-title-en">
+  <div class="nf-inner">
+    <p class="nf-code" aria-hidden="true"><svg viewBox="0 0 189 190"><path fill="#81ffd9" d="__MARK__"/></svg><span>404</span></p>
+
+    <div class="nf-block" id="nf-en" lang="en">
+      <h1 id="nf-title-en">This page doesn't exist.</h1>
+      <p class="lede">The link may be old, or the address may have a typo. You asked for <code class="nf-path"></code>.</p>
+      <div class="nf-suggest" hidden>
+        <h2>Were you looking for one of these?</h2>
+        <ul class="nf-list"></ul>
+      </div>
+      <div class="btns">
+        <a class="btn btn-primary" href="/">Go to the homepage</a>
+        <a class="btn btn-ghost" href="/work/">Case studies</a>
+        <a class="btn btn-ghost" href="/writing/">Writing</a>
+      </div>
+    </div>
+
+    <div class="nf-block" id="nf-es" lang="es">
+      <h2 class="nf-es-title">Esta página no existe.</h2>
+      <p class="lede">Puede que el enlace sea antiguo o que la dirección tenga un error. Buscabas <code class="nf-path"></code>.</p>
+      <div class="nf-suggest" hidden>
+        <h2>¿Buscabas alguna de estas páginas?</h2>
+        <ul class="nf-list"></ul>
+      </div>
+      <div class="btns">
+        <a class="btn btn-primary" href="/es/">Ir al inicio</a>
+        <a class="btn btn-ghost" href="/es/#casos">Casos de estudio</a>
+        <a class="btn btn-ghost" href="/es/articulos/">Artículos</a>
+      </div>
+    </div>
+
+    <p class="nf-contact">Still can't find it? Email <a class="link" href="mailto:erwinmongui@gmail.com">erwinmongui@gmail.com</a> · <span lang="es">¿No la encuentras? Escríbeme.</span></p>
+  </div>
+</section>
+
+<script type="application/json" id="nf-pages">__PAGES__</script>
+<script>
+(function () {
+  var path = location.pathname;
+  var isEs = /^\/es(\/|$)/.test(path);
+  var en = document.getElementById('nf-en');
+  var es = document.getElementById('nf-es');
+
+  Array.prototype.forEach.call(document.querySelectorAll('.nf-path'), function (c) { c.textContent = path; });
+
+  // Put the visitor's language first.
+  if (isEs) {
+    en.parentNode.insertBefore(es, en);
+    document.documentElement.lang = 'es';
+    document.title = 'Página no encontrada | Erwin Mongui';
+    var h = es.querySelector('.nf-es-title');
+    var h1 = document.createElement('h1');
+    h1.className = h.className; h1.textContent = h.textContent; h.replaceWith(h1);
+    var h1en = en.querySelector('h1');
+    var h2en = document.createElement('h2');
+    h2en.textContent = h1en.textContent; h1en.replaceWith(h2en);
+
+    // Spanish navigation and footer.
+    function links(el, items) {
+      if (!el) return;
+      while (el.firstChild) el.removeChild(el.firstChild);
+      items.forEach(function (it) { var x = document.createElement('a'); x.href = it[1]; x.textContent = it[0]; el.appendChild(x); });
+    }
+    links(document.getElementById('nav-links'), [['Casos', '/es/#casos'], ['Artículos', '/es/articulos/'], ['Sobre mí', '/about/']]);
+    var brand = document.querySelector('.brand'); if (brand) brand.href = '/es/';
+    var sw = document.querySelector('.nav .lang'); if (sw) { sw.href = '/'; sw.textContent = 'English'; sw.lang = 'en'; sw.hreflang = 'en'; }
+    var cta = document.querySelector('.nav-cta'); if (cta) { cta.href = '/es/#contacto'; cta.textContent = 'Contacto'; }
+    document.addEventListener('DOMContentLoaded', function () {
+      var fnav = document.querySelector('.foot nav');
+      if (!fnav) return;
+      var keep = Array.prototype.slice.call(fnav.querySelectorAll('a[target="_blank"]'));
+      links(fnav, [['Casos', '/es/#casos'], ['Artículos', '/es/articulos/'], ['Sobre mí', '/about/'], ['English', '/']]);
+      keep.forEach(function (k) {
+        if (k.href.indexOf('preferences/source') !== -1) k.textContent = 'Agregar como fuente preferida en Google';
+        fnav.appendChild(k);
+      });
+    });
+  }
+
+  // Suggest the closest real pages, based on the words in the address.
+  var pages = [];
+  try { pages = JSON.parse(document.getElementById('nf-pages').textContent); } catch (e) {}
+  var stop = { the: 1, and: 1, los: 1, las: 1, del: 1, index: 1, html: 1, www: 1, work: 1, writing: 1, casos: 1, articulos: 1, about: 1 };
+  var words = path.toLowerCase().split(/[^a-z0-9áéíóúñ]+/).filter(function (w) { return w.length > 2 && !stop[w]; });
+  function score(p) {
+    var hay = (p.url + ' ' + p.title).toLowerCase();
+    var s = 0;
+    words.forEach(function (w) { if (hay.indexOf(w) !== -1) s += w.length; });
+    return s;
+  }
+  function fill(block, lang) {
+    if (!words.length) return;
+    var ranked = pages.map(function (p) { return { p: p, s: score(p), same: p.lang === lang }; })
+      .filter(function (r) { return r.s > 2; })
+      .sort(function (a, b) { return (b.same - a.same) || (b.s - a.s); })
+      .slice(0, 3);
+    if (!ranked.length) return;
+    var list = block.querySelector('.nf-list');
+    ranked.forEach(function (r) {
+      var li = document.createElement('li');
+      var a = document.createElement('a');
+      a.href = r.p.url; a.textContent = r.p.title;
+      if (r.p.lang !== lang) a.setAttribute('hreflang', r.p.lang);
+      li.appendChild(a); list.appendChild(li);
+    });
+    block.querySelector('.nf-suggest').hidden = false;
+  }
+  fill(en, 'en');
+  fill(es, 'es');
+
+  // Record the missing address so broken links show up in GA4.
+  if (typeof window.gtag === 'function') {
+    window.gtag('event', 'page_not_found', { page_path: path, page_referrer: document.referrer || '(direct)' });
+  }
+})();
+</script>

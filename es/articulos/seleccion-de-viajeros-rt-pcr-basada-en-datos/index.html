@@ -1,0 +1,342 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Selección de viajeros para RT-PCR basada en datos, no al azar | Erwin Mongui</title>
+<meta name="description" content="Nuestro artículo del STEM Fellowship Big Data and AI Challenge 2023: datos de la OMS y del Gobierno de Canadá para priorizar viajeros para RT-PCR.">
+<meta name="author" content="Erwin Mongui">
+<meta name="robots" content="index, follow, max-snippet:-1, max-image-preview:large, max-video-preview:-1">
+<meta name="theme-color" content="#000000">
+<link rel="canonical" href="https://erwinmongui.com/es/articulos/seleccion-de-viajeros-rt-pcr-basada-en-datos/">
+<link rel="alternate" hreflang="en" href="https://erwinmongui.com/writing/rt-pcr-travel-screening-data-driven-selection/">
+<link rel="alternate" hreflang="es" href="https://erwinmongui.com/es/articulos/seleccion-de-viajeros-rt-pcr-basada-en-datos/">
+<link rel="alternate" hreflang="x-default" href="https://erwinmongui.com/writing/rt-pcr-travel-screening-data-driven-selection/">
+<link rel="alternate" type="application/rss+xml" title="Erwin Mongui: casos y artículos" href="https://erwinmongui.com/es/feed.xml">
+<link rel="me" href="https://www.linkedin.com/in/erwin-mongui/">
+<meta property="og:type" content="article">
+<meta property="og:site_name" content="Erwin Mongui">
+<meta property="og:locale" content="es_CO">
+<meta property="og:locale:alternate" content="en_CA">
+<meta property="og:url" content="https://erwinmongui.com/es/articulos/seleccion-de-viajeros-rt-pcr-basada-en-datos/">
+<meta property="og:title" content="Reemplazar la selección aleatoria para RT-PCR con una selección de viajeros basada en datos">
+<meta property="og:description" content="Nuestro artículo del STEM Fellowship Big Data and AI Challenge 2023: datos de la OMS y del Gobierno de Canadá para priorizar viajeros para RT-PCR.">
+<meta property="og:image" content="https://erwinmongui.com/og-image.png">
+<meta property="og:image:width" content="1200">
+<meta property="og:image:height" content="630">
+<meta property="og:image:alt" content="Erwin Mongui logo with the words Engineering leader, Director of Technology, Toronto, Canada">
+<meta property="article:published_time" content="2023-12-12">
+<meta property="article:modified_time" content="2026-09-26">
+<meta property="article:author" content="https://www.linkedin.com/in/erwin-mongui/">
+<meta name="twitter:card" content="summary_large_image">
+<meta name="twitter:title" content="Reemplazar la selección aleatoria para RT-PCR con una selección de viajeros basada en datos">
+<meta name="twitter:description" content="Nuestro artículo del STEM Fellowship Big Data and AI Challenge 2023: datos de la OMS y del Gobierno de Canadá para priorizar viajeros para RT-PCR.">
+<meta name="twitter:image" content="https://erwinmongui.com/og-image.png">
+<link rel="icon" href="/favicon.ico" sizes="16x16 32x32 48x48">
+<link rel="icon" type="image/svg+xml" href="/favicon.svg">
+<link rel="apple-touch-icon" sizes="180x180" href="/apple-touch-icon.png">
+<link rel="manifest" href="/site.webmanifest">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Manrope:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="/assets/site.css">
+<script type="application/ld+json">
+{
+ "@context": "https://schema.org",
+ "@graph": [
+  {
+   "@type": "Person",
+   "@id": "https://erwinmongui.com/#person",
+   "name": "Erwin Mongui",
+   "url": "https://erwinmongui.com/",
+   "jobTitle": "Director of Technology",
+   "worksFor": {
+    "@type": "Organization",
+    "name": "Cedar Planters"
+   },
+   "sameAs": [
+    "https://www.linkedin.com/in/erwin-mongui/"
+   ]
+  },
+  {
+   "@type": "WebSite",
+   "@id": "https://erwinmongui.com/#website",
+   "url": "https://erwinmongui.com/",
+   "name": "Erwin Mongui",
+   "publisher": {
+    "@id": "https://erwinmongui.com/#person"
+   },
+   "inLanguage": [
+    "en",
+    "es"
+   ]
+  },
+  {
+   "@type": "BlogPosting",
+   "@id": "https://erwinmongui.com/es/articulos/seleccion-de-viajeros-rt-pcr-basada-en-datos/#article",
+   "headline": "Reemplazar la selección aleatoria para RT-PCR con una selección de viajeros basada en datos",
+   "description": "Nuestro artículo del STEM Fellowship Big Data and AI Challenge 2023: datos de la OMS y del Gobierno de Canadá para priorizar viajeros para RT-PCR.",
+   "url": "https://erwinmongui.com/es/articulos/seleccion-de-viajeros-rt-pcr-basada-en-datos/",
+   "mainEntityOfPage": "https://erwinmongui.com/es/articulos/seleccion-de-viajeros-rt-pcr-basada-en-datos/",
+   "inLanguage": "es",
+   "image": "https://erwinmongui.com/og-image.png",
+   "datePublished": "2023-12-12",
+   "dateModified": "2026-09-26",
+   "author": [
+    {
+     "@id": "https://erwinmongui.com/#person"
+    },
+    {
+     "@type": "Person",
+     "name": "Umid Ghimire"
+    },
+    {
+     "@type": "Person",
+     "name": "Dharmik Limbani"
+    },
+    {
+     "@type": "Person",
+     "name": "Sairam Kilari"
+    }
+   ],
+   "publisher": {
+    "@id": "https://erwinmongui.com/#person"
+   },
+   "isPartOf": {
+    "@id": "https://erwinmongui.com/#website"
+   },
+   "keywords": [
+    "COVID-19",
+    "RT-PCR",
+    "control sanitario de viajeros",
+    "segmentación de riesgo",
+    "datos abiertos",
+    "Lambton College"
+   ],
+   "citation": {
+    "@type": "ScholarlyArticle",
+    "name": "Eliminating Randomness in Selecting International Passengers for RT-PCR",
+    "author": [
+     "Umid Ghimire",
+     "Dharmik Limbani",
+     "Erwin Mongui",
+     "Sairam Kilari"
+    ],
+    "datePublished": "2023",
+    "isPartOf": "STEM Fellowship Journal: Proceedings from the 2023 Inter-University Big Data and AI Challenge",
+    "sameAs": "https://doi.org/10.17975/sfj-2023-007",
+    "url": "https://journal.stemfellowship.org/doi/abs/10.17975/sfj-2023-007"
+   },
+   "sameAs": "https://www.linkedin.com/pulse/enhancing-international-passengers-selection-rt-pcr-erwin-mongui-yllle/",
+   "articleSection": "Investigación",
+   "isBasedOn": {
+    "@type": "SoftwareSourceCode",
+    "codeRepository": "https://github.com/gelnomo/ART.-National-Inter-University-Big-Data-And-AI-Challenge-2023",
+    "programmingLanguage": "Python"
+   }
+  },
+  {
+   "@type": "BreadcrumbList",
+   "itemListElement": [
+    {
+     "@type": "ListItem",
+     "position": 1,
+     "name": "Inicio",
+     "item": "https://erwinmongui.com/es/"
+    },
+    {
+     "@type": "ListItem",
+     "position": 2,
+     "name": "Artículos",
+     "item": "https://erwinmongui.com/es/articulos/"
+    },
+    {
+     "@type": "ListItem",
+     "position": 3,
+     "name": "Reemplazar la selección aleatoria para RT-PCR con una selección de viajeros basada en datos",
+     "item": "https://erwinmongui.com/es/articulos/seleccion-de-viajeros-rt-pcr-basada-en-datos/"
+    }
+   ]
+  }
+ ]
+}
+</script>
+<!-- Google tag (gtag.js) -->
+<script async src="https://www.googletagmanager.com/gtag/js?id=G-LKD2WCNDV1"></script>
+<script>
+  window.dataLayer = window.dataLayer || [];
+  function gtag(){dataLayer.push(arguments);}
+  gtag('js', new Date());
+  gtag('config', 'G-LKD2WCNDV1');
+</script>
+<!-- Clarity tracking code for https://erwinmongui.com/ -->
+<script>
+    (function(c,l,a,r,i,t,y){
+        c[a]=c[a]||function(){(c[a].q=c[a].q||[]).push(arguments)};
+        t=l.createElement(r);t.async=1;t.src="https://www.clarity.ms/tag/"+i;
+        y=l.getElementsByTagName(r)[0];y.parentNode.insertBefore(t,y);
+    })(window, document, "clarity", "script", "ygo6nehxdb");
+</script>
+<script defer src="/analytics.js"></script>
+</head>
+<body>
+<a class="skip" href="#main">Ir al contenido</a>
+<header class="nav" id="nav">
+  <div class="nav-inner">
+    <a class="brand" href="/es/"><svg aria-hidden="true" viewBox="0 0 189 190"><path fill="#81ffd9" d="M9.8 184.5C4.8 181.7 2.6 174.6 5.1 169.7C5.7 168.5 10.3 163.3 15.3 158.2L24.5 149.0L15.3 139.8C10.3 134.7 5.7 129.5 5.1 128.3C2.4 123.0 5.3 115.4 10.9 113.1C17.0 110.5 19.5 112.0 33.7 126.3C41.0 133.5 47.4 140.8 48.0 142.3C49.4 146.2 49.3 152.5 47.6 156.3C46.8 158.1 40.4 165.3 33.3 172.3C21.9 183.6 19.9 185.2 16.4 185.6C14.0 185.9 11.5 185.4 9.8 184.5ZM70.7 158.0C65.1 153.6 65.1 144.4 70.7 140.0C73.0 138.2 74.7 138.0 89.6 138.0C107.4 138.0 110.2 138.6 112.6 143.1C115.5 148.8 113.5 156.5 108.5 158.8C106.8 159.6 100.1 160.0 89.6 160.0C74.7 160.0 73.0 159.8 70.7 158.0ZM136.9 158.6C135.4 157.7 133.5 155.4 132.5 153.4C131.1 150.3 131.0 149.1 131.9 145.9C133.5 140.5 137.1 138.0 143.4 138.0C153.7 138.0 160.3 134.0 161.9 126.9C162.3 125.0 162.3 113.4 161.9 101.0C160.7 67.7 157.5 46.5 151.4 32.9L148.7 27.0L145.2 29.0C138.8 32.8 133.0 38.2 129.2 44.0L125.3 49.8L122.4 48.0C109.4 39.8 87.5 39.6 73.2 47.5L69.0 49.9L67.1 46.1C65.0 42.0 54.3 31.6 49.1 28.7L46.0 26.9L43.0 33.2C39.2 41.3 36.3 54.6 34.4 72.4C32.7 89.3 32.7 89.3 28.9 92.5C24.3 96.3 18.8 96.0 14.4 91.6C11.2 88.4 11.0 87.8 11.0 81.2C11.0 63.5 16.4 36.0 22.4 23.5C28.7 10.1 35.8 4.6 46.6 4.6C53.6 4.6 60.0 7.7 70.7 16.2L77.0 21.1L82.5 20.0C89.6 18.5 105.5 18.5 112.5 20.0L117.9 21.1L124.2 16.1C138.1 4.8 148.3 2.1 158.3 6.9C174.9 15.0 184.2 50.4 184.4 107.0C184.5 137.6 184.3 138.6 174.9 148.5C167.2 156.6 160.9 159.4 149.0 159.7C142.0 160.0 138.8 159.6 136.9 158.6ZM64.3 102.5C62.6 101.8 60.4 99.8 59.6 98.1C55.5 90.3 59.6 82.2 68.3 81.3C72.6 80.8 73.2 81.0 76.5 84.3C79.4 87.2 80.0 88.5 80.0 92.2C80.0 97.4 77.9 100.7 73.4 102.6C69.3 104.3 68.4 104.3 64.3 102.5ZM121.3 102.5C117.0 100.7 114.5 96.6 114.6 91.6C114.7 88.4 115.4 87.0 118.4 84.3C120.8 82.1 123.0 81.0 125.0 81.0C137.3 81.0 141.5 97.2 130.6 102.4C126.5 104.3 125.5 104.3 121.3 102.5Z"/></svg><span>Erwin Mongui</span></a>
+    <nav class="nav-links" id="nav-links" aria-label="Principal">
+      <a href="/es/#casos">Casos</a><a href="/es/articulos/" aria-current="page">Artículos</a><a href="/about/">Sobre mí</a>
+    </nav>
+    <div class="nav-right">
+      <a class="lang" href="/writing/rt-pcr-travel-screening-data-driven-selection/" hreflang="en" lang="en">English</a>
+      <a class="nav-cta" href="/es/#contacto">Contacto</a>
+    </div>
+  </div>
+</header>
+<main id="main">
+<header class="doc-head stage-dark">
+    <nav class="crumbs" aria-label="Ruta de navegación"><a href="/es/">Inicio</a><span>/</span><a href="/es/articulos/">Artículos</a><span>/</span><span>Investigación</span></nav>
+    <p class="eyebrow">Investigación · Ciencia de datos</p>
+    <h1>Reemplazar la selección aleatoria para RT-PCR con una selección de viajeros basada en datos.</h1>
+    <p class="summary">En 2023, los viajeros que llegaban al Aeropuerto Internacional Toronto Pearson eran elegidos al azar para revisar sus reportes de RT-PCR. Para el STEM Fellowship Big Data and AI Challenge, cuatro estudiantes de Lambton College propusimos una forma mejor: combinar los datos de COVID-19 de la OMS y del Gobierno de Canadá con el reporte RT-PCR de cada viajero para clasificar a los pasajeros en grupos de prioridad. Nuestro artículo se publicó en las memorias del reto en el STEM Fellowship Journal.</p>
+    <div class="byline"><span>Por Erwin Mongui, con Umid Ghimire, Dharmik Limbani y Sairam Kilari</span><span>Publicado el 12 de diciembre de 2023</span><span>Actualizado el 23 de septiembre de 2026</span><span>8 min de lectura</span><a class="link" href="/writing/rt-pcr-travel-screening-data-driven-selection/" hreflang="en" lang="en">Read in English</a></div>
+  </header>
+  <section class="doc">
+    <div class="doc-grid">
+      <div class="prose">
+        <div class="inshort"><b>En resumen</b><p>La selección aleatoria trata a todos los viajeros por igual. Nuestro estudio calificó el riesgo actual de COVID-19 de cada país con datos de la OMS, usó datos del Gobierno de Canadá para identificar los grupos de edad con mayor riesgo de enfermedad grave, extrajo con Python los reportes RT-PCR de los viajeros desde PDF y combinó los tres en niveles de prioridad, de "Inmediata" a "Baja". Artículo: <em>Eliminating Randomness in Selecting International Passengers for RT-PCR</em> (<a class="link" href="https://journal.stemfellowship.org/doi/abs/10.17975/sfj-2023-007" target="_blank" rel="noopener">doi:10.17975/sfj-2023-007</a>). Código: <a class="link" href="https://github.com/gelnomo/ART.-National-Inter-University-Big-Data-And-AI-Challenge-2023" target="_blank" rel="noopener">GitHub</a>.</p></div>
+
+        <h2>El problema</h2>
+        <p>A mediados de 2023, los viajes internacionales se habían reabierto con menos restricciones, pero el COVID-19 no había desaparecido. Nuevas subvariantes como Ómicron "Arcturus" se estaban propagando, y no estaba claro qué tan bien protegían las vacunas existentes contra ellas. Las cifras seguían siendo grandes:</p>
+        <div class="kpi-row kpi-3">
+          <div style="border-top-color:var(--line-light)"><b style="color:var(--blue)">1,7 M</b><span style="color:var(--steel)">turistas llegaron a Ontario en el primer trimestre de 2023</span></div>
+          <div style="border-top-color:var(--line-light)"><b style="color:var(--blue)">219.183</b><span style="color:var(--steel)">casos nuevos reportados en el mundo en los 7 días al 7 de junio de 2023 (OMS)</span></div>
+          <div style="border-top-color:var(--line-light)"><b style="color:var(--blue)">Al azar</b><span style="color:var(--steel)">así se elegía a los viajeros para revisar sus reportes RT-PCR en Pearson</span></div>
+        </div>
+        <p>Las pruebas RT-PCR eran la forma más usada de detectar el virus, y muchos viajeros llevaban reportes RT-PCR. Pero elegir al azar a quién revisar ignora información que ya era pública. Nuestra pregunta: ¿podían esos datos orientar a la unidad de Inmigración de Pearson hacia los viajeros con más probabilidad de necesitar atención?</p>
+
+        <h2>Los datos</h2>
+        <div class="table-wrap">
+          <table>
+            <thead><tr><th>Fuente</th><th>Qué usamos</th></tr></thead>
+            <tbody>
+              <tr><td>Organización Mundial de la Salud</td><td>Casos nuevos de COVID-19 por país en los últimos 7 días, y por cada 100.000 habitantes</td></tr>
+              <tr><td>Gobierno de Canadá</td><td>Epidemiología del COVID-19: hospitalizaciones, ingresos a UCI y muertes, por grupo de edad y sexo, a lo largo del tiempo</td></tr>
+              <tr><td>Reportes RT-PCR de viajeros</td><td>Reportes de viajeros de varios países, con fecha de la prueba, edad, género, ubicación y resultado. Algunos se crearon a partir de reportes de muestra disponibles en internet.</td></tr>
+            </tbody>
+          </table>
+        </div>
+
+        <h2>El método</h2>
+        <h3>1. Un nivel de riesgo para cada país</h3>
+        <p>Con los datos de la OMS calculamos la participación de cada país en los casos nuevos por cada 100.000 habitantes durante los últimos 7 días, y la convertimos en un nivel de riesgo simple:</p>
+<pre><code>participación (%) = casos_por_100k_últimos_7_días / suma(todos los países) × 100
+
+nivel de riesgo = 2   si participación &gt; 2%        (muy afectado)
+                  1   si 1% ≤ participación &lt; 2%
+                  0   en otro caso                 (poco afectado)</code></pre>
+
+        <h3>2. Quién tiene más riesgo de enfermedad grave</h3>
+        <p>Analizamos seis meses de datos del Gobierno de Canadá por edad, sexo y desenlace. Las personas de 70 años o más concentraban la mayor parte de las hospitalizaciones, los ingresos a UCI y las muertes, seguidas por el grupo de 50 a 69 años. Eso nos dio tres rangos de edad para el modelo: 70 o más, 50 a 69, y 0 a 49.</p>
+
+        <h3>3. Leer los reportes RT-PCR</h3>
+        <p>Extrajimos con Python los reportes desde PDF a un archivo CSV estructurado: fecha de la prueba, resultado, género, edad y ubicación, con el país derivado de la ubicación. También agregamos la antigüedad de cada reporte, en días desde la fecha de la prueba.</p>
+
+        <h3>4. Grupos de prioridad</h3>
+        <p>Al combinar los tres, cada viajero recibió un nivel de prioridad:</p>
+        <div class="table-wrap">
+          <table>
+            <thead><tr><th>Prioridad</th><th>Edad</th><th>Reporte RT-PCR</th><th>Riesgo del país</th></tr></thead>
+            <tbody>
+              <tr><td><strong>Inmediata, nivel 3</strong></td><td>70+</td><td>Positivo, con más de 14 días</td><td>Alto (2)</td></tr>
+              <tr><td><strong>Inmediata, nivel 2A</strong></td><td>70+</td><td>Positivo, con menos de 14 días</td><td>Alto (2)</td></tr>
+              <tr><td><strong>Inmediata, nivel 2B</strong></td><td>70+</td><td>Positivo, con más de 14 días</td><td>Bajo (1 o menos)</td></tr>
+              <tr><td><strong>Alta, nivel 3</strong></td><td>50 a 69</td><td>Positivo, con más de 14 días</td><td>Alto (2)</td></tr>
+              <tr><td><strong>Alta, nivel 2A</strong></td><td>50 a 69</td><td>Positivo, con menos de 14 días</td><td>Alto (2)</td></tr>
+              <tr><td><strong>Alta, nivel 2B</strong></td><td>50 a 69</td><td>Positivo, con más de 14 días</td><td>Bajo (1 o menos)</td></tr>
+              <tr><td><strong>Media, nivel 2A</strong></td><td>50+</td><td>Negativo</td><td>Cualquiera</td></tr>
+              <tr><td><strong>Media, nivel 2B</strong></td><td>0 a 49</td><td>Positivo</td><td>Cualquiera</td></tr>
+              <tr><td><strong>Baja</strong></td><td>0 a 49</td><td>Negativo</td><td>Cualquiera</td></tr>
+            </tbody>
+          </table>
+        </div>
+        <p>Prioridad inmediata significa que el viajero debe ser seleccionado para una revisión RT-PCR. Los viajeros de prioridad alta y media pueden seleccionarse al azar, pero no requieren atención inmediata. Todos los demás son de prioridad baja.</p>
+
+        <h2>Resultados</h2>
+        <p>Aplicado a los reportes que recopilamos, el modelo ubicó a <strong>2 viajeros</strong> en prioridad Inmediata nivel 2B, <strong>8</strong> en Alta nivel 2B y <strong>19</strong> en Media nivel 2A. En lugar de un sorteo, los oficiales habrían tenido una lista corta y ordenada, con una razón asociada a cada nombre.</p>
+        <blockquote>Seleccionar al azar no es una estrategia óptima cuando los datos para hacerlo mejor ya son públicos.</blockquote>
+
+        <h2>Lo que aprendimos</h2>
+        <ul>
+          <li><strong>Los datos públicos alcanzan para empezar.</strong> Los datos de la OMS y del Gobierno de Canadá, combinados con los reportes que los viajeros ya llevan, permitieron una política de selección clara y explicable.</li>
+          <li><strong>Las reglas simples y transparentes son un buen primer paso.</strong> Cada nivel de prioridad se puede explicar en una frase, algo importante en una decisión que afecta a personas en una frontera.</li>
+          <li><strong>El procesamiento automático de reportes es la base.</strong> Nada funciona hasta que los reportes en PDF se convierten en datos limpios y estructurados.</li>
+          <li><strong>La colaboración y la mentoría lo hicieron posible.</strong> La guía del profesor Ashish Gupta mantuvo el trabajo riguroso y enfocado.</li>
+        </ul>
+
+        <h2>Alcance y próximos pasos</h2>
+        <p>Como proyecto de un reto, el estudio se diseñó para demostrar el enfoque. Llevarlo más lejos implicaría:</p>
+        <ul>
+          <li>aplicar el método a un conjunto más grande de reportes reales de viajeros;</li>
+          <li>validar las reglas de prioridad contra resultados reales de las revisiones;</li>
+          <li>revisar, con expertos en equidad y en temas legales, qué atributos de los viajeros son apropiados para usar.</li>
+        </ul>
+
+        <h2>Cómo lo construiríamos con las herramientas de hoy</h2>
+        <p>Si empezáramos el proyecto en 2026, la misma idea llegaría mucho más lejos:</p>
+        <h3>Leer cualquier reporte, en cualquier formato o idioma</h3>
+        <p>Escribimos código en Python para extraer campos de reportes en PDF con un formato fijo. Hoy, los modelos de IA multimodales pueden leer PDF, fotos y escaneos en muchos idiomas y formatos, y devolver el tipo de prueba, la fecha, el resultado y el laboratorio como un JSON estructurado que sigue un esquema fijo, listo para validar. Explico ese patrón en <a class="link" href="/es/articulos/json-en-aplicaciones-de-ia/">JSON como contrato entre tus sistemas y la IA</a>.</p>
+        <h3>De reglas a un modelo probado</h3>
+        <p>Con datos reales de resultados, por ejemplo qué viajeros seleccionados dieron positivo al llegar, las reglas podrían convertirse en un modelo entrenado. Los árboles con gradient boosting, como XGBoost o LightGBM, son una opción sólida y explicable para este tipo de datos tabulares, y los valores SHAP muestran qué factores pesan en cada predicción, así que los oficiales seguirían recibiendo una razón con cada recomendación. El modelo se probaría con datos reservados y se compararía con la selección aleatoria antes de que alguien dependiera de él.</p>
+        <h3>Investigación más rápida con asistentes de IA</h3>
+        <p>Los asistentes de programación con IA acelerarían la limpieza de datos, la visualización y el código de los experimentos, el trabajo que llenó nuestros notebooks. Las preguntas de investigación, las decisiones de criterio y la verificación seguirían siendo nuestras.</p>
+        <h3>Equidad, privacidad y personas en el proceso</h3>
+        <ul>
+          <li><strong>Equidad:</strong> medir con qué frecuencia se selecciona a cada grupo, y preferir factores del viaje y de la prueba, como la antigüedad del reporte y la tasa de casos actual en el origen, antes que características personales, siempre que sea posible.</li>
+          <li><strong>Privacidad:</strong> tratar los resultados RT-PCR como datos de salud bajo la ley de privacidad canadiense: recoger lo mínimo, protegerlo y borrarlo cuando ya no se necesite.</li>
+          <li><strong>Decisiones humanas:</strong> el modelo prioriza, un oficial decide.</li>
+          <li><strong>Monitoreo:</strong> las tasas de casos y las variantes cambian cada semana, así que los niveles de riesgo y el modelo necesitan actualizaciones periódicas.</li>
+        </ul>
+
+        <h2>El artículo y el código</h2>
+        <dl class="facts-box">
+          <div><dt>Título del artículo</dt><dd>Eliminating Randomness in Selecting International Passengers for RT-PCR</dd></div>
+          <div><dt>Autores</dt><dd>Umid Ghimire, Dharmik Limbani, Erwin Mongui, Sairam Kilari (Lambton College)</dd></div>
+          <div><dt>Mentor</dt><dd>Profesor Ashish Gupta, Lambton College</dd></div>
+          <div><dt>Escrito para</dt><dd>STEM Fellowship National Inter-University Big Data and AI Challenge 2023 (artículo fechado el 11 de junio de 2023)</dd></div>
+          <div><dt>Publicado en</dt><dd>STEM Fellowship Journal, <em>Leveraging open data analytics and machine learning to improve diagnosis of diseases, patients' care, and support: Proceedings from the 2023 Inter-University Big Data and AI Challenge</em></dd></div>
+          <div><dt>DOI</dt><dd><a class="link" href="https://journal.stemfellowship.org/doi/abs/10.17975/sfj-2023-007" target="_blank" rel="noopener">10.17975/sfj-2023-007</a></dd></div>
+          <div><dt>Código</dt><dd><a class="link" href="https://github.com/gelnomo/ART.-National-Inter-University-Big-Data-And-AI-Challenge-2023" target="_blank" rel="noopener">Notebooks de Jupyter en GitHub</a>: visualización de datos de COVID-19, procesamiento de reportes RT-PCR y segmentación de viajeros</dd></div>
+        </dl>
+        <p>Agradecemos al profesor Gupta por su mentoría, y al STEM Fellowship por organizar el reto y darnos la oportunidad de contribuir.</p>
+        <p><em>Una primera versión de este artículo se publicó en inglés en <a class="link" href="https://www.linkedin.com/pulse/enhancing-international-passengers-selection-rt-pcr-erwin-mongui-yllle/" target="_blank" rel="noopener">LinkedIn</a>.</em></p>
+        <div class="author"><svg aria-hidden="true" viewBox="0 0 189 190"><path fill="#0071e3" d="M9.8 184.5C4.8 181.7 2.6 174.6 5.1 169.7C5.7 168.5 10.3 163.3 15.3 158.2L24.5 149.0L15.3 139.8C10.3 134.7 5.7 129.5 5.1 128.3C2.4 123.0 5.3 115.4 10.9 113.1C17.0 110.5 19.5 112.0 33.7 126.3C41.0 133.5 47.4 140.8 48.0 142.3C49.4 146.2 49.3 152.5 47.6 156.3C46.8 158.1 40.4 165.3 33.3 172.3C21.9 183.6 19.9 185.2 16.4 185.6C14.0 185.9 11.5 185.4 9.8 184.5ZM70.7 158.0C65.1 153.6 65.1 144.4 70.7 140.0C73.0 138.2 74.7 138.0 89.6 138.0C107.4 138.0 110.2 138.6 112.6 143.1C115.5 148.8 113.5 156.5 108.5 158.8C106.8 159.6 100.1 160.0 89.6 160.0C74.7 160.0 73.0 159.8 70.7 158.0ZM136.9 158.6C135.4 157.7 133.5 155.4 132.5 153.4C131.1 150.3 131.0 149.1 131.9 145.9C133.5 140.5 137.1 138.0 143.4 138.0C153.7 138.0 160.3 134.0 161.9 126.9C162.3 125.0 162.3 113.4 161.9 101.0C160.7 67.7 157.5 46.5 151.4 32.9L148.7 27.0L145.2 29.0C138.8 32.8 133.0 38.2 129.2 44.0L125.3 49.8L122.4 48.0C109.4 39.8 87.5 39.6 73.2 47.5L69.0 49.9L67.1 46.1C65.0 42.0 54.3 31.6 49.1 28.7L46.0 26.9L43.0 33.2C39.2 41.3 36.3 54.6 34.4 72.4C32.7 89.3 32.7 89.3 28.9 92.5C24.3 96.3 18.8 96.0 14.4 91.6C11.2 88.4 11.0 87.8 11.0 81.2C11.0 63.5 16.4 36.0 22.4 23.5C28.7 10.1 35.8 4.6 46.6 4.6C53.6 4.6 60.0 7.7 70.7 16.2L77.0 21.1L82.5 20.0C89.6 18.5 105.5 18.5 112.5 20.0L117.9 21.1L124.2 16.1C138.1 4.8 148.3 2.1 158.3 6.9C174.9 15.0 184.2 50.4 184.4 107.0C184.5 137.6 184.3 138.6 174.9 148.5C167.2 156.6 160.9 159.4 149.0 159.7C142.0 160.0 138.8 159.6 136.9 158.6ZM64.3 102.5C62.6 101.8 60.4 99.8 59.6 98.1C55.5 90.3 59.6 82.2 68.3 81.3C72.6 80.8 73.2 81.0 76.5 84.3C79.4 87.2 80.0 88.5 80.0 92.2C80.0 97.4 77.9 100.7 73.4 102.6C69.3 104.3 68.4 104.3 64.3 102.5ZM121.3 102.5C117.0 100.7 114.5 96.6 114.6 91.6C114.7 88.4 115.4 87.0 118.4 84.3C120.8 82.1 123.0 81.0 125.0 81.0C137.3 81.0 141.5 97.2 130.6 102.4C126.5 104.3 125.5 104.3 121.3 102.5Z"/></svg><p><b>Erwin Mongui</b>Director de Tecnología en Cedar Planters e ingeniero certificado en Inteligencia Artificial (Lambton College, 2024), en Toronto.</p></div>
+      </div>
+      <aside class="aside"><div class="related"><h4>Relacionado</h4><a href="/es/articulos/json-en-aplicaciones-de-ia/">JSON como contrato entre tus sistemas y la IA</a><a href="/es/articulos/carreras-en-ia-para-recien-graduados/">Lo que necesitan los recién graduados para una carrera en IA</a><a href="/about/">Sobre mí (en inglés)</a></div></aside>
+    </div>
+  </section>
+
+</main>
+<footer class="foot">
+  <div class="foot-inner">
+    <p>&copy; 2026 Erwin Mongui. Todos los derechos reservados.</p>
+    <nav aria-label="Footer">
+      <a href="/es/#casos">Casos</a><a href="/es/articulos/">Artículos</a><a href="/about/">Sobre mí</a><a href="/" lang="en" hreflang="en">English</a>
+      <a href="https://www.linkedin.com/in/erwin-mongui/" target="_blank" rel="noopener">LinkedIn</a>
+      <a href="https://www.google.com/preferences/source?q=erwinmongui.com" target="_blank" rel="noopener">Agregar como fuente preferida en Google</a>
+    </nav>
+  </div>
+</footer>
+<script>
+document.addEventListener('click', function (e) {
+  var b = e.target.closest && e.target.closest('[data-copy]');
+  if (!b || !navigator.clipboard) return;
+  var label = b.textContent;
+  navigator.clipboard.writeText(b.getAttribute('data-copy')).then(function () {
+    b.textContent = document.documentElement.lang === 'es' ? 'Copiado' : 'Copied';
+    setTimeout(function () { b.textContent = label; }, 1600);
+  });
+});
+</script>
+</body>
+</html>

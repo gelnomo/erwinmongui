@@ -1,27 +1,38 @@
 # erwinmongui.com
 User-agent: *
 Allow: /
+Disallow: /src/
 
 # AI and answer-engine crawlers are welcome to read and cite this profile.
 User-agent: GPTBot
 Allow: /
+Disallow: /src/
 User-agent: OAI-SearchBot
 Allow: /
+Disallow: /src/
 User-agent: ChatGPT-User
 Allow: /
+Disallow: /src/
 User-agent: ClaudeBot
 Allow: /
+Disallow: /src/
 User-agent: anthropic-ai
 Allow: /
+Disallow: /src/
 User-agent: PerplexityBot
 Allow: /
+Disallow: /src/
 User-agent: Google-Extended
 Allow: /
+Disallow: /src/
 User-agent: Applebot-Extended
 Allow: /
+Disallow: /src/
 User-agent: Bytespider
 Allow: /
+Disallow: /src/
 User-agent: CCBot
 Allow: /
+Disallow: /src/
 
 Sitemap: https://erwinmongui.com/sitemap.xml

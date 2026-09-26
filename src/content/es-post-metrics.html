@@ -1,0 +1,86 @@
+<header class="doc-head stage-dark">
+    <nav class="crumbs" aria-label="Ruta de navegación"><a href="/es/">Inicio</a><span>/</span><a href="/es/articulos/">Artículos</a><span>/</span><span>Liderazgo</span></nav>
+    <p class="eyebrow">Liderazgo · Métricas</p>
+    <h1>Cómo mido la salud de un equipo de ingeniería.</h1>
+    <p class="summary">Sigo tres grupos de números: qué tan rápido entrega el equipo, qué tan sanos están el equipo y sus sistemas, y si el trabajo llega a los usuarios. Ahora que los asistentes de IA escriben buena parte del código, importa una cuarta pregunta: ¿la IA realmente está mejorando al equipo, o solo lo mantiene más ocupado?</p>
+    <div class="byline"><span>Por Erwin Mongui</span><span>24 de septiembre de 2026</span><span>7 min de lectura</span><a class="link" href="/writing/engineering-team-health-metrics/" hreflang="en" lang="en">Read in English</a></div>
+  </header>
+  <section class="doc">
+    <div class="doc-grid">
+      <div class="prose">
+        <div class="inshort"><b>En resumen</b><p>Acompaña cada métrica de velocidad con una de calidad o de salud, e incluye al menos un número que los usuarios reconozcan. Apóyate en marcos establecidos como DORA y SPACE en lugar de inventar el tuyo. Para juzgar a los asistentes de IA, mira el lead time, la tasa de fallas por cambio y el tiempo de revisión, nunca las líneas de código.</p></div>
+
+        <h2>Las métricas que sigo</h2>
+        <div class="table-wrap">
+          <table>
+            <thead><tr><th>Grupo</th><th>Métrica</th><th>La pregunta que responde</th></tr></thead>
+            <tbody>
+              <tr><td>Entrega</td><td>Lead time de los cambios</td><td>¿Cuánto pasa desde un commit hasta que corre en producción?</td></tr>
+              <tr><td>Entrega</td><td>Frecuencia de despliegue</td><td>¿Con qué frecuencia podemos desplegar de forma segura?</td></tr>
+              <tr><td>Entrega</td><td>Tasa de fallas por cambio</td><td>¿Con qué frecuencia un despliegue causa un problema?</td></tr>
+              <tr><td>Salud</td><td>Relación entre lo comprometido y lo entregado en el sprint</td><td>¿Entregamos lo que nos comprometimos a entregar?</td></tr>
+              <tr><td>Salud</td><td>Tiempo de incorporación</td><td>¿Qué tan rápido un ingeniero nuevo entrega su primer cambio real?</td></tr>
+              <tr><td>Salud</td><td>Conciliación de datos</td><td>¿Nuestros sistemas coinciden entre sí?</td></tr>
+              <tr><td>Impacto</td><td>Core Web Vitals</td><td>¿El producto es rápido para los usuarios reales?</td></tr>
+              <tr><td>Impacto</td><td>Tiempo de entrega de reportes</td><td>¿Cuánto pasa desde una pregunta de negocio hasta una respuesta confiable?</td></tr>
+            </tbody>
+          </table>
+        </div>
+
+        <h2>Parte de marcos establecidos</h2>
+        <p>No necesitas inventar un sistema de medición. Dos marcos cubren casi todo lo que importa:</p>
+        <ul>
+          <li><strong>Las métricas DORA</strong>, del programa DevOps Research and Assessment de Google: frecuencia de despliegue, lead time de los cambios, tasa de fallas por cambio y tiempo para restaurar el servicio. Miden qué tan bien entrega software un equipo.</li>
+          <li><strong>El marco SPACE</strong> mira la productividad de forma más amplia: satisfacción y bienestar, desempeño, actividad, comunicación y colaboración, y eficiencia y flujo. Recuerda que la actividad por sí sola nunca cuenta toda la historia.</li>
+        </ul>
+        <p>Mi lista usa DORA para la entrega y agrega los números de salud e impacto que importan en el tipo de plataformas que construyo.</p>
+
+        <h2>Cómo se vieron los números en la práctica</h2>
+        <ul>
+          <li><strong>Impacto en Fincaraiz.</strong> Durante la migración a microservicios, nuestro número de cara al usuario fue el Largest Contentful Paint. Lo mantuvimos por debajo de 3 segundos, igual que el sitio anterior, lo que protegió tanto la experiencia de usuario como las posiciones en buscadores.</li>
+          <li><strong>Conciliación en la distribución de leads.</strong> En nuestro sistema B2B de distribución de leads, conciliamos cada lead de nuestros reportes con el CRM del aliado y mantuvimos una coincidencia del 100%.</li>
+          <li><strong>Tiempo de entrega de reportes en Cedar Planters.</strong> Al construir la plataforma de datos, la pregunta clave era qué tan rápido una pregunta de negocio se convertía en un tablero confiable.</li>
+        </ul>
+
+        <h2>Medir el impacto de los asistentes de IA</h2>
+        <p>La mayoría de los equipos ya usa asistentes de programación con IA. La tentación es medirlos por volumen: más pull requests, más líneas, más tickets cerrados. Esos números suben con facilidad y demuestran muy poco. Lo que yo miro en cambio:</p>
+        <div class="table-wrap">
+          <table>
+            <thead><tr><th>Qué mirar</th><th>Señal sana</th><th>Señal de alerta</th></tr></thead>
+            <tbody>
+              <tr><td>Lead time de los cambios</td><td>Baja, y se mantiene</td><td>Se programa más rápido pero el lead time no se mueve</td></tr>
+              <tr><td>Tasa de fallas por cambio</td><td>Estable o a la baja</td><td>Sube a medida que se despliega más código</td></tr>
+              <tr><td>Tiempo de revisión</td><td>Estable</td><td>Los pull requests se acumulan esperando revisión</td></tr>
+              <tr><td>Retrabajo</td><td>Estable</td><td>Más código se reescribe o se revierte poco después de integrarse</td></tr>
+              <tr><td>Satisfacción de los desarrolladores</td><td>La gente dice que dedica menos tiempo a tareas repetitivas</td><td>La gente siente que revisa más de lo que construye</td></tr>
+            </tbody>
+          </table>
+        </div>
+        <p>Un patrón común es que el cuello de botella se mueve: la IA acelera la escritura de código y la fila se traslada a la revisión y las pruebas. No es un fracaso, pero significa que la siguiente mejora está en el proceso de revisión, no en generar más código.</p>
+
+        <h2>Cómo obtenerlas</h2>
+        <p>La mayoría de estos números ya vive en tus herramientas. Los datos de despliegue y de lead time salen de tu pipeline de CI/CD y del historial de Git en GitHub o GitLab; los del sprint, de Jira o un gestor similar; el rendimiento web, del monitoreo de usuarios reales y de Google Search Console. Si no quieres construir tableros por tu cuenta, las plataformas de analítica de ingeniería combinan estas fuentes por ti. Cada una se enfoca en algo distinto:</p>
+        <div class="table-wrap">
+          <table>
+            <thead><tr><th>Plataforma</th><th>En qué es mejor</th><th>Úsala cuando</th></tr></thead>
+            <tbody>
+              <tr><td>DX</td><td>Combina encuestas periódicas a los desarrolladores con datos de tus sistemas para medir la experiencia y la productividad, incluida la adopción y el impacto de las herramientas de IA</td><td>Quieres saber dónde pierden tiempo los ingenieros y si los asistentes de IA realmente ayudan, no solo lo que dice el pipeline</td></tr>
+              <tr><td>LinearB</td><td>Analítica de entrega a partir de Git y las herramientas de proyecto: métricas DORA, cycle time por etapa, tamaño de los pull requests y tiempo de revisión, además de automatizar partes del flujo de pull requests</td><td>Quieres encontrar y resolver cuellos de botella en la entrega, sobre todo en la revisión de código</td></tr>
+              <tr><td>Swarmia</td><td>Métricas DORA y de flujo, una vista de cómo se reparte el esfuerzo entre funcionalidades nuevas, mantenimiento y trabajo no planeado, y acuerdos de trabajo del equipo con recordatorios en Slack</td><td>Quieres una vista del flujo y el foco a nivel de equipo, y ayuda para sostener los hábitos acordados</td></tr>
+            </tbody>
+          </table>
+        </div>
+        <p>Elijas la que elijas, empieza por la pregunta que quieres responder, acuerda con el equipo qué se va a medir y por qué, y despliégala primero a nivel de equipo. Las opciones gratuitas también llegan lejos: los insights de GitHub y GitLab, y los reportes de cycle time y de control de Jira. Los asistentes de IA también sirven aquí: dale a uno una exportación de tus tickets o pull requests, pídele que encuentre dónde se va el tiempo y después verifica el patrón tú mismo.</p>
+
+        <h2>Cómo las uso</h2>
+        <ul>
+          <li>Un número que se mueve en la dirección equivocada abre una conversación con los ingenieros involucrados. Los datos muestran dónde; ellos explican por qué.</li>
+          <li>Miro tendencias a lo largo de sprints y versiones, no valores aislados.</li>
+          <li>Las métricas describen el sistema, nunca el desempeño individual. En el momento en que la gente se siente juzgada por un número, empieza a optimizar el número.</li>
+        </ul>
+        <p>Cuando un número de entrega se mueve en la dirección equivocada, así encuentro la causa: <a class="link" href="/es/articulos/cuellos-de-botella-lead-time-cycle-time/">Encontrar cuellos de botella en la entrega con lead time y cycle time</a>.</p>
+        <div class="author"><svg aria-hidden="true" viewBox="0 0 189 190"><path fill="#0071e3" d="__MARK__"/></svg><p><b>Erwin Mongui</b>Director de Tecnología en Cedar Planters e ingeniero certificado en Inteligencia Artificial, en Toronto.</p></div>
+      </div>
+      <aside class="aside"><div class="related"><h4>Relacionado</h4><a href="/es/articulos/cuellos-de-botella-lead-time-cycle-time/">Encontrar cuellos de botella en la entrega</a><a href="/es/casos/fincaraiz-distribucion-de-leads/">Caso: distribución de leads</a><a href="/es/casos/fincaraiz-monolito-a-microservicios/">Caso: la migración</a></div></aside>
+    </div>
+  </section>

@@ -8,14 +8,17 @@ Email: erwinmongui@gmail.com
 
 ## Current role
 
-- Director of Technology and Software Engineering Manager, Cedar Planters, Oakville, Ontario (January 2024 to present). Cedar Planters is a Canadian modular planter company.
+- Director of Technology and Software Engineering Manager, Cedar Planters, Oakville, Ontario (January 2024 to present). Cedar Planters is a Canadian e-commerce company that makes modular planters.
+- Joined as the first technical hire and built the technology department from zero: CI/CD, security practices, Agile workflows and a team of three.
+- Built the company's data platform, replacing third-party reporting tools and spreadsheets with central, standard reporting. The time to produce a new report fell from months to days, and to hours with AI-assisted development and analysis.
 - Leads cross-functional teams building scalable applications and owns the full lifecycle from requirements to deployment.
 - Redesigned the data models behind analytical and operational workloads, making retrieval and analysis 20% faster.
 - Runs continuous website improvement through A/B testing and third-party API integrations, and keeps tracking, security and dependencies current.
 
 ## Earlier roles
 
-- CTO and Software Engineering Team Lead, Fincaraiz.com.co (Adevinta group), Bogotá, Colombia, May 2019 to November 2022. Led the cloud migration that cut infrastructure and maintenance costs by 50%; launched 15+ REST APIs on a Python and Django microservice backend, reducing latency by 25%; built Jenkins CI/CD pipelines; hired and grew backend and platform engineers.
+- CTO and Software Engineering Team Lead, Fincaraiz.com.co (Adevinta group), Bogotá, Colombia, May 2019 to November 2022. Led a team of 30 through the migration of a legacy ASP.NET monolith to Django and React microservices on Kubernetes, using the strangler fig pattern in four tiers (platform; Kong API gateway and Keycloak identity; PostgreSQL and Elasticsearch data with AWS Lambda sync; domain services), for a real estate portal with 5M+ monthly visits and zero downtime. The migration cut hosting and maintenance costs by 50% and rebuilt search with natural language understanding and geographic polygons that resolve local neighbourhood nicknames to official boundaries; launched 15+ REST APIs on a Python and Django microservice backend, reducing latency by 25%; built Jenkins CI/CD pipelines; hired and grew backend and platform engineers.
+- Software Architect for Fincaraiz's B2B lead distribution system (2021): a central engine with GraphQL, retries with exponential backoff and a configurable Connector service that delivers buyer leads to the CRMs of real estate agencies and property developers (Salesforce, HubSpot, Zoho, Microsoft Dynamics and custom CRMs), with 100% data parity and partner onboarding in minutes instead of weeks.
 - Lead Software Engineer, Fincaraiz.com.co, Bogotá, July 2015 to July 2018. Led the rebuild of the core customer-facing website (+25% user engagement), automated 70% of manual operational work, introduced Docker and Kubernetes and Agile practices.
 - Senior Software Engineer, Periferia IT, Bogotá, May 2013 to June 2015. Consulted for Old Mutual (payment microservice on .NET MVC, +50% sales in year one) and Editorial Legis (ASP.NET REST APIs, +40% content management efficiency).
 - Junior Software Engineer, Americas BPS for Hewlett Packard Enterprise, Bogotá, February 2010 to June 2012. C# and .NET applications.
@@ -44,6 +47,50 @@ Email: erwinmongui@gmail.com
 
 - Spanish (native), English (proficient).
 
+## Research
+
+- Co-author, "Eliminating Randomness in Selecting International Passengers for RT-PCR" (Umid Ghimire, Dharmik Limbani, Erwin Mongui, Sairam Kilari; Lambton College), STEM Fellowship Big Data and AI Challenge 2023, published in the STEM Fellowship Journal proceedings, doi:10.17975/sfj-2023-007. The study used WHO and Government of Canada COVID-19 data and traveller RT-PCR reports to replace random selection at Toronto Pearson International Airport with priority groups.
+
 ## Pages
 
 - [Erwin Mongui, Engineering Leader in Toronto](https://erwinmongui.com/): full profile with experience, impact metrics, AI work, skills, education and certifications.
+
+## Case studies
+
+- [Monolith to microservices, without stopping a 5M-visit platform](https://erwinmongui.com/work/fincaraiz-monolith-to-microservices/): How Erwin Mongui moved Fincaraiz from ASP.NET to Django, React and Kubernetes for 5M+ monthly visits: zero downtime, 50% lower costs and NLP search.
+- [A lead distribution engine that connects to any CRM](https://erwinmongui.com/work/fincaraiz-lead-distribution/): How Erwin Mongui designed Fincaraiz's B2B lead distribution: GraphQL, fault-tolerant retries, 100% data parity and a Connector service for six CRM platforms.
+- [A data platform from zero, as the first technical hire](https://erwinmongui.com/work/cedar-planters-data-platform/): As Cedar Planters' first technical hire, Erwin Mongui replaced third-party reporting tools with one data platform. New reports went from months to hours.
+
+## Writing
+
+- [Finding delivery bottlenecks with lead time and cycle time](https://erwinmongui.com/writing/lead-time-cycle-time-bottlenecks/): A five-step way to find where software work gets stuck using lead time, cycle time and flow metrics, confirm the cause with the team, and fix it.
+- [How I measure engineering team health](https://erwinmongui.com/writing/engineering-team-health-metrics/): The delivery, health and impact metrics I track, how they map to DORA and SPACE, and how to tell whether AI coding assistants are really helping a team.
+- [From data analyst to data engineer, through one good question](https://erwinmongui.com/writing/from-data-analyst-to-data-engineer/): How asking a data analyst to challenge our pipeline tool led to a better stack and a new data engineer. A guided discovery approach to mentoring, with AI.
+- [Pick the tool your team can support, not the one on the shortlist](https://erwinmongui.com/writing/choose-tools-your-team-can-support/): A single sign-on project took six times longer than planned. What went wrong, the tool-selection scorecard we use now, and how AI assistants change it.
+- [Shaping the future: what new graduates need for a career in AI](https://erwinmongui.com/writing/ai-careers-new-graduates/): An engineering manager's view of AI careers for new graduates: collaboration, real projects, AI-assisted development, evaluation, ethics and frameworks.
+- [Taming the data jungle: JSON as the contract between your systems and AI](https://erwinmongui.com/writing/ai-applications-json/): Why JSON became the contract between software and AI models: structured outputs with JSON Schema and Pydantic, tool calling, MCP, memory and model configs.
+- [Replacing random RT-PCR checks with data-driven traveller selection](https://erwinmongui.com/writing/rt-pcr-travel-screening-data-driven-selection/): Our STEM Fellowship Big Data and AI Challenge 2023 paper: using WHO and Government of Canada data to prioritize travellers for RT-PCR checks instead of at random.
+
+## About
+
+- [From junior engineer in Bogotá to Director of Technology in Toronto](https://erwinmongui.com/about/): Erwin Mongui's story: 18+ years across real estate, e-commerce and fintech, from junior engineer in Bogotá to CTO and Director of Technology in Toronto.
+
+## En español
+
+- [Erwin Mongui](https://erwinmongui.com/es/): Erwin Mongui, líder de ingeniería de software colombiano en Toronto: Director de Tecnología en Cedar Planters, ingeniero certificado en IA, más de 18 años.
+- [De monolito a microservicios, sin detener una plataforma de 5 millones de visitas](https://erwinmongui.com/es/casos/fincaraiz-monolito-a-microservicios/): Cómo Erwin Mongui llevó Fincaraiz de ASP.NET a Django, React y Kubernetes para más de 5 millones de visitas al mes: sin caídas, 50% menos costos y búsqueda con NLP.
+- [Un motor de distribución de leads que se conecta con cualquier CRM](https://erwinmongui.com/es/casos/fincaraiz-distribucion-de-leads/): Cómo Erwin Mongui diseñó la distribución de leads B2B de Fincaraiz: GraphQL, reintentos tolerantes a fallos, 100% de conciliación y seis plataformas CRM.
+- [Una plataforma de datos desde cero, como primera contratación técnica](https://erwinmongui.com/es/casos/cedar-planters-plataforma-de-datos/): Como primera contratación técnica de Cedar Planters, Erwin Mongui reemplazó herramientas de reportes de terceros por una plataforma de datos propia.
+- [Artículos](https://erwinmongui.com/es/articulos/): Artículos de Erwin Mongui sobre cómo elegir herramientas, formar ingenieros, medir la salud de los equipos, cuellos de botella y construir con IA.
+- [Encontrar cuellos de botella en la entrega con lead time y cycle time](https://erwinmongui.com/es/articulos/cuellos-de-botella-lead-time-cycle-time/): Cinco pasos para encontrar dónde se atasca el trabajo de software con lead time, cycle time y métricas de flujo, confirmar la causa con el equipo y resolverla.
+- [Cómo mido la salud de un equipo de ingeniería](https://erwinmongui.com/es/articulos/metricas-de-salud-de-equipos-de-ingenieria/): Las métricas de entrega, salud e impacto que sigo, cómo se relacionan con DORA y SPACE, y cómo saber si los asistentes de IA realmente ayudan a un equipo.
+- [De analista de datos a ingeniero de datos, gracias a una buena pregunta](https://erwinmongui.com/es/articulos/de-analista-de-datos-a-ingeniero-de-datos/): Cómo pedirle a un analista que cuestionara nuestra herramienta de pipelines llevó a un mejor stack y a un nuevo ingeniero de datos. Descubrimiento guiado, con IA.
+- [Elige la herramienta que tu equipo puede sostener, no la que encabeza la lista](https://erwinmongui.com/es/articulos/elegir-herramientas-que-tu-equipo-pueda-sostener/): Un proyecto de inicio de sesión único tomó seis veces más de lo planeado. Qué salió mal, la matriz de evaluación que usamos y cómo cambia la decisión con IA.
+- [Construir el futuro: lo que necesitan los recién graduados para una carrera en IA](https://erwinmongui.com/es/articulos/carreras-en-ia-para-recien-graduados/): La visión de un líder de ingeniería sobre carreras en IA: colaboración, proyectos reales, desarrollo asistido por IA, evaluación, ética y frameworks.
+- [Domar la jungla de datos: JSON como contrato entre tus sistemas y la IA](https://erwinmongui.com/es/articulos/json-en-aplicaciones-de-ia/): Por qué JSON se volvió el contrato entre el software y los modelos de IA: salidas estructuradas con JSON Schema y Pydantic, herramientas, MCP y memoria.
+- [Reemplazar la selección aleatoria para RT-PCR con una selección de viajeros basada en datos](https://erwinmongui.com/es/articulos/seleccion-de-viajeros-rt-pcr-basada-en-datos/): Nuestro artículo del STEM Fellowship Big Data and AI Challenge 2023: datos de la OMS y del Gobierno de Canadá para priorizar viajeros para RT-PCR.
+
+## Optional
+
+- [Full text of every page](https://erwinmongui.com/llms-full.txt): all case studies and articles as plain text.
+- [RSS feed](https://erwinmongui.com/feed.xml): new case studies and articles.

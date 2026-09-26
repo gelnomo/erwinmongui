@@ -1,0 +1,80 @@
+<header class="doc-head stage-dark">
+    <nav class="crumbs" aria-label="Ruta de navegación"><a href="/es/">Inicio</a><span>/</span><a href="/es/articulos/">Artículos</a><span>/</span><span>IA</span></nav>
+    <p class="eyebrow">IA · Datos</p>
+    <h1>Domar la jungla de datos: JSON como contrato entre tus sistemas y la IA.</h1>
+    <p class="summary">La IA funciona con datos que casi nunca caben en filas y columnas. En 2024 escribí sobre JSON como una herramienta práctica para ese problema. Desde entonces se volvió mucho más: JSON es hoy la forma en que el software y los modelos de IA se comunican, desde las salidas estructuradas y las llamadas a herramientas hasta la memoria y la configuración de los modelos.</p>
+    <div class="byline"><span>Por Erwin Mongui</span><span>Publicado el 6 de febrero de 2024</span><span>Actualizado el 23 de septiembre de 2026</span><span>7 min de lectura</span><a class="link" href="/writing/ai-applications-json/" hreflang="en" lang="en">Read in English</a></div>
+  </header>
+  <section class="doc">
+    <div class="doc-grid">
+      <div class="prose">
+        <div class="inshort"><b>En resumen</b><p>Define un JSON Schema para lo que esperas de un modelo, pídele que lo siga y valida cada respuesta antes de usarla. El mismo patrón impulsa las salidas estructuradas, las llamadas a herramientas y protocolos de agentes como MCP. Guarda también la memoria conversacional y la configuración de los modelos en JSON versionado, para que tu sistema de IA siga siendo predecible y fácil de depurar.</p></div>
+
+        <h2>Más allá de filas y columnas</h2>
+        <p>El modelo relacional de Edgar F. Codd sigue siendo la base de la mayoría de los sistemas de negocio, y con razón. Pero las aplicaciones de IA trabajan con mucho más que tablas:</p>
+        <ul>
+          <li><strong>Datos estructurados:</strong> pedidos, clientes e inmuebles en bases de datos relacionales.</li>
+          <li><strong>Datos semiestructurados:</strong> JSON de APIs, eventos y logs, donde los campos cambian de un registro a otro.</li>
+          <li><strong>Datos no estructurados:</strong> texto libre, documentos e imágenes.</li>
+        </ul>
+        <p>Los datos del mundo real también rompen los supuestos del diseño relacional. En áreas como la biometría o la publicidad en línea, muchas veces no hay un identificador único confiable, así que los registros se tienen que relacionar por probabilidad y no por una llave. Manejar esto bien exige un buen tratamiento de datos y, cada vez más, modelos de IA capaces de leer y estructurar información desordenada.</p>
+
+        <h2>Por qué JSON se volvió el idioma de las aplicaciones de IA</h2>
+        <p>JSON es liviano, legible para las personas y compatible con todo. Esas cualidades lo convirtieron en el estándar de las APIs web. En IA resuelve un problema más grande: convertir el texto libre de un modelo en algo en lo que el software pueda confiar.</p>
+
+        <h3>1. Salidas estructuradas</h3>
+        <p>Los principales proveedores de modelos ya permiten restringir la respuesta de un modelo a un JSON Schema que tú defines. En lugar de interpretar texto y cruzar los dedos, recibes una respuesta con la forma que definiste, que luego validas en código. En Python, Pydantic es la forma habitual de definir el esquema y verificar el resultado; en TypeScript, Zod cumple el mismo papel.</p>
+
+        <h3>2. Llamadas a herramientas y agentes</h3>
+        <p>Cuando un modelo decide llamar una función, como buscar en una base de datos o crear un ticket, produce los argumentos como un JSON que coincide con el esquema de la herramienta. Frameworks de agentes como LangGraph y Pydantic AI están construidos alrededor de esto. El Model Context Protocol (MCP), hoy una forma común de conectar asistentes de IA con herramientas y datos, usa por debajo mensajes JSON-RPC.</p>
+
+        <h3>3. Memoria conversacional</h3>
+        <p>Un asistente útil recuerda el contexto: tus preferencias, lo último que preguntaste, lo que sigue pendiente. Guardar eso como un objeto JSON pequeño y bien definido por usuario o por sesión hace que la memoria sea explícita y fácil de inspeccionar. Para historiales largos, combínalo con búsqueda vectorial (por ejemplo pgvector en PostgreSQL, o Elasticsearch) para recuperar solo las partes relevantes.</p>
+
+        <h3>4. Configuración de modelos y reproducibilidad</h3>
+        <p>Los modelos de aprendizaje profundo funcionan con tensores, pero todo lo que los rodea es configuración: parámetros de la arquitectura, hiperparámetros de entrenamiento, parámetros de ajuste fino y resultados de evaluación. Guardarlos en JSON hace que los experimentos sean transparentes y repetibles. El ecosistema de Hugging Face funciona así: un modelo trae su configuración en un archivo <code>config.json</code> junto a sus pesos, normalmente guardados como safetensors. Herramientas como MLflow registran ejecuciones y parámetros con la misma lógica.</p>
+
+        <h2>Un ejemplo práctico: búsqueda en lenguaje natural</h2>
+        <p>En Fincaraiz construimos una búsqueda que entendía consultas conversacionales y nombres locales de lugares (lo cuento en el <a class="link" href="/es/casos/fincaraiz-monolito-a-microservicios/">caso de la migración</a>). Con los modelos de hoy, el primer paso de ese tipo de búsqueda, convertir una frase en filtros, toma unas pocas líneas. Primero, define cómo se ve una búsqueda:</p>
+<pre><code>from typing import Literal
+from pydantic import BaseModel, Field
+
+class PropertySearch(BaseModel):
+    operation: Literal["buy", "rent"]
+    property_type: Literal["apartment", "house", "lot", "commercial"]
+    bedrooms: int | None = None
+    location: str = Field(description="Barrio, ciudad o punto de referencia, tal como lo escribió el usuario")
+    max_price_cop: int | None = Field(None, description="Precio máximo en pesos colombianos")
+
+schema = PropertySearch.model_json_schema()  # se envía al modelo como formato de salida obligatorio</code></pre>
+        <p>Un usuario escribe: <em>"apartamento de 3 habitaciones para comprar en Chapinero, por menos de 500 millones"</em>. Con salidas estructuradas, el modelo responde:</p>
+<pre><code>{
+  "operation": "buy",
+  "property_type": "apartment",
+  "bedrooms": 3,
+  "location": "Chapinero",
+  "max_price_cop": 500000000
+}</code></pre>
+        <p>Luego se valida antes de que llegue al motor de búsqueda:</p>
+<pre><code>search = PropertySearch.model_validate_json(model_response)
+# lanza un error claro si falta un campo o tiene el tipo equivocado</code></pre>
+        <p>El modelo se encarga del lenguaje. Tu código y tus datos siguen encargándose del resto: resolver "Chapinero" a su límite exacto en el mapa, aplicar los filtros y ordenar los resultados. Esa división es lo que hace confiables las funcionalidades con IA.</p>
+
+        <h2>Prácticas que lo mantienen confiable</h2>
+        <ul>
+          <li><strong>Primero el esquema.</strong> Acuerden la forma del JSON antes de escribir prompts o código.</li>
+          <li><strong>Valida todo.</strong> Trata la salida del modelo como una entrada de usuario: verifícala y ten un plan B cuando falle.</li>
+          <li><strong>Versiona tus esquemas.</strong> Cambiar un campo es un cambio que rompe todo lo que depende de él.</li>
+          <li><strong>Deja fuera los datos sensibles.</strong> No guardes datos personales en objetos de memoria ni en logs a menos que los necesites y los protejas.</li>
+          <li><strong>Registra entradas y salidas.</strong> Los ejemplos reales se convierten en el conjunto de prueba de tus evaluaciones.</li>
+        </ul>
+        <p>Los asistentes de programación con IA también ayudan aquí. Son buenos redactando esquemas, ejemplos de datos, fixtures de prueba y scripts de transformación a partir de una descripción corta, lo que elimina buena parte del trabajo tedioso. Las decisiones de diseño, y la revisión, siguen siendo del ingeniero.</p>
+
+        <h2>La conclusión</h2>
+        <p>Manejar bien datos diversos era la base del trabajo con IA en 2024, y lo sigue siendo. Lo que cambió es que JSON ahora está en el centro, como el contrato entre tus sistemas y los modelos que usan. Ya sea que construyas un asistente, un sistema de recomendación o un agente, hacer bien ese contrato es lo que convierte una demo impresionante en software en el que la gente puede confiar.</p>
+        <p><em>Una primera versión de este artículo se publicó en inglés en <a class="link" href="https://www.linkedin.com/pulse/taming-data-jungle-my-journey-ai-applications-json-erwin-mongui-vhcgc/" target="_blank" rel="noopener">LinkedIn</a>.</em></p>
+        <div class="author"><svg aria-hidden="true" viewBox="0 0 189 190"><path fill="#0071e3" d="__MARK__"/></svg><p><b>Erwin Mongui</b>Director de Tecnología en Cedar Planters e ingeniero certificado en Inteligencia Artificial (Lambton College, 2024), en Toronto.</p></div>
+      </div>
+      <aside class="aside"><div class="related"><h4>Relacionado</h4><a href="/es/casos/fincaraiz-monolito-a-microservicios/">Caso: búsqueda con NLP y mapas en Fincaraiz</a><a href="/es/articulos/carreras-en-ia-para-recien-graduados/">Lo que necesitan los recién graduados para una carrera en IA</a><a href="/es/casos/cedar-planters-plataforma-de-datos/">Caso: plataforma de datos desde cero</a></div></aside>
+    </div>
+  </section>

@@ -1,0 +1,274 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Cómo mido la salud de un equipo de ingeniería, incluido el impacto de la IA | Erwin Mongui</title>
+<meta name="description" content="Las métricas de entrega, salud e impacto que sigo, cómo se relacionan con DORA y SPACE, y cómo saber si los asistentes de IA realmente ayudan a un equipo.">
+<meta name="author" content="Erwin Mongui">
+<meta name="robots" content="index, follow, max-snippet:-1, max-image-preview:large, max-video-preview:-1">
+<meta name="theme-color" content="#000000">
+<link rel="canonical" href="https://erwinmongui.com/es/articulos/metricas-de-salud-de-equipos-de-ingenieria/">
+<link rel="alternate" hreflang="en" href="https://erwinmongui.com/writing/engineering-team-health-metrics/">
+<link rel="alternate" hreflang="es" href="https://erwinmongui.com/es/articulos/metricas-de-salud-de-equipos-de-ingenieria/">
+<link rel="alternate" hreflang="x-default" href="https://erwinmongui.com/writing/engineering-team-health-metrics/">
+<link rel="alternate" type="application/rss+xml" title="Erwin Mongui: casos y artículos" href="https://erwinmongui.com/es/feed.xml">
+<link rel="me" href="https://www.linkedin.com/in/erwin-mongui/">
+<meta property="og:type" content="article">
+<meta property="og:site_name" content="Erwin Mongui">
+<meta property="og:locale" content="es_CO">
+<meta property="og:locale:alternate" content="en_CA">
+<meta property="og:url" content="https://erwinmongui.com/es/articulos/metricas-de-salud-de-equipos-de-ingenieria/">
+<meta property="og:title" content="Cómo mido la salud de un equipo de ingeniería">
+<meta property="og:description" content="Las métricas de entrega, salud e impacto que sigo, cómo se relacionan con DORA y SPACE, y cómo saber si los asistentes de IA realmente ayudan a un equipo.">
+<meta property="og:image" content="https://erwinmongui.com/og-image.png">
+<meta property="og:image:width" content="1200">
+<meta property="og:image:height" content="630">
+<meta property="og:image:alt" content="Erwin Mongui logo with the words Engineering leader, Director of Technology, Toronto, Canada">
+<meta property="article:published_time" content="2026-09-24">
+<meta property="article:modified_time" content="2026-09-26">
+<meta property="article:author" content="https://www.linkedin.com/in/erwin-mongui/">
+<meta name="twitter:card" content="summary_large_image">
+<meta name="twitter:title" content="Cómo mido la salud de un equipo de ingeniería">
+<meta name="twitter:description" content="Las métricas de entrega, salud e impacto que sigo, cómo se relacionan con DORA y SPACE, y cómo saber si los asistentes de IA realmente ayudan a un equipo.">
+<meta name="twitter:image" content="https://erwinmongui.com/og-image.png">
+<link rel="icon" href="/favicon.ico" sizes="16x16 32x32 48x48">
+<link rel="icon" type="image/svg+xml" href="/favicon.svg">
+<link rel="apple-touch-icon" sizes="180x180" href="/apple-touch-icon.png">
+<link rel="manifest" href="/site.webmanifest">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Manrope:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="/assets/site.css">
+<script type="application/ld+json">
+{
+ "@context": "https://schema.org",
+ "@graph": [
+  {
+   "@type": "Person",
+   "@id": "https://erwinmongui.com/#person",
+   "name": "Erwin Mongui",
+   "url": "https://erwinmongui.com/",
+   "jobTitle": "Director of Technology",
+   "worksFor": {
+    "@type": "Organization",
+    "name": "Cedar Planters"
+   },
+   "sameAs": [
+    "https://www.linkedin.com/in/erwin-mongui/"
+   ]
+  },
+  {
+   "@type": "WebSite",
+   "@id": "https://erwinmongui.com/#website",
+   "url": "https://erwinmongui.com/",
+   "name": "Erwin Mongui",
+   "publisher": {
+    "@id": "https://erwinmongui.com/#person"
+   },
+   "inLanguage": [
+    "en",
+    "es"
+   ]
+  },
+  {
+   "@type": "BlogPosting",
+   "@id": "https://erwinmongui.com/es/articulos/metricas-de-salud-de-equipos-de-ingenieria/#article",
+   "headline": "Cómo mido la salud de un equipo de ingeniería",
+   "description": "Las métricas de entrega, salud e impacto que sigo, cómo se relacionan con DORA y SPACE, y cómo saber si los asistentes de IA realmente ayudan a un equipo.",
+   "url": "https://erwinmongui.com/es/articulos/metricas-de-salud-de-equipos-de-ingenieria/",
+   "mainEntityOfPage": "https://erwinmongui.com/es/articulos/metricas-de-salud-de-equipos-de-ingenieria/",
+   "inLanguage": "es",
+   "image": "https://erwinmongui.com/og-image.png",
+   "datePublished": "2026-09-24",
+   "dateModified": "2026-09-26",
+   "author": [
+    {
+     "@id": "https://erwinmongui.com/#person"
+    }
+   ],
+   "publisher": {
+    "@id": "https://erwinmongui.com/#person"
+   },
+   "isPartOf": {
+    "@id": "https://erwinmongui.com/#website"
+   },
+   "keywords": [
+    "métricas de ingeniería",
+    "métricas DORA",
+    "marco SPACE",
+    "productividad de desarrolladores",
+    "asistentes de IA"
+   ],
+   "articleSection": "Liderazgo"
+  },
+  {
+   "@type": "BreadcrumbList",
+   "itemListElement": [
+    {
+     "@type": "ListItem",
+     "position": 1,
+     "name": "Inicio",
+     "item": "https://erwinmongui.com/es/"
+    },
+    {
+     "@type": "ListItem",
+     "position": 2,
+     "name": "Artículos",
+     "item": "https://erwinmongui.com/es/articulos/"
+    },
+    {
+     "@type": "ListItem",
+     "position": 3,
+     "name": "Cómo mido la salud de un equipo de ingeniería",
+     "item": "https://erwinmongui.com/es/articulos/metricas-de-salud-de-equipos-de-ingenieria/"
+    }
+   ]
+  }
+ ]
+}
+</script>
+<!-- Google tag (gtag.js) -->
+<script async src="https://www.googletagmanager.com/gtag/js?id=G-LKD2WCNDV1"></script>
+<script>
+  window.dataLayer = window.dataLayer || [];
+  function gtag(){dataLayer.push(arguments);}
+  gtag('js', new Date());
+  gtag('config', 'G-LKD2WCNDV1');
+</script>
+<!-- Clarity tracking code for https://erwinmongui.com/ -->
+<script>
+    (function(c,l,a,r,i,t,y){
+        c[a]=c[a]||function(){(c[a].q=c[a].q||[]).push(arguments)};
+        t=l.createElement(r);t.async=1;t.src="https://www.clarity.ms/tag/"+i;
+        y=l.getElementsByTagName(r)[0];y.parentNode.insertBefore(t,y);
+    })(window, document, "clarity", "script", "ygo6nehxdb");
+</script>
+<script defer src="/analytics.js"></script>
+</head>
+<body>
+<a class="skip" href="#main">Ir al contenido</a>
+<header class="nav" id="nav">
+  <div class="nav-inner">
+    <a class="brand" href="/es/"><svg aria-hidden="true" viewBox="0 0 189 190"><path fill="#81ffd9" d="M9.8 184.5C4.8 181.7 2.6 174.6 5.1 169.7C5.7 168.5 10.3 163.3 15.3 158.2L24.5 149.0L15.3 139.8C10.3 134.7 5.7 129.5 5.1 128.3C2.4 123.0 5.3 115.4 10.9 113.1C17.0 110.5 19.5 112.0 33.7 126.3C41.0 133.5 47.4 140.8 48.0 142.3C49.4 146.2 49.3 152.5 47.6 156.3C46.8 158.1 40.4 165.3 33.3 172.3C21.9 183.6 19.9 185.2 16.4 185.6C14.0 185.9 11.5 185.4 9.8 184.5ZM70.7 158.0C65.1 153.6 65.1 144.4 70.7 140.0C73.0 138.2 74.7 138.0 89.6 138.0C107.4 138.0 110.2 138.6 112.6 143.1C115.5 148.8 113.5 156.5 108.5 158.8C106.8 159.6 100.1 160.0 89.6 160.0C74.7 160.0 73.0 159.8 70.7 158.0ZM136.9 158.6C135.4 157.7 133.5 155.4 132.5 153.4C131.1 150.3 131.0 149.1 131.9 145.9C133.5 140.5 137.1 138.0 143.4 138.0C153.7 138.0 160.3 134.0 161.9 126.9C162.3 125.0 162.3 113.4 161.9 101.0C160.7 67.7 157.5 46.5 151.4 32.9L148.7 27.0L145.2 29.0C138.8 32.8 133.0 38.2 129.2 44.0L125.3 49.8L122.4 48.0C109.4 39.8 87.5 39.6 73.2 47.5L69.0 49.9L67.1 46.1C65.0 42.0 54.3 31.6 49.1 28.7L46.0 26.9L43.0 33.2C39.2 41.3 36.3 54.6 34.4 72.4C32.7 89.3 32.7 89.3 28.9 92.5C24.3 96.3 18.8 96.0 14.4 91.6C11.2 88.4 11.0 87.8 11.0 81.2C11.0 63.5 16.4 36.0 22.4 23.5C28.7 10.1 35.8 4.6 46.6 4.6C53.6 4.6 60.0 7.7 70.7 16.2L77.0 21.1L82.5 20.0C89.6 18.5 105.5 18.5 112.5 20.0L117.9 21.1L124.2 16.1C138.1 4.8 148.3 2.1 158.3 6.9C174.9 15.0 184.2 50.4 184.4 107.0C184.5 137.6 184.3 138.6 174.9 148.5C167.2 156.6 160.9 159.4 149.0 159.7C142.0 160.0 138.8 159.6 136.9 158.6ZM64.3 102.5C62.6 101.8 60.4 99.8 59.6 98.1C55.5 90.3 59.6 82.2 68.3 81.3C72.6 80.8 73.2 81.0 76.5 84.3C79.4 87.2 80.0 88.5 80.0 92.2C80.0 97.4 77.9 100.7 73.4 102.6C69.3 104.3 68.4 104.3 64.3 102.5ZM121.3 102.5C117.0 100.7 114.5 96.6 114.6 91.6C114.7 88.4 115.4 87.0 118.4 84.3C120.8 82.1 123.0 81.0 125.0 81.0C137.3 81.0 141.5 97.2 130.6 102.4C126.5 104.3 125.5 104.3 121.3 102.5Z"/></svg><span>Erwin Mongui</span></a>
+    <nav class="nav-links" id="nav-links" aria-label="Principal">
+      <a href="/es/#casos">Casos</a><a href="/es/articulos/" aria-current="page">Artículos</a><a href="/about/">Sobre mí</a>
+    </nav>
+    <div class="nav-right">
+      <a class="lang" href="/writing/engineering-team-health-metrics/" hreflang="en" lang="en">English</a>
+      <a class="nav-cta" href="/es/#contacto">Contacto</a>
+    </div>
+  </div>
+</header>
+<main id="main">
+<header class="doc-head stage-dark">
+    <nav class="crumbs" aria-label="Ruta de navegación"><a href="/es/">Inicio</a><span>/</span><a href="/es/articulos/">Artículos</a><span>/</span><span>Liderazgo</span></nav>
+    <p class="eyebrow">Liderazgo · Métricas</p>
+    <h1>Cómo mido la salud de un equipo de ingeniería.</h1>
+    <p class="summary">Sigo tres grupos de números: qué tan rápido entrega el equipo, qué tan sanos están el equipo y sus sistemas, y si el trabajo llega a los usuarios. Ahora que los asistentes de IA escriben buena parte del código, importa una cuarta pregunta: ¿la IA realmente está mejorando al equipo, o solo lo mantiene más ocupado?</p>
+    <div class="byline"><span>Por Erwin Mongui</span><span>24 de septiembre de 2026</span><span>7 min de lectura</span><a class="link" href="/writing/engineering-team-health-metrics/" hreflang="en" lang="en">Read in English</a></div>
+  </header>
+  <section class="doc">
+    <div class="doc-grid">
+      <div class="prose">
+        <div class="inshort"><b>En resumen</b><p>Acompaña cada métrica de velocidad con una de calidad o de salud, e incluye al menos un número que los usuarios reconozcan. Apóyate en marcos establecidos como DORA y SPACE en lugar de inventar el tuyo. Para juzgar a los asistentes de IA, mira el lead time, la tasa de fallas por cambio y el tiempo de revisión, nunca las líneas de código.</p></div>
+
+        <h2>Las métricas que sigo</h2>
+        <div class="table-wrap">
+          <table>
+            <thead><tr><th>Grupo</th><th>Métrica</th><th>La pregunta que responde</th></tr></thead>
+            <tbody>
+              <tr><td>Entrega</td><td>Lead time de los cambios</td><td>¿Cuánto pasa desde un commit hasta que corre en producción?</td></tr>
+              <tr><td>Entrega</td><td>Frecuencia de despliegue</td><td>¿Con qué frecuencia podemos desplegar de forma segura?</td></tr>
+              <tr><td>Entrega</td><td>Tasa de fallas por cambio</td><td>¿Con qué frecuencia un despliegue causa un problema?</td></tr>
+              <tr><td>Salud</td><td>Relación entre lo comprometido y lo entregado en el sprint</td><td>¿Entregamos lo que nos comprometimos a entregar?</td></tr>
+              <tr><td>Salud</td><td>Tiempo de incorporación</td><td>¿Qué tan rápido un ingeniero nuevo entrega su primer cambio real?</td></tr>
+              <tr><td>Salud</td><td>Conciliación de datos</td><td>¿Nuestros sistemas coinciden entre sí?</td></tr>
+              <tr><td>Impacto</td><td>Core Web Vitals</td><td>¿El producto es rápido para los usuarios reales?</td></tr>
+              <tr><td>Impacto</td><td>Tiempo de entrega de reportes</td><td>¿Cuánto pasa desde una pregunta de negocio hasta una respuesta confiable?</td></tr>
+            </tbody>
+          </table>
+        </div>
+
+        <h2>Parte de marcos establecidos</h2>
+        <p>No necesitas inventar un sistema de medición. Dos marcos cubren casi todo lo que importa:</p>
+        <ul>
+          <li><strong>Las métricas DORA</strong>, del programa DevOps Research and Assessment de Google: frecuencia de despliegue, lead time de los cambios, tasa de fallas por cambio y tiempo para restaurar el servicio. Miden qué tan bien entrega software un equipo.</li>
+          <li><strong>El marco SPACE</strong> mira la productividad de forma más amplia: satisfacción y bienestar, desempeño, actividad, comunicación y colaboración, y eficiencia y flujo. Recuerda que la actividad por sí sola nunca cuenta toda la historia.</li>
+        </ul>
+        <p>Mi lista usa DORA para la entrega y agrega los números de salud e impacto que importan en el tipo de plataformas que construyo.</p>
+
+        <h2>Cómo se vieron los números en la práctica</h2>
+        <ul>
+          <li><strong>Impacto en Fincaraiz.</strong> Durante la migración a microservicios, nuestro número de cara al usuario fue el Largest Contentful Paint. Lo mantuvimos por debajo de 3 segundos, igual que el sitio anterior, lo que protegió tanto la experiencia de usuario como las posiciones en buscadores.</li>
+          <li><strong>Conciliación en la distribución de leads.</strong> En nuestro sistema B2B de distribución de leads, conciliamos cada lead de nuestros reportes con el CRM del aliado y mantuvimos una coincidencia del 100%.</li>
+          <li><strong>Tiempo de entrega de reportes en Cedar Planters.</strong> Al construir la plataforma de datos, la pregunta clave era qué tan rápido una pregunta de negocio se convertía en un tablero confiable.</li>
+        </ul>
+
+        <h2>Medir el impacto de los asistentes de IA</h2>
+        <p>La mayoría de los equipos ya usa asistentes de programación con IA. La tentación es medirlos por volumen: más pull requests, más líneas, más tickets cerrados. Esos números suben con facilidad y demuestran muy poco. Lo que yo miro en cambio:</p>
+        <div class="table-wrap">
+          <table>
+            <thead><tr><th>Qué mirar</th><th>Señal sana</th><th>Señal de alerta</th></tr></thead>
+            <tbody>
+              <tr><td>Lead time de los cambios</td><td>Baja, y se mantiene</td><td>Se programa más rápido pero el lead time no se mueve</td></tr>
+              <tr><td>Tasa de fallas por cambio</td><td>Estable o a la baja</td><td>Sube a medida que se despliega más código</td></tr>
+              <tr><td>Tiempo de revisión</td><td>Estable</td><td>Los pull requests se acumulan esperando revisión</td></tr>
+              <tr><td>Retrabajo</td><td>Estable</td><td>Más código se reescribe o se revierte poco después de integrarse</td></tr>
+              <tr><td>Satisfacción de los desarrolladores</td><td>La gente dice que dedica menos tiempo a tareas repetitivas</td><td>La gente siente que revisa más de lo que construye</td></tr>
+            </tbody>
+          </table>
+        </div>
+        <p>Un patrón común es que el cuello de botella se mueve: la IA acelera la escritura de código y la fila se traslada a la revisión y las pruebas. No es un fracaso, pero significa que la siguiente mejora está en el proceso de revisión, no en generar más código.</p>
+
+        <h2>Cómo obtenerlas</h2>
+        <p>La mayoría de estos números ya vive en tus herramientas. Los datos de despliegue y de lead time salen de tu pipeline de CI/CD y del historial de Git en GitHub o GitLab; los del sprint, de Jira o un gestor similar; el rendimiento web, del monitoreo de usuarios reales y de Google Search Console. Si no quieres construir tableros por tu cuenta, las plataformas de analítica de ingeniería combinan estas fuentes por ti. Cada una se enfoca en algo distinto:</p>
+        <div class="table-wrap">
+          <table>
+            <thead><tr><th>Plataforma</th><th>En qué es mejor</th><th>Úsala cuando</th></tr></thead>
+            <tbody>
+              <tr><td>DX</td><td>Combina encuestas periódicas a los desarrolladores con datos de tus sistemas para medir la experiencia y la productividad, incluida la adopción y el impacto de las herramientas de IA</td><td>Quieres saber dónde pierden tiempo los ingenieros y si los asistentes de IA realmente ayudan, no solo lo que dice el pipeline</td></tr>
+              <tr><td>LinearB</td><td>Analítica de entrega a partir de Git y las herramientas de proyecto: métricas DORA, cycle time por etapa, tamaño de los pull requests y tiempo de revisión, además de automatizar partes del flujo de pull requests</td><td>Quieres encontrar y resolver cuellos de botella en la entrega, sobre todo en la revisión de código</td></tr>
+              <tr><td>Swarmia</td><td>Métricas DORA y de flujo, una vista de cómo se reparte el esfuerzo entre funcionalidades nuevas, mantenimiento y trabajo no planeado, y acuerdos de trabajo del equipo con recordatorios en Slack</td><td>Quieres una vista del flujo y el foco a nivel de equipo, y ayuda para sostener los hábitos acordados</td></tr>
+            </tbody>
+          </table>
+        </div>
+        <p>Elijas la que elijas, empieza por la pregunta que quieres responder, acuerda con el equipo qué se va a medir y por qué, y despliégala primero a nivel de equipo. Las opciones gratuitas también llegan lejos: los insights de GitHub y GitLab, y los reportes de cycle time y de control de Jira. Los asistentes de IA también sirven aquí: dale a uno una exportación de tus tickets o pull requests, pídele que encuentre dónde se va el tiempo y después verifica el patrón tú mismo.</p>
+
+        <h2>Cómo las uso</h2>
+        <ul>
+          <li>Un número que se mueve en la dirección equivocada abre una conversación con los ingenieros involucrados. Los datos muestran dónde; ellos explican por qué.</li>
+          <li>Miro tendencias a lo largo de sprints y versiones, no valores aislados.</li>
+          <li>Las métricas describen el sistema, nunca el desempeño individual. En el momento en que la gente se siente juzgada por un número, empieza a optimizar el número.</li>
+        </ul>
+        <p>Cuando un número de entrega se mueve en la dirección equivocada, así encuentro la causa: <a class="link" href="/es/articulos/cuellos-de-botella-lead-time-cycle-time/">Encontrar cuellos de botella en la entrega con lead time y cycle time</a>.</p>
+        <div class="author"><svg aria-hidden="true" viewBox="0 0 189 190"><path fill="#0071e3" d="M9.8 184.5C4.8 181.7 2.6 174.6 5.1 169.7C5.7 168.5 10.3 163.3 15.3 158.2L24.5 149.0L15.3 139.8C10.3 134.7 5.7 129.5 5.1 128.3C2.4 123.0 5.3 115.4 10.9 113.1C17.0 110.5 19.5 112.0 33.7 126.3C41.0 133.5 47.4 140.8 48.0 142.3C49.4 146.2 49.3 152.5 47.6 156.3C46.8 158.1 40.4 165.3 33.3 172.3C21.9 183.6 19.9 185.2 16.4 185.6C14.0 185.9 11.5 185.4 9.8 184.5ZM70.7 158.0C65.1 153.6 65.1 144.4 70.7 140.0C73.0 138.2 74.7 138.0 89.6 138.0C107.4 138.0 110.2 138.6 112.6 143.1C115.5 148.8 113.5 156.5 108.5 158.8C106.8 159.6 100.1 160.0 89.6 160.0C74.7 160.0 73.0 159.8 70.7 158.0ZM136.9 158.6C135.4 157.7 133.5 155.4 132.5 153.4C131.1 150.3 131.0 149.1 131.9 145.9C133.5 140.5 137.1 138.0 143.4 138.0C153.7 138.0 160.3 134.0 161.9 126.9C162.3 125.0 162.3 113.4 161.9 101.0C160.7 67.7 157.5 46.5 151.4 32.9L148.7 27.0L145.2 29.0C138.8 32.8 133.0 38.2 129.2 44.0L125.3 49.8L122.4 48.0C109.4 39.8 87.5 39.6 73.2 47.5L69.0 49.9L67.1 46.1C65.0 42.0 54.3 31.6 49.1 28.7L46.0 26.9L43.0 33.2C39.2 41.3 36.3 54.6 34.4 72.4C32.7 89.3 32.7 89.3 28.9 92.5C24.3 96.3 18.8 96.0 14.4 91.6C11.2 88.4 11.0 87.8 11.0 81.2C11.0 63.5 16.4 36.0 22.4 23.5C28.7 10.1 35.8 4.6 46.6 4.6C53.6 4.6 60.0 7.7 70.7 16.2L77.0 21.1L82.5 20.0C89.6 18.5 105.5 18.5 112.5 20.0L117.9 21.1L124.2 16.1C138.1 4.8 148.3 2.1 158.3 6.9C174.9 15.0 184.2 50.4 184.4 107.0C184.5 137.6 184.3 138.6 174.9 148.5C167.2 156.6 160.9 159.4 149.0 159.7C142.0 160.0 138.8 159.6 136.9 158.6ZM64.3 102.5C62.6 101.8 60.4 99.8 59.6 98.1C55.5 90.3 59.6 82.2 68.3 81.3C72.6 80.8 73.2 81.0 76.5 84.3C79.4 87.2 80.0 88.5 80.0 92.2C80.0 97.4 77.9 100.7 73.4 102.6C69.3 104.3 68.4 104.3 64.3 102.5ZM121.3 102.5C117.0 100.7 114.5 96.6 114.6 91.6C114.7 88.4 115.4 87.0 118.4 84.3C120.8 82.1 123.0 81.0 125.0 81.0C137.3 81.0 141.5 97.2 130.6 102.4C126.5 104.3 125.5 104.3 121.3 102.5Z"/></svg><p><b>Erwin Mongui</b>Director de Tecnología en Cedar Planters e ingeniero certificado en Inteligencia Artificial, en Toronto.</p></div>
+      </div>
+      <aside class="aside"><div class="related"><h4>Relacionado</h4><a href="/es/articulos/cuellos-de-botella-lead-time-cycle-time/">Encontrar cuellos de botella en la entrega</a><a href="/es/casos/fincaraiz-distribucion-de-leads/">Caso: distribución de leads</a><a href="/es/casos/fincaraiz-monolito-a-microservicios/">Caso: la migración</a></div></aside>
+    </div>
+  </section>
+
+</main>
+<footer class="foot">
+  <div class="foot-inner">
+    <p>&copy; 2026 Erwin Mongui. Todos los derechos reservados.</p>
+    <nav aria-label="Footer">
+      <a href="/es/#casos">Casos</a><a href="/es/articulos/">Artículos</a><a href="/about/">Sobre mí</a><a href="/" lang="en" hreflang="en">English</a>
+      <a href="https://www.linkedin.com/in/erwin-mongui/" target="_blank" rel="noopener">LinkedIn</a>
+      <a href="https://www.google.com/preferences/source?q=erwinmongui.com" target="_blank" rel="noopener">Agregar como fuente preferida en Google</a>
+    </nav>
+  </div>
+</footer>
+<script>
+document.addEventListener('click', function (e) {
+  var b = e.target.closest && e.target.closest('[data-copy]');
+  if (!b || !navigator.clipboard) return;
+  var label = b.textContent;
+  navigator.clipboard.writeText(b.getAttribute('data-copy')).then(function () {
+    b.textContent = document.documentElement.lang === 'es' ? 'Copiado' : 'Copied';
+    setTimeout(function () { b.textContent = label; }, 1600);
+  });
+});
+</script>
+</body>
+</html>

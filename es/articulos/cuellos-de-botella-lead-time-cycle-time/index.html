@@ -1,0 +1,255 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Cuellos de botella en la entrega de software con lead time y cycle time | Erwin Mongui</title>
+<meta name="description" content="Cinco pasos para encontrar dónde se atasca el trabajo de software con lead time, cycle time y métricas de flujo, confirmar la causa con el equipo y resolverla.">
+<meta name="author" content="Erwin Mongui">
+<meta name="robots" content="index, follow, max-snippet:-1, max-image-preview:large, max-video-preview:-1">
+<meta name="theme-color" content="#000000">
+<link rel="canonical" href="https://erwinmongui.com/es/articulos/cuellos-de-botella-lead-time-cycle-time/">
+<link rel="alternate" hreflang="en" href="https://erwinmongui.com/writing/lead-time-cycle-time-bottlenecks/">
+<link rel="alternate" hreflang="es" href="https://erwinmongui.com/es/articulos/cuellos-de-botella-lead-time-cycle-time/">
+<link rel="alternate" hreflang="x-default" href="https://erwinmongui.com/writing/lead-time-cycle-time-bottlenecks/">
+<link rel="alternate" type="application/rss+xml" title="Erwin Mongui: casos y artículos" href="https://erwinmongui.com/es/feed.xml">
+<link rel="me" href="https://www.linkedin.com/in/erwin-mongui/">
+<meta property="og:type" content="article">
+<meta property="og:site_name" content="Erwin Mongui">
+<meta property="og:locale" content="es_CO">
+<meta property="og:locale:alternate" content="en_CA">
+<meta property="og:url" content="https://erwinmongui.com/es/articulos/cuellos-de-botella-lead-time-cycle-time/">
+<meta property="og:title" content="Encontrar cuellos de botella en la entrega con lead time y cycle time">
+<meta property="og:description" content="Cinco pasos para encontrar dónde se atasca el trabajo de software con lead time, cycle time y métricas de flujo, confirmar la causa con el equipo y resolverla.">
+<meta property="og:image" content="https://erwinmongui.com/og-image.png">
+<meta property="og:image:width" content="1200">
+<meta property="og:image:height" content="630">
+<meta property="og:image:alt" content="Erwin Mongui logo with the words Engineering leader, Director of Technology, Toronto, Canada">
+<meta property="article:published_time" content="2026-09-25">
+<meta property="article:modified_time" content="2026-09-26">
+<meta property="article:author" content="https://www.linkedin.com/in/erwin-mongui/">
+<meta name="twitter:card" content="summary_large_image">
+<meta name="twitter:title" content="Encontrar cuellos de botella en la entrega con lead time y cycle time">
+<meta name="twitter:description" content="Cinco pasos para encontrar dónde se atasca el trabajo de software con lead time, cycle time y métricas de flujo, confirmar la causa con el equipo y resolverla.">
+<meta name="twitter:image" content="https://erwinmongui.com/og-image.png">
+<link rel="icon" href="/favicon.ico" sizes="16x16 32x32 48x48">
+<link rel="icon" type="image/svg+xml" href="/favicon.svg">
+<link rel="apple-touch-icon" sizes="180x180" href="/apple-touch-icon.png">
+<link rel="manifest" href="/site.webmanifest">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Manrope:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="/assets/site.css">
+<script type="application/ld+json">
+{
+ "@context": "https://schema.org",
+ "@graph": [
+  {
+   "@type": "Person",
+   "@id": "https://erwinmongui.com/#person",
+   "name": "Erwin Mongui",
+   "url": "https://erwinmongui.com/",
+   "jobTitle": "Director of Technology",
+   "worksFor": {
+    "@type": "Organization",
+    "name": "Cedar Planters"
+   },
+   "sameAs": [
+    "https://www.linkedin.com/in/erwin-mongui/"
+   ]
+  },
+  {
+   "@type": "WebSite",
+   "@id": "https://erwinmongui.com/#website",
+   "url": "https://erwinmongui.com/",
+   "name": "Erwin Mongui",
+   "publisher": {
+    "@id": "https://erwinmongui.com/#person"
+   },
+   "inLanguage": [
+    "en",
+    "es"
+   ]
+  },
+  {
+   "@type": "BlogPosting",
+   "@id": "https://erwinmongui.com/es/articulos/cuellos-de-botella-lead-time-cycle-time/#article",
+   "headline": "Encontrar cuellos de botella en la entrega con lead time y cycle time",
+   "description": "Cinco pasos para encontrar dónde se atasca el trabajo de software con lead time, cycle time y métricas de flujo, confirmar la causa con el equipo y resolverla.",
+   "url": "https://erwinmongui.com/es/articulos/cuellos-de-botella-lead-time-cycle-time/",
+   "mainEntityOfPage": "https://erwinmongui.com/es/articulos/cuellos-de-botella-lead-time-cycle-time/",
+   "inLanguage": "es",
+   "image": "https://erwinmongui.com/og-image.png",
+   "datePublished": "2026-09-25",
+   "dateModified": "2026-09-26",
+   "author": [
+    {
+     "@id": "https://erwinmongui.com/#person"
+    }
+   ],
+   "publisher": {
+    "@id": "https://erwinmongui.com/#person"
+   },
+   "isPartOf": {
+    "@id": "https://erwinmongui.com/#website"
+   },
+   "keywords": [
+    "lead time",
+    "cycle time",
+    "eficiencia de flujo",
+    "ley de Little",
+    "límites de WIP",
+    "revisión de código"
+   ],
+   "articleSection": "Entrega"
+  },
+  {
+   "@type": "BreadcrumbList",
+   "itemListElement": [
+    {
+     "@type": "ListItem",
+     "position": 1,
+     "name": "Inicio",
+     "item": "https://erwinmongui.com/es/"
+    },
+    {
+     "@type": "ListItem",
+     "position": 2,
+     "name": "Artículos",
+     "item": "https://erwinmongui.com/es/articulos/"
+    },
+    {
+     "@type": "ListItem",
+     "position": 3,
+     "name": "Encontrar cuellos de botella en la entrega con lead time y cycle time",
+     "item": "https://erwinmongui.com/es/articulos/cuellos-de-botella-lead-time-cycle-time/"
+    }
+   ]
+  }
+ ]
+}
+</script>
+<!-- Google tag (gtag.js) -->
+<script async src="https://www.googletagmanager.com/gtag/js?id=G-LKD2WCNDV1"></script>
+<script>
+  window.dataLayer = window.dataLayer || [];
+  function gtag(){dataLayer.push(arguments);}
+  gtag('js', new Date());
+  gtag('config', 'G-LKD2WCNDV1');
+</script>
+<!-- Clarity tracking code for https://erwinmongui.com/ -->
+<script>
+    (function(c,l,a,r,i,t,y){
+        c[a]=c[a]||function(){(c[a].q=c[a].q||[]).push(arguments)};
+        t=l.createElement(r);t.async=1;t.src="https://www.clarity.ms/tag/"+i;
+        y=l.getElementsByTagName(r)[0];y.parentNode.insertBefore(t,y);
+    })(window, document, "clarity", "script", "ygo6nehxdb");
+</script>
+<script defer src="/analytics.js"></script>
+</head>
+<body>
+<a class="skip" href="#main">Ir al contenido</a>
+<header class="nav" id="nav">
+  <div class="nav-inner">
+    <a class="brand" href="/es/"><svg aria-hidden="true" viewBox="0 0 189 190"><path fill="#81ffd9" d="M9.8 184.5C4.8 181.7 2.6 174.6 5.1 169.7C5.7 168.5 10.3 163.3 15.3 158.2L24.5 149.0L15.3 139.8C10.3 134.7 5.7 129.5 5.1 128.3C2.4 123.0 5.3 115.4 10.9 113.1C17.0 110.5 19.5 112.0 33.7 126.3C41.0 133.5 47.4 140.8 48.0 142.3C49.4 146.2 49.3 152.5 47.6 156.3C46.8 158.1 40.4 165.3 33.3 172.3C21.9 183.6 19.9 185.2 16.4 185.6C14.0 185.9 11.5 185.4 9.8 184.5ZM70.7 158.0C65.1 153.6 65.1 144.4 70.7 140.0C73.0 138.2 74.7 138.0 89.6 138.0C107.4 138.0 110.2 138.6 112.6 143.1C115.5 148.8 113.5 156.5 108.5 158.8C106.8 159.6 100.1 160.0 89.6 160.0C74.7 160.0 73.0 159.8 70.7 158.0ZM136.9 158.6C135.4 157.7 133.5 155.4 132.5 153.4C131.1 150.3 131.0 149.1 131.9 145.9C133.5 140.5 137.1 138.0 143.4 138.0C153.7 138.0 160.3 134.0 161.9 126.9C162.3 125.0 162.3 113.4 161.9 101.0C160.7 67.7 157.5 46.5 151.4 32.9L148.7 27.0L145.2 29.0C138.8 32.8 133.0 38.2 129.2 44.0L125.3 49.8L122.4 48.0C109.4 39.8 87.5 39.6 73.2 47.5L69.0 49.9L67.1 46.1C65.0 42.0 54.3 31.6 49.1 28.7L46.0 26.9L43.0 33.2C39.2 41.3 36.3 54.6 34.4 72.4C32.7 89.3 32.7 89.3 28.9 92.5C24.3 96.3 18.8 96.0 14.4 91.6C11.2 88.4 11.0 87.8 11.0 81.2C11.0 63.5 16.4 36.0 22.4 23.5C28.7 10.1 35.8 4.6 46.6 4.6C53.6 4.6 60.0 7.7 70.7 16.2L77.0 21.1L82.5 20.0C89.6 18.5 105.5 18.5 112.5 20.0L117.9 21.1L124.2 16.1C138.1 4.8 148.3 2.1 158.3 6.9C174.9 15.0 184.2 50.4 184.4 107.0C184.5 137.6 184.3 138.6 174.9 148.5C167.2 156.6 160.9 159.4 149.0 159.7C142.0 160.0 138.8 159.6 136.9 158.6ZM64.3 102.5C62.6 101.8 60.4 99.8 59.6 98.1C55.5 90.3 59.6 82.2 68.3 81.3C72.6 80.8 73.2 81.0 76.5 84.3C79.4 87.2 80.0 88.5 80.0 92.2C80.0 97.4 77.9 100.7 73.4 102.6C69.3 104.3 68.4 104.3 64.3 102.5ZM121.3 102.5C117.0 100.7 114.5 96.6 114.6 91.6C114.7 88.4 115.4 87.0 118.4 84.3C120.8 82.1 123.0 81.0 125.0 81.0C137.3 81.0 141.5 97.2 130.6 102.4C126.5 104.3 125.5 104.3 121.3 102.5Z"/></svg><span>Erwin Mongui</span></a>
+    <nav class="nav-links" id="nav-links" aria-label="Principal">
+      <a href="/es/#casos">Casos</a><a href="/es/articulos/" aria-current="page">Artículos</a><a href="/about/">Sobre mí</a>
+    </nav>
+    <div class="nav-right">
+      <a class="lang" href="/writing/lead-time-cycle-time-bottlenecks/" hreflang="en" lang="en">English</a>
+      <a class="nav-cta" href="/es/#contacto">Contacto</a>
+    </div>
+  </div>
+</header>
+<main id="main">
+<header class="doc-head stage-dark">
+    <nav class="crumbs" aria-label="Ruta de navegación"><a href="/es/">Inicio</a><span>/</span><a href="/es/articulos/">Artículos</a><span>/</span><span>Entrega</span></nav>
+    <p class="eyebrow">Entrega</p>
+    <h1>Encontrar cuellos de botella en la entrega con lead time y cycle time.</h1>
+    <p class="summary">Cuando el trabajo se vuelve lento, la causa casi nunca está donde la gente señala primero. Uso el lead time, el cycle time y algunas métricas de flujo para encontrar exactamente dónde se atascan las historias, confirmo el patrón a lo largo de varios sprints y valido la causa raíz con los ingenieros antes de cambiar algo. Las herramientas de IA hacen el análisis más rápido, y también crean un nuevo cuello de botella que hay que vigilar.</p>
+    <div class="byline"><span>Por Erwin Mongui</span><span>25 de septiembre de 2026</span><span>6 min de lectura</span><a class="link" href="/writing/lead-time-cycle-time-bottlenecks/" hreflang="en" lang="en">Read in English</a></div>
+  </header>
+  <section class="doc">
+    <div class="doc-grid">
+      <div class="prose">
+        <div class="inshort"><b>En resumen</b><p>El <strong>lead time</strong> es cuánto tarda una solicitud desde que se pide hasta que se entrega. El <strong>cycle time</strong> es cuánto tarda desde que alguien empieza a trabajar en ella. Una gran diferencia entre los dos significa que el trabajo está esperando, no avanzando. Mide ambos por etapa, confirma el patrón con el equipo, cambia una sola cosa y vuelve a medir.</p></div>
+
+        <h2>Cuatro números que describen el flujo</h2>
+        <div class="table-wrap">
+          <table>
+            <thead><tr><th>Métrica</th><th>Qué mide</th></tr></thead>
+            <tbody>
+              <tr><td>Lead time</td><td>Desde la solicitud hasta la entrega, incluida toda la espera</td></tr>
+              <tr><td>Cycle time</td><td>Desde que empieza el trabajo hasta la entrega</td></tr>
+              <tr><td>Trabajo en curso (WIP)</td><td>Cuántos elementos están abiertos al mismo tiempo</td></tr>
+              <tr><td>Throughput</td><td>Cuántos elementos se terminan por semana o por sprint</td></tr>
+            </tbody>
+          </table>
+        </div>
+        <p>Están conectados. La ley de Little dice que, en promedio, el cycle time es igual al trabajo en curso dividido por el throughput. En la práctica: si un equipo empieza más trabajo del que termina, todo tarda más, aunque todos estén ocupados. Reducir el trabajo en curso suele ser la forma más rápida de acelerar la entrega.</p>
+        <p>Un quinto número, la <strong>eficiencia de flujo</strong>, es la parte del cycle time en la que alguien está trabajando activamente en un elemento. En muchos equipos es sorprendentemente baja, porque la mayor parte del tiempo se va en esperar una revisión, pruebas, una decisión u otro equipo.</p>
+
+        <h2>Los cinco pasos</h2>
+        <ol>
+          <li><strong>Mide ambos tiempos en cada historia.</strong> Divide el cycle time en las etapas de tu flujo de trabajo, como en progreso, en revisión, en pruebas y esperando despliegue.</li>
+          <li><strong>Encuentra la desviación.</strong> Busca la etapa donde el tiempo crece más respecto a lo normal.</li>
+          <li><strong>Confirma que es un patrón.</strong> Compara a lo largo del sprint o de la versión. Una historia lenta es ruido; la misma etapa volviéndose lenta en cada sprint es un cuello de botella.</li>
+          <li><strong>Habla con los ingenieros involucrados.</strong> Los datos muestran dónde; las personas explican por qué. Las causas comunes son dependencias de otros equipos, requisitos poco claros y revisiones de código lentas.</li>
+          <li><strong>Cambia una sola cosa y vuelve a medir.</strong> Ajusta prioridades, el flujo de trabajo o el proceso de revisión, y luego revisa si los números se mueven.</li>
+        </ol>
+
+        <h2>Causas comunes y soluciones</h2>
+        <div class="table-wrap">
+          <table>
+            <thead><tr><th>Dónde crece el tiempo</th><th>Causa probable</th><th>Qué suele ayudar</th></tr></thead>
+            <tbody>
+              <tr><td>Antes de empezar</td><td>Requisitos poco claros</td><td>Refinar las historias con producto antes del sprint, con criterios de aceptación claros</td></tr>
+              <tr><td>En progreso</td><td>Esperando a otro equipo</td><td>Hacer visibles las dependencias en la planeación y acordar temprano los contratos de las APIs</td></tr>
+              <tr><td>En progreso</td><td>Demasiado trabajo en curso</td><td>Poner límites de WIP y terminar antes de empezar algo nuevo</td></tr>
+              <tr><td>En revisión</td><td>Las revisiones se acumulan</td><td>Pull requests más pequeños, tiempos de revisión acordados y una primera revisión asistida por IA</td></tr>
+              <tr><td>En pruebas</td><td>Pruebas manuales</td><td>Pruebas automatizadas en CI, con asistentes de IA que ayuden a escribirlas</td></tr>
+            </tbody>
+          </table>
+        </div>
+
+        <h2>Dónde ayuda la IA, y el nuevo cuello de botella que crea</h2>
+        <p>Las herramientas de IA ayudan en los dos extremos del proceso:</p>
+        <ul>
+          <li><strong>Análisis.</strong> Exporta el historial de tickets de Jira o los datos de pull requests de GitHub, y un asistente de IA puede calcular el tiempo por etapa, detectar valores atípicos y sugerir patrones en minutos. Trata sus hallazgos como hipótesis por verificar, no como conclusiones.</li>
+          <li><strong>Soluciones.</strong> Los asistentes de programación con IA ayudan a escribir las pruebas que faltan, y las herramientas de revisión con IA pueden hacer una primera pasada sobre los pull requests, para que los revisores humanos se concentren en el diseño y el riesgo.</li>
+        </ul>
+        <p>Pero cuando un equipo adopta asistentes de programación con IA, escribir código se vuelve más rápido, y llega más código a revisión y a pruebas al mismo tiempo. El cuello de botella se mueve hacia adelante. Si el cycle time no mejora después de adoptar IA, mira primero las etapas de revisión y pruebas. La solución suele ser pull requests más pequeños, expectativas de revisión claras y mejores pruebas automatizadas, no generar más código.</p>
+
+        <h2>Por qué validar con las personas</h2>
+        <p>Los números sin contexto llevan a la solución equivocada. Una etapa de revisión larga puede significar que los revisores están sobrecargados, o que los pull requests son demasiado grandes para revisar, y cada caso necesita un cambio distinto. Preguntar primero mantiene la solución enfocada y conserva la confianza del equipo.</p>
+        <p>Mira el conjunto completo de métricas que sigo: <a class="link" href="/es/articulos/metricas-de-salud-de-equipos-de-ingenieria/">Cómo mido la salud de un equipo de ingeniería</a>.</p>
+        <div class="author"><svg aria-hidden="true" viewBox="0 0 189 190"><path fill="#0071e3" d="M9.8 184.5C4.8 181.7 2.6 174.6 5.1 169.7C5.7 168.5 10.3 163.3 15.3 158.2L24.5 149.0L15.3 139.8C10.3 134.7 5.7 129.5 5.1 128.3C2.4 123.0 5.3 115.4 10.9 113.1C17.0 110.5 19.5 112.0 33.7 126.3C41.0 133.5 47.4 140.8 48.0 142.3C49.4 146.2 49.3 152.5 47.6 156.3C46.8 158.1 40.4 165.3 33.3 172.3C21.9 183.6 19.9 185.2 16.4 185.6C14.0 185.9 11.5 185.4 9.8 184.5ZM70.7 158.0C65.1 153.6 65.1 144.4 70.7 140.0C73.0 138.2 74.7 138.0 89.6 138.0C107.4 138.0 110.2 138.6 112.6 143.1C115.5 148.8 113.5 156.5 108.5 158.8C106.8 159.6 100.1 160.0 89.6 160.0C74.7 160.0 73.0 159.8 70.7 158.0ZM136.9 158.6C135.4 157.7 133.5 155.4 132.5 153.4C131.1 150.3 131.0 149.1 131.9 145.9C133.5 140.5 137.1 138.0 143.4 138.0C153.7 138.0 160.3 134.0 161.9 126.9C162.3 125.0 162.3 113.4 161.9 101.0C160.7 67.7 157.5 46.5 151.4 32.9L148.7 27.0L145.2 29.0C138.8 32.8 133.0 38.2 129.2 44.0L125.3 49.8L122.4 48.0C109.4 39.8 87.5 39.6 73.2 47.5L69.0 49.9L67.1 46.1C65.0 42.0 54.3 31.6 49.1 28.7L46.0 26.9L43.0 33.2C39.2 41.3 36.3 54.6 34.4 72.4C32.7 89.3 32.7 89.3 28.9 92.5C24.3 96.3 18.8 96.0 14.4 91.6C11.2 88.4 11.0 87.8 11.0 81.2C11.0 63.5 16.4 36.0 22.4 23.5C28.7 10.1 35.8 4.6 46.6 4.6C53.6 4.6 60.0 7.7 70.7 16.2L77.0 21.1L82.5 20.0C89.6 18.5 105.5 18.5 112.5 20.0L117.9 21.1L124.2 16.1C138.1 4.8 148.3 2.1 158.3 6.9C174.9 15.0 184.2 50.4 184.4 107.0C184.5 137.6 184.3 138.6 174.9 148.5C167.2 156.6 160.9 159.4 149.0 159.7C142.0 160.0 138.8 159.6 136.9 158.6ZM64.3 102.5C62.6 101.8 60.4 99.8 59.6 98.1C55.5 90.3 59.6 82.2 68.3 81.3C72.6 80.8 73.2 81.0 76.5 84.3C79.4 87.2 80.0 88.5 80.0 92.2C80.0 97.4 77.9 100.7 73.4 102.6C69.3 104.3 68.4 104.3 64.3 102.5ZM121.3 102.5C117.0 100.7 114.5 96.6 114.6 91.6C114.7 88.4 115.4 87.0 118.4 84.3C120.8 82.1 123.0 81.0 125.0 81.0C137.3 81.0 141.5 97.2 130.6 102.4C126.5 104.3 125.5 104.3 121.3 102.5Z"/></svg><p><b>Erwin Mongui</b>Director de Tecnología en Cedar Planters e ingeniero certificado en Inteligencia Artificial, en Toronto.</p></div>
+      </div>
+      <aside class="aside"><div class="related"><h4>Relacionado</h4><a href="/es/articulos/metricas-de-salud-de-equipos-de-ingenieria/">Cómo mido la salud de un equipo de ingeniería</a><a href="/es/articulos/elegir-herramientas-que-tu-equipo-pueda-sostener/">Elige la herramienta que tu equipo puede sostener</a><a href="/es/casos/cedar-planters-plataforma-de-datos/">Caso: plataforma de datos desde cero</a></div></aside>
+    </div>
+  </section>
+
+</main>
+<footer class="foot">
+  <div class="foot-inner">
+    <p>&copy; 2026 Erwin Mongui. Todos los derechos reservados.</p>
+    <nav aria-label="Footer">
+      <a href="/es/#casos">Casos</a><a href="/es/articulos/">Artículos</a><a href="/about/">Sobre mí</a><a href="/" lang="en" hreflang="en">English</a>
+      <a href="https://www.linkedin.com/in/erwin-mongui/" target="_blank" rel="noopener">LinkedIn</a>
+      <a href="https://www.google.com/preferences/source?q=erwinmongui.com" target="_blank" rel="noopener">Agregar como fuente preferida en Google</a>
+    </nav>
+  </div>
+</footer>
+<script>
+document.addEventListener('click', function (e) {
+  var b = e.target.closest && e.target.closest('[data-copy]');
+  if (!b || !navigator.clipboard) return;
+  var label = b.textContent;
+  navigator.clipboard.writeText(b.getAttribute('data-copy')).then(function () {
+    b.textContent = document.documentElement.lang === 'es' ? 'Copiado' : 'Copied';
+    setTimeout(function () { b.textContent = label; }, 1600);
+  });
+});
+</script>
+</body>
+</html>

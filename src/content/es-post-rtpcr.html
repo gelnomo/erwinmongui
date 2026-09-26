@@ -1,0 +1,121 @@
+<header class="doc-head stage-dark">
+    <nav class="crumbs" aria-label="Ruta de navegación"><a href="/es/">Inicio</a><span>/</span><a href="/es/articulos/">Artículos</a><span>/</span><span>Investigación</span></nav>
+    <p class="eyebrow">Investigación · Ciencia de datos</p>
+    <h1>Reemplazar la selección aleatoria para RT-PCR con una selección de viajeros basada en datos.</h1>
+    <p class="summary">En 2023, los viajeros que llegaban al Aeropuerto Internacional Toronto Pearson eran elegidos al azar para revisar sus reportes de RT-PCR. Para el STEM Fellowship Big Data and AI Challenge, cuatro estudiantes de Lambton College propusimos una forma mejor: combinar los datos de COVID-19 de la OMS y del Gobierno de Canadá con el reporte RT-PCR de cada viajero para clasificar a los pasajeros en grupos de prioridad. Nuestro artículo se publicó en las memorias del reto en el STEM Fellowship Journal.</p>
+    <div class="byline"><span>Por Erwin Mongui, con Umid Ghimire, Dharmik Limbani y Sairam Kilari</span><span>Publicado el 12 de diciembre de 2023</span><span>Actualizado el 23 de septiembre de 2026</span><span>8 min de lectura</span><a class="link" href="/writing/rt-pcr-travel-screening-data-driven-selection/" hreflang="en" lang="en">Read in English</a></div>
+  </header>
+  <section class="doc">
+    <div class="doc-grid">
+      <div class="prose">
+        <div class="inshort"><b>En resumen</b><p>La selección aleatoria trata a todos los viajeros por igual. Nuestro estudio calificó el riesgo actual de COVID-19 de cada país con datos de la OMS, usó datos del Gobierno de Canadá para identificar los grupos de edad con mayor riesgo de enfermedad grave, extrajo con Python los reportes RT-PCR de los viajeros desde PDF y combinó los tres en niveles de prioridad, de "Inmediata" a "Baja". Artículo: <em>Eliminating Randomness in Selecting International Passengers for RT-PCR</em> (<a class="link" href="https://journal.stemfellowship.org/doi/abs/10.17975/sfj-2023-007" target="_blank" rel="noopener">doi:10.17975/sfj-2023-007</a>). Código: <a class="link" href="https://github.com/gelnomo/ART.-National-Inter-University-Big-Data-And-AI-Challenge-2023" target="_blank" rel="noopener">GitHub</a>.</p></div>
+
+        <h2>El problema</h2>
+        <p>A mediados de 2023, los viajes internacionales se habían reabierto con menos restricciones, pero el COVID-19 no había desaparecido. Nuevas subvariantes como Ómicron "Arcturus" se estaban propagando, y no estaba claro qué tan bien protegían las vacunas existentes contra ellas. Las cifras seguían siendo grandes:</p>
+        <div class="kpi-row kpi-3">
+          <div style="border-top-color:var(--line-light)"><b style="color:var(--blue)">1,7 M</b><span style="color:var(--steel)">turistas llegaron a Ontario en el primer trimestre de 2023</span></div>
+          <div style="border-top-color:var(--line-light)"><b style="color:var(--blue)">219.183</b><span style="color:var(--steel)">casos nuevos reportados en el mundo en los 7 días al 7 de junio de 2023 (OMS)</span></div>
+          <div style="border-top-color:var(--line-light)"><b style="color:var(--blue)">Al azar</b><span style="color:var(--steel)">así se elegía a los viajeros para revisar sus reportes RT-PCR en Pearson</span></div>
+        </div>
+        <p>Las pruebas RT-PCR eran la forma más usada de detectar el virus, y muchos viajeros llevaban reportes RT-PCR. Pero elegir al azar a quién revisar ignora información que ya era pública. Nuestra pregunta: ¿podían esos datos orientar a la unidad de Inmigración de Pearson hacia los viajeros con más probabilidad de necesitar atención?</p>
+
+        <h2>Los datos</h2>
+        <div class="table-wrap">
+          <table>
+            <thead><tr><th>Fuente</th><th>Qué usamos</th></tr></thead>
+            <tbody>
+              <tr><td>Organización Mundial de la Salud</td><td>Casos nuevos de COVID-19 por país en los últimos 7 días, y por cada 100.000 habitantes</td></tr>
+              <tr><td>Gobierno de Canadá</td><td>Epidemiología del COVID-19: hospitalizaciones, ingresos a UCI y muertes, por grupo de edad y sexo, a lo largo del tiempo</td></tr>
+              <tr><td>Reportes RT-PCR de viajeros</td><td>Reportes de viajeros de varios países, con fecha de la prueba, edad, género, ubicación y resultado. Algunos se crearon a partir de reportes de muestra disponibles en internet.</td></tr>
+            </tbody>
+          </table>
+        </div>
+
+        <h2>El método</h2>
+        <h3>1. Un nivel de riesgo para cada país</h3>
+        <p>Con los datos de la OMS calculamos la participación de cada país en los casos nuevos por cada 100.000 habitantes durante los últimos 7 días, y la convertimos en un nivel de riesgo simple:</p>
+<pre><code>participación (%) = casos_por_100k_últimos_7_días / suma(todos los países) × 100
+
+nivel de riesgo = 2   si participación &gt; 2%        (muy afectado)
+                  1   si 1% ≤ participación &lt; 2%
+                  0   en otro caso                 (poco afectado)</code></pre>
+
+        <h3>2. Quién tiene más riesgo de enfermedad grave</h3>
+        <p>Analizamos seis meses de datos del Gobierno de Canadá por edad, sexo y desenlace. Las personas de 70 años o más concentraban la mayor parte de las hospitalizaciones, los ingresos a UCI y las muertes, seguidas por el grupo de 50 a 69 años. Eso nos dio tres rangos de edad para el modelo: 70 o más, 50 a 69, y 0 a 49.</p>
+
+        <h3>3. Leer los reportes RT-PCR</h3>
+        <p>Extrajimos con Python los reportes desde PDF a un archivo CSV estructurado: fecha de la prueba, resultado, género, edad y ubicación, con el país derivado de la ubicación. También agregamos la antigüedad de cada reporte, en días desde la fecha de la prueba.</p>
+
+        <h3>4. Grupos de prioridad</h3>
+        <p>Al combinar los tres, cada viajero recibió un nivel de prioridad:</p>
+        <div class="table-wrap">
+          <table>
+            <thead><tr><th>Prioridad</th><th>Edad</th><th>Reporte RT-PCR</th><th>Riesgo del país</th></tr></thead>
+            <tbody>
+              <tr><td><strong>Inmediata, nivel 3</strong></td><td>70+</td><td>Positivo, con más de 14 días</td><td>Alto (2)</td></tr>
+              <tr><td><strong>Inmediata, nivel 2A</strong></td><td>70+</td><td>Positivo, con menos de 14 días</td><td>Alto (2)</td></tr>
+              <tr><td><strong>Inmediata, nivel 2B</strong></td><td>70+</td><td>Positivo, con más de 14 días</td><td>Bajo (1 o menos)</td></tr>
+              <tr><td><strong>Alta, nivel 3</strong></td><td>50 a 69</td><td>Positivo, con más de 14 días</td><td>Alto (2)</td></tr>
+              <tr><td><strong>Alta, nivel 2A</strong></td><td>50 a 69</td><td>Positivo, con menos de 14 días</td><td>Alto (2)</td></tr>
+              <tr><td><strong>Alta, nivel 2B</strong></td><td>50 a 69</td><td>Positivo, con más de 14 días</td><td>Bajo (1 o menos)</td></tr>
+              <tr><td><strong>Media, nivel 2A</strong></td><td>50+</td><td>Negativo</td><td>Cualquiera</td></tr>
+              <tr><td><strong>Media, nivel 2B</strong></td><td>0 a 49</td><td>Positivo</td><td>Cualquiera</td></tr>
+              <tr><td><strong>Baja</strong></td><td>0 a 49</td><td>Negativo</td><td>Cualquiera</td></tr>
+            </tbody>
+          </table>
+        </div>
+        <p>Prioridad inmediata significa que el viajero debe ser seleccionado para una revisión RT-PCR. Los viajeros de prioridad alta y media pueden seleccionarse al azar, pero no requieren atención inmediata. Todos los demás son de prioridad baja.</p>
+
+        <h2>Resultados</h2>
+        <p>Aplicado a los reportes que recopilamos, el modelo ubicó a <strong>2 viajeros</strong> en prioridad Inmediata nivel 2B, <strong>8</strong> en Alta nivel 2B y <strong>19</strong> en Media nivel 2A. En lugar de un sorteo, los oficiales habrían tenido una lista corta y ordenada, con una razón asociada a cada nombre.</p>
+        <blockquote>Seleccionar al azar no es una estrategia óptima cuando los datos para hacerlo mejor ya son públicos.</blockquote>
+
+        <h2>Lo que aprendimos</h2>
+        <ul>
+          <li><strong>Los datos públicos alcanzan para empezar.</strong> Los datos de la OMS y del Gobierno de Canadá, combinados con los reportes que los viajeros ya llevan, permitieron una política de selección clara y explicable.</li>
+          <li><strong>Las reglas simples y transparentes son un buen primer paso.</strong> Cada nivel de prioridad se puede explicar en una frase, algo importante en una decisión que afecta a personas en una frontera.</li>
+          <li><strong>El procesamiento automático de reportes es la base.</strong> Nada funciona hasta que los reportes en PDF se convierten en datos limpios y estructurados.</li>
+          <li><strong>La colaboración y la mentoría lo hicieron posible.</strong> La guía del profesor Ashish Gupta mantuvo el trabajo riguroso y enfocado.</li>
+        </ul>
+
+        <h2>Alcance y próximos pasos</h2>
+        <p>Como proyecto de un reto, el estudio se diseñó para demostrar el enfoque. Llevarlo más lejos implicaría:</p>
+        <ul>
+          <li>aplicar el método a un conjunto más grande de reportes reales de viajeros;</li>
+          <li>validar las reglas de prioridad contra resultados reales de las revisiones;</li>
+          <li>revisar, con expertos en equidad y en temas legales, qué atributos de los viajeros son apropiados para usar.</li>
+        </ul>
+
+        <h2>Cómo lo construiríamos con las herramientas de hoy</h2>
+        <p>Si empezáramos el proyecto en 2026, la misma idea llegaría mucho más lejos:</p>
+        <h3>Leer cualquier reporte, en cualquier formato o idioma</h3>
+        <p>Escribimos código en Python para extraer campos de reportes en PDF con un formato fijo. Hoy, los modelos de IA multimodales pueden leer PDF, fotos y escaneos en muchos idiomas y formatos, y devolver el tipo de prueba, la fecha, el resultado y el laboratorio como un JSON estructurado que sigue un esquema fijo, listo para validar. Explico ese patrón en <a class="link" href="/es/articulos/json-en-aplicaciones-de-ia/">JSON como contrato entre tus sistemas y la IA</a>.</p>
+        <h3>De reglas a un modelo probado</h3>
+        <p>Con datos reales de resultados, por ejemplo qué viajeros seleccionados dieron positivo al llegar, las reglas podrían convertirse en un modelo entrenado. Los árboles con gradient boosting, como XGBoost o LightGBM, son una opción sólida y explicable para este tipo de datos tabulares, y los valores SHAP muestran qué factores pesan en cada predicción, así que los oficiales seguirían recibiendo una razón con cada recomendación. El modelo se probaría con datos reservados y se compararía con la selección aleatoria antes de que alguien dependiera de él.</p>
+        <h3>Investigación más rápida con asistentes de IA</h3>
+        <p>Los asistentes de programación con IA acelerarían la limpieza de datos, la visualización y el código de los experimentos, el trabajo que llenó nuestros notebooks. Las preguntas de investigación, las decisiones de criterio y la verificación seguirían siendo nuestras.</p>
+        <h3>Equidad, privacidad y personas en el proceso</h3>
+        <ul>
+          <li><strong>Equidad:</strong> medir con qué frecuencia se selecciona a cada grupo, y preferir factores del viaje y de la prueba, como la antigüedad del reporte y la tasa de casos actual en el origen, antes que características personales, siempre que sea posible.</li>
+          <li><strong>Privacidad:</strong> tratar los resultados RT-PCR como datos de salud bajo la ley de privacidad canadiense: recoger lo mínimo, protegerlo y borrarlo cuando ya no se necesite.</li>
+          <li><strong>Decisiones humanas:</strong> el modelo prioriza, un oficial decide.</li>
+          <li><strong>Monitoreo:</strong> las tasas de casos y las variantes cambian cada semana, así que los niveles de riesgo y el modelo necesitan actualizaciones periódicas.</li>
+        </ul>
+
+        <h2>El artículo y el código</h2>
+        <dl class="facts-box">
+          <div><dt>Título del artículo</dt><dd>Eliminating Randomness in Selecting International Passengers for RT-PCR</dd></div>
+          <div><dt>Autores</dt><dd>Umid Ghimire, Dharmik Limbani, Erwin Mongui, Sairam Kilari (Lambton College)</dd></div>
+          <div><dt>Mentor</dt><dd>Profesor Ashish Gupta, Lambton College</dd></div>
+          <div><dt>Escrito para</dt><dd>STEM Fellowship National Inter-University Big Data and AI Challenge 2023 (artículo fechado el 11 de junio de 2023)</dd></div>
+          <div><dt>Publicado en</dt><dd>STEM Fellowship Journal, <em>Leveraging open data analytics and machine learning to improve diagnosis of diseases, patients' care, and support: Proceedings from the 2023 Inter-University Big Data and AI Challenge</em></dd></div>
+          <div><dt>DOI</dt><dd><a class="link" href="https://journal.stemfellowship.org/doi/abs/10.17975/sfj-2023-007" target="_blank" rel="noopener">10.17975/sfj-2023-007</a></dd></div>
+          <div><dt>Código</dt><dd><a class="link" href="https://github.com/gelnomo/ART.-National-Inter-University-Big-Data-And-AI-Challenge-2023" target="_blank" rel="noopener">Notebooks de Jupyter en GitHub</a>: visualización de datos de COVID-19, procesamiento de reportes RT-PCR y segmentación de viajeros</dd></div>
+        </dl>
+        <p>Agradecemos al profesor Gupta por su mentoría, y al STEM Fellowship por organizar el reto y darnos la oportunidad de contribuir.</p>
+        <p><em>Una primera versión de este artículo se publicó en inglés en <a class="link" href="https://www.linkedin.com/pulse/enhancing-international-passengers-selection-rt-pcr-erwin-mongui-yllle/" target="_blank" rel="noopener">LinkedIn</a>.</em></p>
+        <div class="author"><svg aria-hidden="true" viewBox="0 0 189 190"><path fill="#0071e3" d="__MARK__"/></svg><p><b>Erwin Mongui</b>Director de Tecnología en Cedar Planters e ingeniero certificado en Inteligencia Artificial (Lambton College, 2024), en Toronto.</p></div>
+      </div>
+      <aside class="aside"><div class="related"><h4>Relacionado</h4><a href="/es/articulos/json-en-aplicaciones-de-ia/">JSON como contrato entre tus sistemas y la IA</a><a href="/es/articulos/carreras-en-ia-para-recien-graduados/">Lo que necesitan los recién graduados para una carrera en IA</a><a href="/about/">Sobre mí (en inglés)</a></div></aside>
+    </div>
+  </section>

@@ -1,0 +1,87 @@
+<header class="doc-head stage-dark">
+    <nav class="crumbs" aria-label="Breadcrumb"><a href="/">Home</a><span>/</span><a href="/work/">Work</a><span>/</span><span>Lead distribution</span></nav>
+    <p class="eyebrow">Case study · Fincaraiz.com.co · B2B · 2021</p>
+    <h1>A lead distribution engine that connects to any CRM.</h1>
+    <p class="summary">At Fincaraiz I designed a central system that sends every buyer lead from the portal to the CRM of the real estate agency or property developer it belongs to. The first design failed because partners could not build against it, so we took the integration work on ourselves with a configurable Connector service. Partners went from weeks of integration to minutes, across six CRM platforms, and no lead was lost, even during outages.</p>
+    <div class="byline"><span>By Erwin Mongui</span><span>Published September 26, 2026</span><span>7 min read</span><a class="link" href="/es/casos/fincaraiz-distribucion-de-leads/" hreflang="es" lang="es">Leer en español</a></div>
+    <div class="kpi-row">
+      <div><b>100%</b><span>data parity between our reports and partner CRMs</span></div>
+      <div><b>0</b><span>leads lost during traffic spikes or CRM outages</span></div>
+      <div><b>Minutes</b><span>to onboard a new partner, down from weeks</span></div>
+      <div><b>6</b><span>CRM platforms connected, from Salesforce to custom-built</span></div>
+    </div>
+  </header>
+  <section class="doc">
+    <div class="doc-grid">
+      <div class="prose">
+        <h2>The problem</h2>
+        <p>Fincaraiz's business partners were real estate agencies and property developers. Every time a buyer contacted one of their listings, that lead had to reach the right partner quickly, inside whatever CRM the partner used: Salesforce, HubSpot, Zoho, Microsoft Dynamics, or a CRM the partner had built themselves. Each integration had been built one at a time.</p>
+        <p>A lead that arrived late, or not at all, was a lost sale for the partner and a reason to question what they were paying for.</p>
+
+        <h2>The first design</h2>
+        <p>In 2021 I designed a central lead distribution system with two ways to connect:</p>
+        <ul>
+          <li><strong>A GraphQL layer</strong>, so partners could ask for exactly the lead data they needed in one request.</li>
+          <li><strong>API subscriptions</strong>, so partners' systems were notified the moment a new lead arrived.</li>
+        </ul>
+        <p>The part I cared most about was reliability. I designed retry logic with exponential backoff: if a partner's CRM was down or slow, the system waited and tried again, with longer gaps each time, until the lead was delivered. No lead was dropped during traffic spikes or third-party outages.</p>
+
+        <h2>What went wrong</h2>
+        <p>Technically the subscription model worked. In practice, it did not scale, because most partners did not have engineering teams to build and maintain the other side of it. We had built a good solution that many customers could not use.</p>
+        <blockquote>The best technical solution is useless if the customer can't implement it.</blockquote>
+
+        <h2>The fix: we took on the complexity</h2>
+        <p>Instead of asking every partner to integrate with us, we built a central Connector service that integrated with them. It could talk to any CRM API, and our team configured each connection through a custom-built configuration screen, with no code on the partner's side.</p>
+        <figure class="flow" aria-label="How a lead reaches a partner CRM">
+          <p class="flow-cap">How a lead reaches a partner's CRM</p>
+          <div class="flow-row c1"><div class="node"><b>Buyer contacts a listing on Fincaraiz</b><span>A new lead is created</span></div></div>
+          <div class="arrow" aria-hidden="true"><svg viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round"><path d="M8 2v12M3 9l5 5 5-5"/></svg></div>
+          <div class="flow-row c1"><div class="node key"><b>Lead distribution engine</b><span>Works out which partner gets the lead, with GraphQL for data access and retries with exponential backoff</span></div></div>
+          <div class="arrow" aria-hidden="true"><svg viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round"><path d="M8 2v12M3 9l5 5 5-5"/></svg></div>
+          <div class="flow-row c1"><div class="node new"><b>Connector service</b><span>One configurable adapter per partner, set up in a configuration screen instead of code</span></div></div>
+          <div class="arrow" aria-hidden="true"><svg viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round"><path d="M8 2v12M3 9l5 5 5-5"/></svg></div>
+          <div class="flow-row c3">
+            <div class="node"><b>Salesforce and HubSpot</b><span>Partner CRMs</span></div>
+            <div class="node"><b>Zoho and Microsoft Dynamics</b><span>Partner CRMs</span></div>
+            <div class="node"><b>Custom CRMs</b><span>Built by the partners themselves</span></div>
+          </div>
+          <div class="arrow" aria-hidden="true"><svg viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round"><path d="M8 2v12M3 9l5 5 5-5"/></svg></div>
+          <div class="flow-row c1"><div class="node key"><b>Reconciliation</b><span>Every lead in our admin reports is checked against the partner's CRM record</span></div></div>
+        </figure>
+        <p>That change turned a delivery failure into a competitive advantage. A new partner went live in minutes instead of weeks, and sales could promise integrations without waiting on the partner's IT team.</p>
+
+        <h2>How we measured success</h2>
+        <p>I tracked two numbers above everything else:</p>
+        <ul>
+          <li><strong>Data parity.</strong> A strict reconciliation process compared our internal admin reports with the records in each partner's CRM. The target was a 100% match, and we held it.</li>
+          <li><strong>End-to-end latency.</strong> How long from a buyer's message to the lead appearing in the partner's CRM. For a sales team, minutes matter.</li>
+        </ul>
+
+        <h2>Leading the team</h2>
+        <ul>
+          <li><strong>I owned the blueprint, the team owned the adapters.</strong> I designed the multi-tenant requirements and the reconciliation logic. The team built the individual adapters for Salesforce, HubSpot, Zoho, Microsoft Dynamics and partners' custom CRMs.</li>
+          <li><strong>Client Success joined sprint reviews.</strong> Our Definition of Done changed from "the API works" to "the client can actually use it". That single change is what brought onboarding down from weeks to minutes.</li>
+          <li><strong>A junior engineer grew into the role.</strong> I asked a junior engineer who cared a lot about elegant code to own the configuration screen. Working directly with non-technical partners taught them to design for real constraints, and they grew into a mid-level role.</li>
+          <li><strong>A setback handled in the open.</strong> When the subscription model failed, we looked at the gap between our design and our clients' reality together, without blame, and the pivot came out of that conversation.</li>
+        </ul>
+
+        <h2>Lessons</h2>
+        <ul>
+          <li>Find out who has to implement the other side of your integration before you design it.</li>
+          <li>Retries with backoff and a reconciliation report are what make "no lead lost" something you can prove.</li>
+          <li>Invite the people who talk to customers into your sprint reviews.</li>
+        </ul>
+        <div class="author"><svg aria-hidden="true" viewBox="0 0 189 190"><path fill="#0071e3" d="M9.8 184.5C4.8 181.7 2.6 174.6 5.1 169.7C5.7 168.5 10.3 163.3 15.3 158.2L24.5 149.0L15.3 139.8C10.3 134.7 5.7 129.5 5.1 128.3C2.4 123.0 5.3 115.4 10.9 113.1C17.0 110.5 19.5 112.0 33.7 126.3C41.0 133.5 47.4 140.8 48.0 142.3C49.4 146.2 49.3 152.5 47.6 156.3C46.8 158.1 40.4 165.3 33.3 172.3C21.9 183.6 19.9 185.2 16.4 185.6C14.0 185.9 11.5 185.4 9.8 184.5ZM70.7 158.0C65.1 153.6 65.1 144.4 70.7 140.0C73.0 138.2 74.7 138.0 89.6 138.0C107.4 138.0 110.2 138.6 112.6 143.1C115.5 148.8 113.5 156.5 108.5 158.8C106.8 159.6 100.1 160.0 89.6 160.0C74.7 160.0 73.0 159.8 70.7 158.0ZM136.9 158.6C135.4 157.7 133.5 155.4 132.5 153.4C131.1 150.3 131.0 149.1 131.9 145.9C133.5 140.5 137.1 138.0 143.4 138.0C153.7 138.0 160.3 134.0 161.9 126.9C162.3 125.0 162.3 113.4 161.9 101.0C160.7 67.7 157.5 46.5 151.4 32.9L148.7 27.0L145.2 29.0C138.8 32.8 133.0 38.2 129.2 44.0L125.3 49.8L122.4 48.0C109.4 39.8 87.5 39.6 73.2 47.5L69.0 49.9L67.1 46.1C65.0 42.0 54.3 31.6 49.1 28.7L46.0 26.9L43.0 33.2C39.2 41.3 36.3 54.6 34.4 72.4C32.7 89.3 32.7 89.3 28.9 92.5C24.3 96.3 18.8 96.0 14.4 91.6C11.2 88.4 11.0 87.8 11.0 81.2C11.0 63.5 16.4 36.0 22.4 23.5C28.7 10.1 35.8 4.6 46.6 4.6C53.6 4.6 60.0 7.7 70.7 16.2L77.0 21.1L82.5 20.0C89.6 18.5 105.5 18.5 112.5 20.0L117.9 21.1L124.2 16.1C138.1 4.8 148.3 2.1 158.3 6.9C174.9 15.0 184.2 50.4 184.4 107.0C184.5 137.6 184.3 138.6 174.9 148.5C167.2 156.6 160.9 159.4 149.0 159.7C142.0 160.0 138.8 159.6 136.9 158.6ZM64.3 102.5C62.6 101.8 60.4 99.8 59.6 98.1C55.5 90.3 59.6 82.2 68.3 81.3C72.6 80.8 73.2 81.0 76.5 84.3C79.4 87.2 80.0 88.5 80.0 92.2C80.0 97.4 77.9 100.7 73.4 102.6C69.3 104.3 68.4 104.3 64.3 102.5ZM121.3 102.5C117.0 100.7 114.5 96.6 114.6 91.6C114.7 88.4 115.4 87.0 118.4 84.3C120.8 82.1 123.0 81.0 125.0 81.0C137.3 81.0 141.5 97.2 130.6 102.4C126.5 104.3 125.5 104.3 121.3 102.5Z"/></svg><p><b>Erwin Mongui</b>Director of Technology at Cedar Planters and Certified AI Engineer, based in Toronto. 18+ years building customer-facing platforms and the teams that run them. <a class="link" href="/about/">More about me</a></p></div>
+      </div>
+      <aside class="aside">
+        <dl class="facts-box">
+          <div><dt>Company</dt><dd>Fincaraiz.com.co</dd></div>
+          <div><dt>My role</dt><dd>Software Architect</dd></div>
+          <div><dt>When</dt><dd>2021</dd></div>
+          <div><dt>Users</dt><dd>Real estate agencies and property developers (B2B)</dd></div>
+          <div><dt>Stack</dt><dd><div class="chips" style="margin-top:6px"><span class="chip" style="border-color:var(--line-light);color:var(--ink)">GraphQL</span><span class="chip" style="border-color:var(--line-light);color:var(--ink)">API subscriptions</span><span class="chip" style="border-color:var(--line-light);color:var(--ink)">Salesforce</span><span class="chip" style="border-color:var(--line-light);color:var(--ink)">HubSpot</span><span class="chip" style="border-color:var(--line-light);color:var(--ink)">Zoho</span><span class="chip" style="border-color:var(--line-light);color:var(--ink)">Microsoft Dynamics</span></div></dd></div>
+        </dl>
+        <div class="related"><h4>Related</h4><a href="/work/fincaraiz-monolith-to-microservices/">Case study: monolith to microservices</a><a href="/writing/engineering-team-health-metrics/">How I measure engineering team health</a></div>
+      </aside>
+    </div>
+  </section>
