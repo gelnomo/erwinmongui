@@ -30,10 +30,18 @@
       </div>
     </div>
 
-    <p class="nf-contact">Still can't find it? Email <a class="link" href="mailto:erwinmongui@gmail.com">erwinmongui@gmail.com</a> · <span lang="es">¿No la encuentras? Escríbeme.</span></p>
+    <div class="nf-contact">
+      <p><span class="nf-contact-en">Still can't find it? Write to me.</span> <span class="nf-contact-es" lang="es">¿No la encuentras? Escríbeme.</span></p>
+      <div class="btns">
+        <a class="btn btn-primary" href="mailto:erwinmongui@gmail.com"><span class="nf-contact-en">Email</span><span class="nf-contact-es" lang="es">Correo</span></a>
+        <a class="btn btn-ghost" href="https://www.linkedin.com/in/erwin-mongui/" target="_blank" rel="noopener"><span class="nf-contact-en">LinkedIn profile</span><span class="nf-contact-es" lang="es">Perfil de LinkedIn</span></a>
+      </div>
+    </div>
   </div>
 </section>
 
+<template id="nf-es-header">__ES_HEADER__</template>
+<template id="nf-es-footer">__ES_FOOTER__</template>
 <script type="application/json" id="nf-pages">__PAGES__</script>
 <script>
 (function () {
@@ -56,26 +64,22 @@
     var h2en = document.createElement('h2');
     h2en.textContent = h1en.textContent; h1en.replaceWith(h2en);
 
-    // Spanish navigation and footer.
-    function links(el, items) {
-      if (!el) return;
-      while (el.firstChild) el.removeChild(el.firstChild);
-      items.forEach(function (it) { var x = document.createElement('a'); x.href = it[1]; x.textContent = it[0]; el.appendChild(x); });
-    }
-    links(document.getElementById('nav-links'), [['Casos', '/es/#casos'], ['Artículos', '/es/articulos/'], ['Sobre mí', '/about/']]);
-    var brand = document.querySelector('.brand'); if (brand) brand.href = '/es/';
-    var sw = document.querySelector('.nav .lang'); if (sw) { sw.href = '/'; sw.textContent = 'English'; sw.lang = 'en'; sw.hreflang = 'en'; }
-    var cta = document.querySelector('.nav-cta'); if (cta) { cta.href = '/es/#contacto'; cta.textContent = 'Contacto'; }
-    document.addEventListener('DOMContentLoaded', function () {
-      var fnav = document.querySelector('.foot nav');
-      if (!fnav) return;
-      var keep = Array.prototype.slice.call(fnav.querySelectorAll('a[target="_blank"]'));
-      links(fnav, [['Casos', '/es/#casos'], ['Artículos', '/es/articulos/'], ['Sobre mí', '/about/'], ['English', '/']]);
-      keep.forEach(function (k) {
-        if (k.href.indexOf('preferences/source') !== -1) k.textContent = 'Agregar como fuente preferida en Google';
-        fnav.appendChild(k);
-      });
+    // Spanish header, footer and contact labels.
+    ['header', 'footer'].forEach(function (part) {
+      var tpl = document.getElementById('nf-es-' + part);
+      var cur = document.querySelector(part === 'header' ? 'header.nav' : 'footer.foot');
+      if (tpl) {
+        if (part === 'footer') {
+          document.addEventListener('DOMContentLoaded', function () {
+            var f = document.querySelector('footer.foot');
+            if (f) f.replaceWith(tpl.content.cloneNode(true));
+          });
+        } else if (cur) {
+          cur.replaceWith(tpl.content.cloneNode(true));
+        }
+      }
     });
+    document.documentElement.classList.add('nf-es');
   }
 
   // Suggest the closest real pages, based on the words in the address.

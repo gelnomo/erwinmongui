@@ -50,14 +50,18 @@ HOME = {"key": "home", "url": "/", "lang": "en", "headline": "Erwin Mongui", "mo
 MARK_PATH = (ROOT / "src" / "mark.path").read_text().strip()
 
 TEXT = {
-    "en": {"nav": [("Work", "/work/", "work"), ("Writing", "/writing/", "writing"), ("About", "/about/", "about")],
-           "contact": ("Contact", "/#contact"), "switch": ("Español", "es"), "skip": "Skip to content",
-           "rights": "All rights reserved.", "pref": "Add as a preferred source on Google", "nav_label": "Main",
-           "footer_links": '<a href="/work/">Work</a><a href="/writing/">Writing</a><a href="/about/">About</a><a href="/es/" lang="es" hreflang="es">Español</a>'},
-    "es": {"nav": [("Casos", "/es/#casos", "es"), ("Artículos", "/es/articulos/", "es-writing"), ("Sobre mí", "/about/", "about")],
-           "contact": ("Contacto", "/es/#contacto"), "switch": ("English", "en"), "skip": "Ir al contenido",
-           "rights": "Todos los derechos reservados.", "pref": "Agregar como fuente preferida en Google", "nav_label": "Principal",
-           "footer_links": '<a href="/es/#casos">Casos</a><a href="/es/articulos/">Artículos</a><a href="/about/">Sobre mí</a><a href="/" lang="en" hreflang="en">English</a>'},
+    "en": {"home": "/", "contact": ("Contact", "/#contact"), "switch": ("Español", "es"), "skip": "Skip to content",
+           "rights": "All rights reserved.", "pref": "Add as a preferred source on Google", "nav_label": "Sections",
+           "menu": "Open menu",
+           "nav": [("About", "/about/"), ("Experience", "/#experience"), ("Impact", "/#impact"), ("AI", "/#ai"),
+                   ("Skills", "/#skills"), ("Case studies", "/work/"), ("Writing", "/writing/"), ("Quick facts", "/#facts")],
+           "footer": [("Case studies", "/work/"), ("Writing", "/writing/"), ("About", "/about/")]},
+    "es": {"home": "/es/", "contact": ("Contacto", "/es/#contacto"), "switch": ("English", "en"), "skip": "Ir al contenido",
+           "rights": "Todos los derechos reservados.", "pref": "Agregar como fuente preferida en Google", "nav_label": "Secciones",
+           "menu": "Abrir menú",
+           "nav": [("Sobre mí", "/about/"), ("Experiencia", "/es/#experience"), ("Impacto", "/es/#impact"), ("IA", "/es/#ai"),
+                   ("Habilidades", "/es/#skills"), ("Casos", "/es/#casos"), ("Artículos", "/es/articulos/"), ("Preguntas", "/es/#facts")],
+           "footer": [("Casos", "/es/#casos"), ("Artículos", "/es/articulos/"), ("Sobre mí", "/about/")]},
 }
 LOCALE = {"en": "en_CA", "es": "es_CO"}
 
@@ -208,6 +212,7 @@ def head(p, by_key):
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 <link href="https://fonts.googleapis.com/css2?family=Manrope:wght@400;500;600;700;800&display=swap" rel="stylesheet">
 <link rel="stylesheet" href="/assets/site.css">
+<link rel="stylesheet" href="/assets/chrome.css">
 <script type="application/ld+json">
 {jsonld(p, by_key)}
 </script>
@@ -236,60 +241,87 @@ def feed_link(p):
     return f'<link rel="alternate" type="application/rss+xml" title="Erwin Mongui: case studies and writing" href="{SITE}/feed.xml">'
 
 
-def nav(p, by_key):
-    t = TEXT[p["lang"]]
-    home = "/es/" if p["lang"] == "es" else "/"
+MENU_ICONS = ('<svg class="bars" width="18" height="18" viewBox="0 0 18 18" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round"><path d="M2 5h14M2 9h14M2 13h14"/></svg>\n'
+              '        <svg class="x" width="18" height="18" viewBox="0 0 18 18" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round"><path d="M4 4l10 10M14 4L4 14"/></svg>')
+
+
+def site_header(lang, url, switch_href, is_home=False):
+    """The one header every page uses, homepage included. On a homepage, links to
+    its own sections become plain #anchors so they scroll instead of reloading."""
+    t = TEXT[lang]
+    home = t["home"]
+    def local(href):
+        return href[len(home):] if is_home and href.startswith(home + "#") else href
     links = []
-    for label, href, key in t["nav"]:
-        current = key == p["key"] or (key == "work" and p["url"].startswith("/work/")) or \
-                  (key == "writing" and p["url"].startswith("/writing/")) or \
-                  (key == "es-writing" and p["url"].startswith("/es/articulos/")) or \
-                  (key == "es" and p["url"].startswith("/es/casos/"))
+    for label, href in t["nav"]:
+        current = not is_home and "#" not in href and url.startswith(href)
+        if href == "/es/#casos" and url.startswith("/es/casos/"):
+            current = True
         cur = ' aria-current="page"' if current else ""
-        links.append(f'<a href="{href}"{cur}>{label}</a>')
-    label, other_lang = t["switch"]
-    alt = by_key.get(p.get("alternate", ""))
-    switch_href = alt["url"] if alt else ("/" if other_lang == "en" else "/es/")
-    return f"""<a class="skip" href="#main">{t["skip"]}</a>
-<header class="nav" id="nav">
+        links.append(f'<a href="{local(href)}"{cur}>{label}</a>')
+    label, other = t["switch"]
+    brand = "#top" if is_home else home
+    return f"""<header class="nav" id="nav">
   <div class="nav-inner">
-    <a class="brand" href="{home}"><svg aria-hidden="true" viewBox="0 0 189 190"><path fill="#81ffd9" d="{MARK_PATH}"/></svg><span>Erwin Mongui</span></a>
+    <a class="brand" href="{brand}"><svg aria-hidden="true" focusable="false" viewBox="0 0 189 190"><path fill="#81ffd9" d="{MARK_PATH}"/></svg><span>Erwin Mongui</span></a>
     <nav class="nav-links" id="nav-links" aria-label="{t["nav_label"]}">
-      {"".join(links)}
+      {chr(10).join("      " + l if i else l for i, l in enumerate(links))}
     </nav>
     <div class="nav-right">
-      <a class="lang" href="{switch_href}" hreflang="{other_lang}" lang="{other_lang}">{label}</a>
-      <a class="nav-cta" href="{t["contact"][1]}">{t["contact"][0]}</a>
+      <a class="nav-lang" href="{switch_href}" hreflang="{other}" lang="{other}">{label}</a>
+      <a class="nav-cta" href="{local(t["contact"][1])}">{t["contact"][0]}</a>
+      <button class="menu-btn" id="menu-btn" aria-label="{t["menu"]}" aria-expanded="false" aria-controls="nav-links">
+        {MENU_ICONS}
+      </button>
     </div>
   </div>
 </header>"""
 
 
-def footer(p):
-    t = TEXT[p["lang"]]
+def site_footer(lang, switch_href, is_home=False):
+    """The one footer every page uses, homepage included."""
+    t = TEXT[lang]
+    home = t["home"]
+    def local(href):
+        return href[len(home):] if is_home and href.startswith(home + "#") else href
+    label, other = t["switch"]
+    links = [f'<a href="{local(h)}">{n}</a>' for n, h in t["footer"]]
+    links.append(f'<a href="{switch_href}" lang="{other}" hreflang="{other}">{label}</a>')
+    links.append(f'<a href="https://www.google.com/preferences/source?q=erwinmongui.com" target="_blank" rel="noopener">{t["pref"]}</a>')
+    links.append(f'<a href="{LINKEDIN}" target="_blank" rel="noopener">LinkedIn</a>')
     return f"""<footer class="foot">
   <div class="foot-inner">
-    <p>&copy; {date.today().year} Erwin Mongui. {t["rights"]}</p>
-    <nav aria-label="Footer">
-      {t["footer_links"]}
-      <a href="{LINKEDIN}" target="_blank" rel="noopener">LinkedIn</a>
-      <a href="https://www.google.com/preferences/source?q=erwinmongui.com" target="_blank" rel="noopener">{t["pref"]}</a>
-    </nav>
+    <p class="foot-brand"><svg aria-hidden="true" focusable="false" viewBox="0 0 189 190"><path fill="#81ffd9" d="{MARK_PATH}"/></svg><span>Erwin Mongui, Toronto</span></p>
+    <p class="foot-copy">&copy; {date.today().year} Erwin Mongui. {t["rights"]}</p>
+    <p>{" &middot; ".join(links)}</p>
   </div>
 </footer>"""
 
 
-COPY_SCRIPT = """<script>
-document.addEventListener('click', function (e) {
-  var b = e.target.closest && e.target.closest('[data-copy]');
-  if (!b || !navigator.clipboard) return;
-  var label = b.textContent;
-  navigator.clipboard.writeText(b.getAttribute('data-copy')).then(function () {
-    b.textContent = document.documentElement.lang === 'es' ? 'Copiado' : 'Copied';
-    setTimeout(function () { b.textContent = label; }, 1600);
-  });
-});
-</script>"""
+def switch_for(p, by_key):
+    alt = by_key.get(p.get("alternate", ""))
+    return alt["url"] if alt else ("/" if p["lang"] == "es" else "/es/")
+
+
+def nav(p, by_key):
+    return f'<a class="skip" href="#main">{TEXT[p["lang"]]["skip"]}</a>\n' + site_header(p["lang"], p["url"], switch_for(p, by_key))
+
+
+def footer(p, by_key):
+    return site_footer(p["lang"], switch_for(p, by_key))
+
+
+def inject(page, name, content):
+    """Puts the shared header or footer between <!-- site-NAME --> markers.
+    The first time, it wraps the page's existing <header class="nav"> or <footer class="foot">."""
+    start, end = f"<!-- site-{name} -->", f"<!-- /site-{name} -->"
+    block = f"{start}\n{content}\n{end}"
+    if start in page:
+        a, b = page.index(start), page.index(end) + len(end)
+        return page[:a] + block + page[b:]
+    tag = {"header": ('<header class="nav" id="nav">', "</header>"), "footer": ('<footer class="foot">', "</footer>")}[name]
+    a = page.index(tag[0]); b = page.index(tag[1], a) + len(tag[1])
+    return page[:a] + block + page[b:]
 
 
 def render(p, by_key):
@@ -299,13 +331,13 @@ def render(p, by_key):
 <head>
 {head(p, by_key)}
 </head>
-<body>
+<body class="chrome-sticky">
 {nav(p, by_key)}
 <main id="main">
 {body}
 </main>
-{footer(p)}
-{COPY_SCRIPT}
+{footer(p, by_key)}
+<script defer src="/assets/chrome.js"></script>
 </body>
 </html>
 """
@@ -348,6 +380,8 @@ def render_home_es():
                          "mainEntity": [{"@type": "Question", "name": strip(q),
                                          "acceptedAnswer": {"@type": "Answer", "text": strip(a)}} for q, a in facts]})
     out = out.replace("__JSONLD__", json.dumps(data, ensure_ascii=False, indent=2))
+    out = inject(out, "header", site_header("es", "/es/", "/", is_home=True))
+    out = inject(out, "footer", site_footer("es", "/", is_home=True))
     return out, missing
 
 
@@ -359,7 +393,9 @@ def render_404(pages, by_key):
     index = [{"url": p["url"], "title": p["headline"], "lang": p["lang"]} for p in [HOME] + pages]
     body = ((SRC / "content" / "404.html").read_text()
             .replace("__MARK__", MARK_PATH)
-            .replace("__PAGES__", json.dumps(index, ensure_ascii=False).replace("</", "<\\/")))
+            .replace("__PAGES__", json.dumps(index, ensure_ascii=False).replace("</", "<\\/"))
+            .replace("__ES_HEADER__", site_header("es", "/404.html", "/"))
+            .replace("__ES_FOOTER__", site_footer("es", "/")))
     p = {"key": "404", "lang": "en", "url": "/404.html"}
     return f"""<!DOCTYPE html>
 <html lang="en">
@@ -376,6 +412,7 @@ def render_404(pages, by_key):
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 <link href="https://fonts.googleapis.com/css2?family=Manrope:wght@400;500;600;700;800&display=swap" rel="stylesheet">
 <link rel="stylesheet" href="/assets/site.css">
+<link rel="stylesheet" href="/assets/chrome.css">
 <!-- Google tag (gtag.js) -->
 <script async src="https://www.googletagmanager.com/gtag/js?id=G-LKD2WCNDV1"></script>
 <script>
@@ -394,12 +431,13 @@ def render_404(pages, by_key):
 </script>
 <script defer src="/analytics.js"></script>
 </head>
-<body>
+<body class="chrome-sticky">
 {nav(p, by_key)}
 <main id="main">
 {body}
 </main>
-{footer(p)}
+{footer(p, by_key)}
+<script defer src="/assets/chrome.js"></script>
 </body>
 </html>
 """
@@ -601,6 +639,11 @@ def main():
         out.parent.mkdir(parents=True, exist_ok=True)
         out.write_text(render(p, by_key))
         print("wrote", out.relative_to(ROOT))
+    index = (ROOT / "index.html").read_text()
+    index = inject(index, "header", site_header("en", "/", "/es/", is_home=True))
+    index = inject(index, "footer", site_footer("en", "/es/", is_home=True))
+    (ROOT / "index.html").write_text(index)
+    print("updated the header and footer in index.html")
     es_home, missing = render_home_es()
     (ROOT / "es" / "index.html").write_text(es_home)
     print("wrote es/index.html (translated homepage)")

@@ -2,6 +2,21 @@
 
 Notable changes to erwinmongui.com. Each version has a `## vX.Y.Z` heading; pushing a matching tag, or running the Release workflow from the Actions tab with that version, publishes the section as a GitHub release (see `.github/workflows/release.yml`).
 
+## v1.2.0 (2026-09-26)
+
+### One header and one footer everywhere
+
+- Every page now uses the same header and footer, written by `src/build.py` and styled by the new `assets/chrome.css`: the homepage, the inner pages, the Spanish pages and the 404 page. The build writes them into `index.html` between `<!-- site-header -->` and `<!-- site-footer -->` markers.
+- The header links are the same on every page: About, Experience, Impact, AI, Skills, Case studies, Writing and Quick facts, plus the language switch and Contact. On the homepages they scroll to the section; elsewhere they open it.
+- The mobile menu button now works on every page (`assets/chrome.js` for the inner pages).
+
+### Email address
+
+- The email address no longer appears as text anywhere. Visitors reach it through the Email button, which links to it.
+- The 404 page shows Email and LinkedIn buttons instead of the address.
+- `llms.txt` points to the contact section.
+- The hidden `email` field is removed from the structured data.
+
 ## v1.1.0 (2026-09-26)
 
 ### Spanish homepage
