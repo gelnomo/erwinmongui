@@ -1,6 +1,6 @@
 # Changelog
 
-Notable changes to erwinmongui.com. Each version has a `## vX.Y.Z` heading; pushing a matching tag publishes that section as a GitHub release (see `.github/workflows/release.yml`).
+Notable changes to erwinmongui.com. Each version has a `## vX.Y.Z` heading; pushing a matching tag, or running the Release workflow from the Actions tab with that version, publishes the section as a GitHub release (see `.github/workflows/release.yml`).
 
 ## v1.0.0 (2026-09-26)
 
