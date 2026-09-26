@@ -1,0 +1,1366 @@
+# Erwin Mongui
+
+> Erwin Mongui is a software engineering leader based in Toronto, Ontario, Canada. He is the Director of Technology and Software Engineering Manager at Cedar Planters in Oakville, Ontario, and a Certified Artificial Intelligence Engineer (Lambton College, 2024). He has 18+ years of experience (since 2010) building customer-facing platforms, owning architecture end to end, and leading engineering teams.
+
+Canonical profile: https://erwinmongui.com/
+LinkedIn: https://www.linkedin.com/in/erwin-mongui/
+Email: erwinmongui@gmail.com
+
+## Current role
+
+- Director of Technology and Software Engineering Manager, Cedar Planters, Oakville, Ontario (January 2024 to present). Cedar Planters is a Canadian e-commerce company that makes modular planters.
+- Joined as the first technical hire and built the technology department from zero: CI/CD, security practices, Agile workflows and a team of three.
+- Built the company's data platform, replacing third-party reporting tools and spreadsheets with central, standard reporting. The time to produce a new report fell from months to days, and to hours with AI-assisted development and analysis.
+- Leads cross-functional teams building scalable applications and owns the full lifecycle from requirements to deployment.
+- Redesigned the data models behind analytical and operational workloads, making retrieval and analysis 20% faster.
+- Runs continuous website improvement through A/B testing and third-party API integrations, and keeps tracking, security and dependencies current.
+
+## Earlier roles
+
+- CTO and Software Engineering Team Lead, Fincaraiz.com.co (Adevinta group), Bogotá, Colombia, May 2019 to November 2022. Led a team of 30 through the migration of a legacy ASP.NET monolith to Django and React microservices on Kubernetes, using the strangler fig pattern in four tiers (platform; Kong API gateway and Keycloak identity; PostgreSQL and Elasticsearch data with AWS Lambda sync; domain services), for a real estate portal with 5M+ monthly visits and zero downtime. The migration cut hosting and maintenance costs by 50% and rebuilt search with natural language understanding and geographic polygons that resolve local neighbourhood nicknames to official boundaries; launched 15+ REST APIs on a Python and Django microservice backend, reducing latency by 25%; built Jenkins CI/CD pipelines; hired and grew backend and platform engineers.
+- Software Architect for Fincaraiz's B2B lead distribution system (2021): a central engine with GraphQL, retries with exponential backoff and a configurable Connector service that delivers buyer leads to the CRMs of real estate agencies and property developers (Salesforce, HubSpot, Zoho, Microsoft Dynamics and custom CRMs), with 100% data parity and partner onboarding in minutes instead of weeks.
+- Lead Software Engineer, Fincaraiz.com.co, Bogotá, July 2015 to July 2018. Led the rebuild of the core customer-facing website (+25% user engagement), automated 70% of manual operational work, introduced Docker and Kubernetes and Agile practices.
+- Senior Software Engineer, Periferia IT, Bogotá, May 2013 to June 2015. Consulted for Old Mutual (payment microservice on .NET MVC, +50% sales in year one) and Editorial Legis (ASP.NET REST APIs, +40% content management efficiency).
+- Junior Software Engineer, Americas BPS for Hewlett Packard Enterprise, Bogotá, February 2010 to June 2012. C# and .NET applications.
+
+## Education and credentials
+
+- Certified Artificial Intelligence Engineer, Lambton College, Toronto, August 2024.
+- Bachelor of Computer Engineering, Fundación Universitaria Los Libertadores, Bogotá, October 2013.
+- Scrum Master Certified (SMC), SCRUMstudy, 2016.
+- Continuing education certificates in machine learning, NLP, software architecture, microservices, REST API design, Elasticsearch, Redis, RabbitMQ, Amazon S3, Django with GraphQL, and fintech (Udemy, LinkedIn Learning, Refactoring.Guru), 2021 to 2024.
+
+## Expertise
+
+- Engineering leadership: technical strategy, architecture ownership, hiring and onboarding, mentorship, performance management, technical debt roadmaps, metrics-driven prioritization.
+- Backend and architecture: Python, Django, Django-Celery, C#, .NET, Node.js, REST APIs, microservices, RabbitMQ.
+- Machine learning and AI: TensorFlow, PyTorch, Pandas, NumPy, Matplotlib; AI-assisted development with Cursor and Windsurf.
+- Cloud and DevOps: AWS, Docker, Kubernetes, Jenkins, Spinnaker, CI/CD.
+- Data and search: PostgreSQL, MySQL, SQL Server, Oracle, DB2, MongoDB, Redis, Elasticsearch, OpenSearch, Apache Solr, Apache NiFi.
+- Frontend: React, TypeScript, JavaScript, A/B testing, web performance.
+
+## Recognition
+
+- Adevinta Culture Awards 2019 finalist, while CTO at Fincaraiz.com.co.
+
+## Languages
+
+- Spanish (native), English (proficient).
+
+## Research
+
+- Co-author, "Eliminating Randomness in Selecting International Passengers for RT-PCR" (Umid Ghimire, Dharmik Limbani, Erwin Mongui, Sairam Kilari; Lambton College), STEM Fellowship Big Data and AI Challenge 2023, published in the STEM Fellowship Journal proceedings, doi:10.17975/sfj-2023-007. The study used WHO and Government of Canada COVID-19 data and traveller RT-PCR reports to replace random selection at Toronto Pearson International Airport with priority groups.
+
+This file contains the full text of every case study and article on erwinmongui.com. Spanish translations of the case studies are available under https://erwinmongui.com/es/.
+
+---
+
+URL: https://erwinmongui.com/work/fincaraiz-monolith-to-microservices/
+Published 2026-09-23
+
+Case study · Fincaraiz.com.co · 2019 to 2022
+
+# Monolith to microservices, without stopping a 5M-visit platform.
+
+As CTO of Fincaraiz.com.co, one of Colombia's leading real estate portals, I led the move from a legacy ASP.NET monolith to Django and React microservices on Kubernetes. We migrated in four tiers behind a Kong API gateway, kept old and new data in sync with AWS Lambda, and rebuilt search so it understands how people really describe places. The platform never went down, stayed as fast as before, and hosting and maintenance costs fell by 50%.
+
+- 50%: lower hosting and maintenance cost
+
+- 100%: availability through the migration, for 5M+ monthly visits
+
+- <3s: Largest Contentful Paint, same as legacy
+
+- 30 min: listing publication time, kept through the switch
+
+## The situation
+
+Fincaraiz.com.co is one of Colombia's leading real estate portals, part of the Adevinta group at the time. More than 5 million people visited it every month to search for lots, apartments, houses and commercial property, and agents published and updated listings on it every day.
+
+All of that ran on a legacy ASP.NET monolith, served by Windows IIS on VM-based Amazon EC2 instances, with Microsoft SQL Server for data and Apache Solr for search. Four problems had built up:
+
+- A monolith that was hard to change. Everything was tightly coupled, so every deployment carried risk for the whole site, and servers were patched by hand.
+
+- High running costs. Virtual machines and Microsoft licenses made hosting and maintenance expensive.
+
+- Search that matched keywords, not intent. The Solr setup couldn't handle the variety of real estate searches well, across very different property types.
+
+- Coarse location matching. People search with informal neighborhood names, local nicknames and conversational phrases. The search engine missed most of them.
+
+And one constraint above all: the site had to keep running. No downtime, no data inconsistencies, no latency spikes, and no drop in search rankings.
+
+## The goal
+
+- Replace the monolith with Django and React services the team could change and deploy independently.
+
+- Move off licensed software and hand-managed servers to cut costs.
+
+- Keep the site up the whole time, for users and for agents.
+
+- Keep Core Web Vitals at or better than the legacy site, and keep listing publication at its 30-minute benchmark.
+
+- Make search understand what people mean, including how they name places.
+
+## The approach: four tiers, one layer at a time
+
+A big-bang rewrite was never an option. I used the strangler fig pattern: build the new system around the old one, move traffic over piece by piece, and retire the monolith once nothing depends on it. To make that manageable, I split the work into four tiers, each one making the next possible.
+
+Tier | Before | After
+
+1. Platform | VM-based EC2, Windows IIS, manual patching | Docker containers on Kubernetes, NGINX, automated CI/CD
+
+2. Edge and identity | Traffic straight into the monolith | Kong API Gateway routing every request, Keycloak for identity and access
+
+3. Data and search | Microsoft SQL Server, Apache Solr | PostgreSQL for transactions, Elasticsearch for search, Lambda keeping both worlds in sync
+
+4. Services and frontend | One ASP.NET codebase | Django services split by business domain, React frontend
+
+Architecture during the migration
+
+- Users and agents: 5M+ visits a month
+
+- Kong API Gateway: Tier 2: sends each route to the old or new system
+
+- Keycloak: Tier 2: one identity and access layer for both
+
+- Legacy ASP.NET monolith: IIS on EC2, SQL Server and Solr. Retired piece by piece
+
+- AWS Lambda sync: Tier 3: event-driven, keeps both datastores identical
+
+- Django services and React: Tier 4: take over one domain at a time
+
+- PostgreSQL: Tier 3: transactions and data integrity
+
+- Elasticsearch: Tier 3: search, with NLP and geographic polygons
+
+- Celery and RabbitMQ: High-volume listing publication
+
+- Kubernetes, Docker, NGINX and CI/CD on AWS: Tier 1: the platform everything new runs on
+
+LegacyNewMigration glue
+
+### Tier 1: a platform for the new system
+
+Before moving any code, the new services needed somewhere to run. We replaced hand-managed EC2 virtual machines with Docker containers orchestrated by Kubernetes, swapped Windows IIS for NGINX as the web server and reverse proxy, and put automated CI/CD pipelines in front of every deployment. Shipping went from a risky manual event to a routine one, and the new stack used fewer resources for more traffic.
+
+### Tier 2: one front door, one identity
+
+Next, we put Kong API Gateway in front of both systems. From then on, every request went through one place that decided whether the old or the new system answered it. That let us move traffic route by route, and send a route back to the old system if something looked wrong. Keycloak gave both systems one shared identity and access layer.
+
+### Tier 3: data and search, kept in sync
+
+We moved transactional data from Microsoft SQL Server to PostgreSQL, which improved integrity and performance and removed the license cost. Search moved from Apache Solr to Elasticsearch, built for fast, high-volume reads. PostgreSQL handled what had to be correct; Elasticsearch handled what had to be fast.
+
+The hardest part was running two systems at once. Event-driven AWS Lambda functions copied every change between the legacy and new datastores in real time, so the two never disagreed while services were cut over one by one. A listing published on either side still appeared within the same 30-minute window as before.
+
+### Tier 4: services by domain, and a new frontend
+
+With the platform, the gateway and the data in place, we split the monolith into Django services, one per business domain, with a React frontend. Each service took over its part of the site behind Kong, one domain at a time. Heavy work like publishing listings at high volume moved to background tasks with Celery and RabbitMQ, so a spike of agent uploads no longer slowed the site down for everyone else.
+
+## Search that understands how people describe places
+
+Moving search to Elasticsearch was also a chance to make it smarter. This was early AI work, years before the current wave of generative AI.
+
+- Natural language queries. We added natural language understanding, so the search could read intent from a conversational query, for example a property type, a size and a place in one sentence, instead of needing filters.
+
+- A map of the whole country. We acquired cartographic and street-network data for Colombia: cities, municipalities, neighborhoods and local landmarks.
+
+- Official names and local nicknames. We mapped official place names alongside the informal names and aliases people actually use, and turned boundaries and areas of interest into geographic polygons and vectors inside Elasticsearch.
+
+For example, many people in Bogotá call one area "Zona T", but no official map uses that name. This is how the search resolved it:
+
+Example: from a local nickname to an official neighbourhood
+
+- User search: "apartamentos en Zona T" (apartments in Zona T)
+
+- Candidate matches: Zona T · Zona Rosa · El Retiro · Chapinero · nearby landmarks
+
+- Normalization: Nickname and aliases resolved against the official polygons
+
+- Official neighbourhood: EL RETIRO: Code 008310 · Locality: CHAPINERO
+
+- Property results: Listings inside that exact boundary
+
+Search moved from matching keywords to understanding places.
+
+## What went wrong: single sign-on
+
+Not every decision worked. Keycloak was the right idea, one identity layer for both systems, but it was new to the team and built on Java, which was outside our core skills. We hit integration problems we had not planned for, and gaps in the documentation made them slow to solve. That part of the project took six times longer than estimated.
+
+> For mission-critical tools, the team's familiarity and the support around the tool matter as much as its features.
+
+We ran an open lessons-learned session instead of looking for someone to blame, and we added a vetting step for mission-critical tools: does the team know the stack, how good are the docs and community, and who do we call when it breaks? I wrote about that checklist in Pick the tool your team can support.
+
+## Leading 30 engineers through it
+
+I led a team of 30 during the migration. A few things made the difference:
+
+- Ownership for seniors. I designed the high-level architecture and gave senior engineers full ownership of implementing it. That grew our leadership capacity from inside the team, and kept me from becoming a bottleneck.
+
+- Scrum across departments. We rolled out Scrum beyond engineering and agreed on one Definition of Done and one format for sprint reviews, so product, engineering and the business saw the same progress.
+
+- Getting hands-on when it mattered. When the new stack overwhelmed the team, I learned it fast enough to unblock people directly, until they were confident on their own.
+
+- Growing people. I coached a junior engineer to own a critical module and defend their design choices, like PostgreSQL over NoSQL. They were promoted to mid-level after five months.
+
+## Results
+
+Measure | Before | After
+
+Hosting and maintenance cost | VM instances and Microsoft licenses | 50% lower
+
+Availability during the migration | n/a | 100%, zero downtime
+
+Deployments | Manual patching, high risk | Automated CI/CD, containerized
+
+Largest Contentful Paint | Under 3 s | Under 3 s, despite a more complex system
+
+Listing publication time | 30 minutes | 30 minutes, with two systems running
+
+Search | Keyword matching in Apache Solr | Natural language and geographic matching in Elasticsearch
+
+Web server | Windows IIS on EC2 | NGINX on Kubernetes, smaller footprint, higher throughput
+
+REST APIs on the new backend | n/a | 15+, with 25% lower latency
+
+## What I'd take to the next migration
+
+- Build the platform and the gateway first. After that, every move is a routing decision you can undo.
+
+- Budget real time for keeping two systems in sync. It is the hardest part, and the one that protects the business.
+
+- Choose tools the team already knows for anything security-critical.
+
+- Measure what users feel, like page speed, from day one, so "no regressions" is a number and not a hope.
+
+Erwin MonguiDirector of Technology at Cedar Planters and Certified AI Engineer, based in Toronto. 18+ years building customer-facing platforms and the teams that run them. More about me
+
+Company
+
+  Fincaraiz.com.co, Adevinta group
+
+My role
+
+  CTO and Software Engineering Team Lead
+
+When
+
+  2019 to 2022
+
+Team
+
+  30 engineers
+
+Pattern
+
+  Strangler fig, in four tiers
+
+New stack
+
+  DjangoReactKubernetesDockerNGINXKongKeycloakPostgreSQLElasticsearchAWS LambdaCeleryRabbitMQNLP
+
+Retired
+
+  ASP.NET, Windows IIS, Microsoft SQL Server, Apache Solr, VM-based EC2
+
+#### Related
+
+Pick the tool your team can supportCase study: lead distribution for any CRMHow I measure engineering team health
+
+---
+
+URL: https://erwinmongui.com/work/fincaraiz-lead-distribution/
+Published 2026-09-26
+
+Case study · Fincaraiz.com.co · B2B · 2021
+
+# A lead distribution engine that connects to any CRM.
+
+At Fincaraiz I designed a central system that sends every buyer lead from the portal to the CRM of the real estate agency or property developer it belongs to. The first design failed because partners could not build against it, so we took the integration work on ourselves with a configurable Connector service. Partners went from weeks of integration to minutes, across six CRM platforms, and no lead was lost, even during outages.
+
+- 100%: data parity between our reports and partner CRMs
+
+- 0: leads lost during traffic spikes or CRM outages
+
+- Minutes: to onboard a new partner, down from weeks
+
+- 6: CRM platforms connected, from Salesforce to custom-built
+
+## The problem
+
+Fincaraiz's business partners were real estate agencies and property developers. Every time a buyer contacted one of their listings, that lead had to reach the right partner quickly, inside whatever CRM the partner used: Salesforce, HubSpot, Zoho, Microsoft Dynamics, or a CRM the partner had built themselves. Each integration had been built one at a time.
+
+A lead that arrived late, or not at all, was a lost sale for the partner and a reason to question what they were paying for.
+
+## The first design
+
+In 2021 I designed a central lead distribution system with two ways to connect:
+
+- A GraphQL layer, so partners could ask for exactly the lead data they needed in one request.
+
+- API subscriptions, so partners' systems were notified the moment a new lead arrived.
+
+The part I cared most about was reliability. I designed retry logic with exponential backoff: if a partner's CRM was down or slow, the system waited and tried again, with longer gaps each time, until the lead was delivered. No lead was dropped during traffic spikes or third-party outages.
+
+## What went wrong
+
+Technically the subscription model worked. In practice, it did not scale, because most partners did not have engineering teams to build and maintain the other side of it. We had built a good solution that many customers could not use.
+
+> The best technical solution is useless if the customer can't implement it.
+
+## The fix: we took on the complexity
+
+Instead of asking every partner to integrate with us, we built a central Connector service that integrated with them. It could talk to any CRM API, and our team configured each connection through a custom-built configuration screen, with no code on the partner's side.
+
+How a lead reaches a partner's CRM
+
+- Buyer contacts a listing on Fincaraiz: A new lead is created
+
+- Lead distribution engine: Works out which partner gets the lead, with GraphQL for data access and retries with exponential backoff
+
+- Connector service: One configurable adapter per partner, set up in a configuration screen instead of code
+
+- Salesforce and HubSpot: Partner CRMs
+
+- Zoho and Microsoft Dynamics: Partner CRMs
+
+- Custom CRMs: Built by the partners themselves
+
+- Reconciliation: Every lead in our admin reports is checked against the partner's CRM record
+
+That change turned a delivery failure into a competitive advantage. A new partner went live in minutes instead of weeks, and sales could promise integrations without waiting on the partner's IT team.
+
+## How we measured success
+
+I tracked two numbers above everything else:
+
+- Data parity. A strict reconciliation process compared our internal admin reports with the records in each partner's CRM. The target was a 100% match, and we held it.
+
+- End-to-end latency. How long from a buyer's message to the lead appearing in the partner's CRM. For a sales team, minutes matter.
+
+## Leading the team
+
+- I owned the blueprint, the team owned the adapters. I designed the multi-tenant requirements and the reconciliation logic. The team built the individual adapters for Salesforce, HubSpot, Zoho, Microsoft Dynamics and partners' custom CRMs.
+
+- Client Success joined sprint reviews. Our Definition of Done changed from "the API works" to "the client can actually use it". That single change is what brought onboarding down from weeks to minutes.
+
+- A junior engineer grew into the role. I asked a junior engineer who cared a lot about elegant code to own the configuration screen. Working directly with non-technical partners taught them to design for real constraints, and they grew into a mid-level role.
+
+- A setback handled in the open. When the subscription model failed, we looked at the gap between our design and our clients' reality together, without blame, and the pivot came out of that conversation.
+
+## Lessons
+
+- Find out who has to implement the other side of your integration before you design it.
+
+- Retries with backoff and a reconciliation report are what make "no lead lost" something you can prove.
+
+- Invite the people who talk to customers into your sprint reviews.
+
+Erwin MonguiDirector of Technology at Cedar Planters and Certified AI Engineer, based in Toronto. 18+ years building customer-facing platforms and the teams that run them. More about me
+
+Company
+
+  Fincaraiz.com.co
+
+My role
+
+  Software Architect
+
+When
+
+  2021
+
+Users
+
+  Real estate agencies and property developers (B2B)
+
+Stack
+
+  GraphQLAPI subscriptionsSalesforceHubSpotZohoMicrosoft Dynamics
+
+#### Related
+
+Case study: monolith to microservicesHow I measure engineering team health
+
+---
+
+URL: https://erwinmongui.com/work/cedar-planters-data-platform/
+Published 2026-09-25
+
+Case study · Cedar Planters · 2024 to present
+
+# A data platform from zero, as the first technical hire.
+
+I joined Cedar Planters as its first technical hire, with no technology department and no central reporting. I built both. With a team of three, we replaced third-party reporting tools and spreadsheet-based reports with one data platform: an open-source ingestion layer, a lightweight orchestrator, and a mix of relational, document and object storage. Reporting that used to take months now takes days, and with AI, hours.
+
+- Months → hours: time to a new report, with AI in the loop
+
+- 20%: faster data retrieval and analysis
+
+- 3: people on the team
+
+- 2 weeks: between stakeholder reviews
+
+## Starting from nothing
+
+Cedar Planters is a Canadian e-commerce company that makes modular planters. When I joined in January 2024 there was no technology team. My first job was to set up the basics any engineering department needs: CI/CD, security practices and Agile ways of working. Then I turned to data.
+
+The company's data lived in many places: the e-commerce platform, analytics and marketing tools, advertising platforms and more. Reports were pulled together with third-party connectors and spreadsheets, each one built by hand, and a new report could take months.
+
+## The decision: one platform instead of many tools
+
+I proposed moving away from the fragmented tools to one central data platform we owned. It would give us a single source of truth, standard reports, proper data governance, and lower running costs.
+
+## Don't wait for the perfect warehouse
+
+Choosing a data warehouse is a big decision, and it deserves a real evaluation. But a long proof of concept can stall a project for months while the business still has no reports.
+
+So we split the two problems. I built the ingestion pipelines to load data into a relational staging database straight away. That let us start collecting history and producing reports from day one, and decide on the long-term storage later, based on performance data instead of pressure.
+
+In the end we didn't need one big warehouse. The platform settled on a mix, with each store doing what it is best at: a relational database for structured data, a document database for semi-structured data, and cloud object storage for raw and historical files.
+
+The data platform
+
+- E-commerce platform: Orders and sales
+
+- Analytics and marketing tools: Traffic and campaigns
+
+- Advertising platforms and more: Ad performance and other sources
+
+- Ingestion layer: Open-source connectors for each source
+
+- Orchestration: Lightweight, low-latency workflows
+
+- Relational database: Structured data
+
+- Document database: Semi-structured data
+
+- Object storage: Raw and historical files
+
+- Central reporting: First in a commercial BI tool, now in our own in-house reporting tool
+
+## Choosing the pipeline tools
+
+We ran a proper research phase for the ingestion and orchestration layers, comparing established open-source pipeline and orchestration tools. They are powerful, but we chose a more modern, modular pair: a connector-based tool for reliable ingestion and a lightweight orchestrator for low-latency workflows. The combination balanced developer productivity and scalability in a way the older tools couldn't.
+
+The change of ingestion tool came from inside the team. Our data analyst questioned whether our first tool was still the right choice, researched alternatives and made the case for a better one. I wrote about how that happened in From data analyst to data engineer.
+
+## Reporting people actually use
+
+Once the data was in one place, we automated extraction and transformation and replaced the third-party connectors and spreadsheet reports with standard, central reporting. We started with a commercial BI tool, then moved to a reporting tool we developed in-house. I also redesigned the data models behind analytical and operational workloads, which made retrieval and analysis 20% faster.
+
+The result is the number I care about most: a new report that used to take months now takes days. With AI-assisted development and analysis, many now take hours.
+
+## Leading a new team
+
+- A team of three. A small team meant everyone owned real parts of the platform from the start.
+
+- From tool operators to system builders. Moving away from off-the-shelf tools worried some people at first. I framed it as a chance to grow, and gave the team the training and time to feel confident with the new stack.
+
+- Data visibility in every sprint review. Every two weeks we showed stakeholders progress on their reports. Their feedback decided what we built next, so the most useful reports came first.
+
+- Hands-on first, then governance. I started 100% hands-on. As the team grew, I moved to setting the architecture and standards, and let the team own the implementation.
+
+## Results
+
+- One source of truth, replacing third-party reporting tools and spreadsheets with standard, central reporting.
+
+- Time to a new report down from months to days, and to hours with AI.
+
+- 20% faster data retrieval and analysis after the data model redesign.
+
+- Lower running costs from dropping paid third-party tools.
+
+Erwin MonguiDirector of Technology at Cedar Planters and Certified AI Engineer, based in Toronto. 18+ years building customer-facing platforms and the teams that run them. More about me
+
+Company
+
+  Cedar Planters, Oakville, Ontario
+
+My role
+
+  Software Engineering Manager and Director of Technology
+
+When
+
+  2024 to present
+
+Team
+
+  3 people
+
+Platform
+
+  Open-source ingestion and orchestration; relational, document and object storage; in-house reporting; CI/CD
+
+Replaced
+
+  Third-party reporting connectors, spreadsheet reports and a first-generation pipeline tool
+
+#### Related
+
+From data analyst to data engineerFinding delivery bottlenecks
+
+---
+
+URL: https://erwinmongui.com/writing/lead-time-cycle-time-bottlenecks/
+Published 2026-09-25
+
+Delivery
+
+# Finding delivery bottlenecks with lead time and cycle time.
+
+When work slows down, the cause is rarely where people first point. I use lead time, cycle time and a few flow metrics to find exactly where stories get stuck, check the pattern over several sprints, and confirm the root cause with the engineers before changing anything. AI tools make the analysis faster, and they also create a new bottleneck to watch.
+
+In short
+
+Lead time is how long a request takes from the moment it is asked for until it is delivered. Cycle time is how long it takes once someone starts working on it. A big gap between them means work is waiting, not being worked on. Measure both per stage, confirm the pattern with the team, change one thing, and measure again.
+
+## Four numbers that describe flow
+
+Metric | What it measures
+
+Lead time | From request to delivery, including all the waiting
+
+Cycle time | From starting work to delivery
+
+Work in progress (WIP) | How many items are open at the same time
+
+Throughput | How many items are finished per week or sprint
+
+They are connected. Little's Law says that, on average, cycle time equals work in progress divided by throughput. In practice: if a team starts more work than it finishes, everything takes longer, even if everyone is busy. Reducing work in progress is often the fastest way to speed up delivery.
+
+A fifth number, flow efficiency, is the share of cycle time when someone is actively working on an item. On many teams it is surprisingly low, because most of the time is spent waiting for review, testing, a decision or another team.
+
+## The five steps
+
+- Measure both times for every story. Break cycle time into the stages of your workflow, such as in progress, in review, in testing and waiting to deploy.
+
+- Find the deviation. Look for the stage where time grows most compared with normal.
+
+- Check it is a pattern. Compare across the sprint or release. One slow story is noise; the same stage slowing down every sprint is a bottleneck.
+
+- Talk to the engineers involved. The data shows where; people explain why. Common causes are dependencies on other teams, unclear requirements and slow code reviews.
+
+- Change one thing and measure again. Adjust priorities, the workflow or the review process, then check whether the numbers move.
+
+## Common causes and fixes
+
+Where time grows | Likely cause | What usually helps
+
+Before work starts | Unclear requirements | Refine stories with product before the sprint, with clear acceptance criteria
+
+In progress | Waiting on another team | Surface dependencies in planning, agree on API contracts early
+
+In progress | Too much work in progress | Set WIP limits and finish work before starting more
+
+In review | Reviews pile up | Smaller pull requests, agreed review times, AI-assisted first-pass review
+
+In testing | Manual testing | Automated tests in CI, with AI assistants helping write them
+
+## Where AI helps, and the new bottleneck it creates
+
+AI tools help at both ends of this process:
+
+- Analysis. Export your ticket history from Jira or your pull request data from GitHub, and an AI assistant can compute time per stage, spot outliers and suggest patterns in minutes. Treat its findings as hypotheses to check, not conclusions.
+
+- Fixes. AI coding assistants help write the missing tests, and AI review tools can do a first pass on pull requests, so human reviewers focus on design and risk.
+
+But when a team adopts AI coding assistants, writing code gets faster, and more of it arrives at review and testing at once. The bottleneck moves downstream. If cycle time doesn't improve after adopting AI, look at the review and testing stages first. The fix is usually smaller pull requests, clear review expectations and better automated testing, not more code generation.
+
+## Why validate with people
+
+Numbers without context lead to the wrong fix. A long review stage might mean reviewers are overloaded, or that pull requests are too big to review, and each needs a different change. Asking first keeps the fix targeted and keeps the team's trust.
+
+See the full set of metrics I track: How I measure engineering team health.
+
+Erwin MonguiDirector of Technology at Cedar Planters and Certified AI Engineer, based in Toronto. More about me
+
+#### Related
+
+How I measure engineering team healthPick the tool your team can supportCase study: data platform from zero
+
+---
+
+URL: https://erwinmongui.com/writing/engineering-team-health-metrics/
+Published 2026-09-24
+
+Leadership · Metrics
+
+# How I measure engineering team health.
+
+I track three groups of numbers: how fast the team delivers, how healthy the team and its systems are, and whether the work reaches users. With AI assistants now writing much of the code, a fourth question matters too: is AI actually making the team better, or just busier?
+
+In short
+
+Pair every speed metric with a quality or health metric, and include at least one number users would recognize. Build on established frameworks like DORA and SPACE rather than inventing your own. To judge AI assistants, watch lead time, change failure rate and review time, never lines of code.
+
+## The metrics I track
+
+Group | Metric | The question it answers
+
+Delivery | Lead time for changes | How long from a commit to it running in production?
+
+Delivery | Deployment frequency | How often can we safely ship?
+
+Delivery | Change failure rate | How often does a release cause a problem?
+
+Health | Sprint say/do ratio | Do we deliver what we commit to?
+
+Health | Time to onboard | How fast does a new engineer ship their first real change?
+
+Health | Data parity | Do our systems agree with each other?
+
+Impact | Core Web Vitals | Is the product fast for real users?
+
+Impact | Reporting lead time | How long from a business question to a trusted answer?
+
+## Start from established frameworks
+
+You don't need to invent a measurement system. Two frameworks cover most of what matters:
+
+- DORA metrics from Google's DevOps Research and Assessment program: deployment frequency, lead time for changes, change failure rate and time to restore service. They measure how well a team delivers software.
+
+- The SPACE framework looks at productivity more broadly: satisfaction and well-being, performance, activity, communication and collaboration, and efficiency and flow. It is a reminder that activity alone is never the full picture.
+
+My list above uses DORA for delivery and adds the health and impact numbers that matter for the kind of platforms I build.
+
+## What the numbers looked like in practice
+
+- Impact at Fincaraiz. During the migration to microservices, our user-facing number was Largest Contentful Paint. We kept it under 3 seconds, the same as the legacy site, which protected both user experience and search rankings.
+
+- Data parity in lead distribution. In our B2B lead distribution system, we reconciled every lead in our reports against the partner's CRM and held a 100% match.
+
+- Reporting lead time at Cedar Planters. When building the data platform, the key question was how fast a business question became a trusted dashboard.
+
+## Measuring the impact of AI assistants
+
+Most teams now use AI coding assistants. The temptation is to measure them by volume: more pull requests, more lines, more tickets closed. Those numbers go up easily and prove very little. What I watch instead:
+
+Watch | Healthy sign | Warning sign
+
+Lead time for changes | Falls, and stays down | Coding gets faster but lead time doesn't move
+
+Change failure rate | Stays flat or falls | Rises as more code ships
+
+Review time | Stable | Pull requests pile up waiting for review
+
+Rework | Stable | More code is rewritten or reverted soon after merging
+
+Developer satisfaction | People say they spend less time on toil | People feel they review more than they build
+
+A common pattern is the bottleneck moving: AI speeds up writing code, and the queue shifts to review and testing. That is not a failure, but it means the next improvement is in the review process, not in more generation.
+
+## How to collect them
+
+Most of these numbers already live in your tools. Deployment and lead time data come from your CI/CD pipeline and Git history on GitHub or GitLab; sprint data from Jira or a similar tracker; web performance from real-user monitoring and Google Search Console. If you don't want to build dashboards yourself, engineering analytics platforms combine these sources for you. They focus on different things:
+
+Platform | What it is best at | Use it when
+
+DX | Combines regular developer surveys with data from your systems, to measure developer experience and productivity, including the adoption and impact of AI tools | You want to know where engineers lose time and whether AI assistants are really helping, not only what the pipeline says
+
+LinearB | Delivery analytics from Git and project tools: DORA metrics, cycle time by stage, pull request size and review time, plus automation for parts of the pull request workflow | You want to find and fix delivery bottlenecks, especially in code review
+
+Swarmia | DORA and flow metrics, a view of how effort splits between new features, maintenance and unplanned work, and team working agreements with Slack reminders | You want a team-level view of flow and focus, and help keeping agreed habits
+
+Whichever you choose, start with the question you want answered, agree with the team on what will be measured and why, and roll it out at team level first. Free options go a long way too: GitHub and GitLab insights, and Jira's cycle time and control chart reports. AI assistants are also useful here: give one an export of your ticket or pull request data and ask it to find where time goes, then verify the pattern yourself.
+
+## How I use them
+
+- A number that moves the wrong way starts a conversation with the engineers involved. The data shows where; they explain why.
+
+- I look at trends across sprints and releases, not single values.
+
+- Metrics describe the system, never individual performance. The moment people feel judged by a number, they start optimizing the number.
+
+When a delivery number moves the wrong way, this is how I find the cause: Finding delivery bottlenecks with lead time and cycle time.
+
+Erwin MonguiDirector of Technology at Cedar Planters and Certified AI Engineer, based in Toronto. More about me
+
+#### Related
+
+Finding delivery bottlenecksCase study: lead distributionCase study: the migration
+
+---
+
+URL: https://erwinmongui.com/writing/from-data-analyst-to-data-engineer/
+Published 2026-09-22
+
+Leadership · Data
+
+# From data analyst to data engineer, through one good question.
+
+Our first data ingestion pipelines ran on an established open-source tool. Instead of choosing a replacement myself, I asked our data analyst to find out whether something better existed. He researched the options, made the case for a modern connector-based tool and led the switch. Our pipelines got faster, and he grew into a data engineer. This is the approach, and how AI assistants make it easier today.
+
+In short
+
+Give people a real decision to research, a framework to judge it, a time-boxed proof of concept and the authority to act on the result. You get a better decision and a more capable engineer. AI assistants now shorten the path from analyst to engineer, as long as the learning, not just the output, stays with the person.
+
+## The situation
+
+At Cedar Planters I was building the company's first data platform. Our first ingestion pipelines ran on an established, flow-based open-source tool. It worked, but I wanted to know whether more modern, faster options existed. I had my own opinions about alternatives, and it would have been quicker to just pick one.
+
+## The question
+
+Instead, I asked our data analyst: is our current tool still the right one for us, and if not, what is? The framework started from what he knew best. He had deep, hands-on experience with our current process, so his first job was to use it: map how data moved today and find where it was slow. From there, we made space to exchange and compare architecture options as a team, with one clear goal: improve the performance of that process. He had the time to test the options properly.
+
+## The landscape he explored
+
+Data tools do different jobs, and part of the learning was seeing where each kind fits:
+
+Kind of tool | What it is best at
+
+Flow-based routing tools | Visual pipelines that route and transform data between systems
+
+Code-first orchestrators | Scheduling and running pipelines written as code
+
+Connector-based ingestion tools | Ready-made connectors that extract data from many sources and load it into a database or warehouse
+
+Lightweight workflow engines | Fast orchestration of scripts and small workflows
+
+In-warehouse transformation tools | Modelling and testing data after it lands
+
+## What he found
+
+He tested the options against our real sources and came back with a clear recommendation: a modern, connector-based ingestion tool, with the evidence to support it. I didn't hand him the answer. I helped him through the proof of concept and the rollout, and let him lead the transition. We later paired it with a lightweight orchestrator, and built central reporting on top.
+
+## What changed
+
+- The stack. Data pulls became faster.
+
+- The person. He moved from an analyst's mindset, using data, to a builder's mindset, designing how data moves. He now works as a data engineer.
+
+- The team. Everyone saw that anyone, whatever their title, could question the stack and be taken seriously.
+
+## The guided discovery method
+
+- Pick a real decision, one that matters to the business and stretches the person.
+
+- Start from their expertise. Ask them to map the current process they know best, and agree on the goal, such as performance, before anyone looks at tools.
+
+- Time-box a proof of concept on real data.
+
+- Ask for a recommendation with evidence, and challenge it the way a senior engineer would.
+
+- Hand over the rollout. Ownership is where most of the growth happens.
+
+- Reflect together on what worked and what they would do differently.
+
+## Where AI assistants fit
+
+The jump from analyst to engineer used to mean months of learning Python, APIs, testing and deployment before being productive. AI coding assistants have shortened that a lot. Used well, they help a growing engineer:
+
+- draft connectors, SQL transformations and tests, then learn by reviewing and fixing them;
+
+- get unfamiliar code or error messages explained in plain language;
+
+- compare tools quickly at the research stage, as a starting point for their own testing.
+
+Two rules keep it healthy. First, AI summaries of tools can be out of date or wrong, so every claim gets checked in the proof of concept. Second, the mentee should be able to explain every line they ship. If AI does the thinking, you get output without growth.
+
+## Why it works
+
+Telling someone the answer teaches them the answer. Letting them find it, with a framework and support, teaches them how to make the next decision without you. For a small team, that is how leadership capacity grows.
+
+More on the platform this was part of: A data platform from zero at Cedar Planters.
+
+Erwin MonguiDirector of Technology at Cedar Planters and Certified AI Engineer, based in Toronto. More about me
+
+#### Related
+
+Case study: data platform from zeroWhat new graduates need for a career in AIHow I measure engineering team health
+
+---
+
+URL: https://erwinmongui.com/writing/choose-tools-your-team-can-support/
+Published 2026-09-21
+
+Architecture
+
+# Pick the tool your team can support, not the one on the shortlist.
+
+During a large platform migration we chose Keycloak for single sign-on. It was a strong tool on paper, but it was new to the team and built on a stack we didn't know, and that piece of work took six times longer than planned. Here is what went wrong, the scorecard we used afterwards, and how AI assistants change the trade-off today.
+
+In short
+
+For mission-critical systems like authentication, score every option on team familiarity, documentation, support and operational load, not only on features. Run a short, time-boxed proof of concept before you commit. AI assistants make unfamiliar tools easier to learn, but they don't remove the need for someone to own the tool in production.
+
+## What happened
+
+At Fincaraiz we were moving a legacy ASP.NET monolith to Django and React microservices, for a platform with more than 5 million monthly visits. The old and new systems had to run side by side, so we needed one identity layer both could share. Keycloak was a sensible choice: open source, full-featured and widely used for single sign-on.
+
+The problem was fit, not quality. Keycloak was new to the team and built on Java, which was outside our core skills. When integration issues appeared, nobody could dig into its internals with confidence, and the documentation had gaps for our exact setup. Every problem became an investigation. That part of the project took six times longer than estimated.
+
+## Why it happened
+
+We evaluated the tool, not the fit. Our comparison of features was thorough. What we didn't ask was: when this breaks under real traffic, who on our team can fix it, how long will it take them, and where will they look for answers?
+
+> A tool is only as good as your team's ability to run it when it fails.
+
+## The scorecard we use now
+
+After an open lessons-learned session, we added a vetting step for any mission-critical tool. Each option gets a simple score from 1 to 5 on these questions:
+
+Criterion | The question to ask
+
+Stack fit | Is it built on a language and platform the team already knows?
+
+Team experience | Has anyone on the team run it in production?
+
+Documentation | Do the docs cover our exact use case, with working examples?
+
+Support | Is there an active community, paid support, or both? How fast do issues get answered?
+
+Operational load | Who patches, upgrades and monitors it, and how much time does that take each month?
+
+Integration effort | How much custom code does it need to work with our systems?
+
+A tool that scores low on stack fit and team experience can still win, but only if the plan includes the time and training to learn it, and a named owner.
+
+## Build, host or buy
+
+For identity specifically, the options today fall into two groups, and the right choice depends on your team as much as your requirements:
+
+- Managed identity services such as Auth0, Okta, AWS Cognito or Microsoft Entra ID. You trade some flexibility and a monthly bill for far less to operate.
+
+- Self-hosted open source such as Keycloak. More control and no per-user licence, but your team runs it, upgrades it and secures it. Keycloak has become easier to operate in recent versions, but the ownership question doesn't go away.
+
+In practice, the deciding factor is operational ownership. Self-hosting an identity provider means owning its availability targets and on-call rotation, security patching and CVE response, version upgrades, database backups, and signing-key rotation. If the team can't commit to that, a managed provider is the safer architecture choice.
+
+## How AI assistants change the trade-off
+
+If we faced the same decision today, AI tools would help in three ways, and leave one problem untouched.
+
+- Learning an unfamiliar stack is faster. Assistants like Claude Code, Cursor or GitHub Copilot can explain an unfamiliar Java codebase, walk through configuration, and draft integration code. The "we don't know this language" penalty is smaller than it was.
+
+- Proofs of concept are cheaper. A working spike can often be built in days instead of weeks, so there is no excuse to skip one for a critical tool.
+
+- Documentation gaps are easier to bridge. An assistant can read the source code and the issue tracker when the docs fall short.
+
+- But ownership stays human. AI can help you set a tool up. It can't be on call for it, and for niche configuration it can be confidently wrong. For security-critical systems, every AI-suggested change still needs review by someone who understands it.
+
+## A simple process for your next decision
+
+- Write down the requirements, including who will operate the tool.
+
+- Shortlist two or three options, including at least one the team already knows.
+
+- Score each option with the scorecard above.
+
+- Run a time-boxed proof of concept on the top option, using AI assistants to move fast.
+
+- Decide, name an owner, and record the reasons so the next team understands the choice.
+
+## How the team handled it
+
+The overrun could easily have turned into blame. Instead, we treated it as a shared lesson and wrote the scorecard together. After that, people raised risks earlier, which was worth more than any single tool decision.
+
+Read the full story of the migration in Monolith to microservices at Fincaraiz.
+
+Erwin MonguiDirector of Technology at Cedar Planters and Certified AI Engineer, based in Toronto. More about me
+
+#### Related
+
+Case study: monolith to microservicesHow I measure engineering team healthWhat new graduates need for a career in AI
+
+---
+
+URL: https://erwinmongui.com/writing/ai-careers-new-graduates/
+Published 2024-03-05, updated 2026-09-23
+
+AI · Careers
+
+# Shaping the future: what new graduates need for a career in AI.
+
+In 2024 I wrote that a career in AI would depend on collaboration, a future-ready education, ethics and lifelong learning. Two years later, all four still hold, but the day-to-day work has changed. AI assistants now write much of the first draft of code, so the skills that stand out are framing problems, evaluating results and taking responsibility for what ships.
+
+In short
+
+Learn the fundamentals (Python, data, PyTorch, statistics), learn to build with foundation models (retrieval, tool calling, structured outputs), and learn to prove your system works with evaluations. Use AI assistants every day, but own every line you ship. Build one real, end-to-end project and write about it.
+
+## What has changed since 2024
+
+When I wrote the first version of this article, most AI work for graduates meant training or fine-tuning models. Today, many AI products are built on top of large foundation models that someone else trained. The job has moved up a level:
+
+- From training models to building systems. Much of the value is in connecting a model to the right data, tools and guardrails, not in the model itself.
+
+- From writing code to directing and reviewing it. Assistants like Cursor, Windsurf, GitHub Copilot and Claude Code can scaffold a service, write tests and refactor in minutes. The engineer's job is to specify the work clearly and judge the result.
+
+- From "it works on my prompt" to evaluation. Model outputs vary. Teams now expect engineers to measure quality with test sets and automated evaluations, the same way we measure latency or uptime.
+
+## 1. Collaboration is the job
+
+AI products touch data, software, design, law and the business at once. No single person covers all of that, so the most effective graduates are the ones who work well across disciplines.
+
+- Work in mixed teams. Strong AI features usually come from engineers, designers, domain experts and people who think about ethics working on the same problem.
+
+- Communicate in writing. Clear design notes and pull request descriptions matter more now, because they are also what you hand to an AI assistant as instructions.
+
+- Learn from peers. Pair programming and code review are still the fastest way to grow, with or without AI in the loop.
+
+## 2. An education built on real projects
+
+Courses struggle to keep up with the field, so real projects carry more weight than grades. When I review candidates, one end-to-end project tells me more than a list of courses. In interviews, I ask candidates to walk me through it: the different approaches they considered, why they chose one, and what they would do differently now. How someone reasons about those trade-offs tells me more than the final result. A strong project:
+
+- solves a real problem with real, messy data;
+
+- has a clear baseline and a way to measure whether the AI version is better;
+
+- runs somewhere other than a notebook, with an API, a simple interface and basic monitoring;
+
+- is written up, including what did not work.
+
+Soft skills still matter as much as technical ones: teamwork, communication and problem-solving are what make a project land inside a real organization.
+
+## 3. The frameworks worth learning now
+
+Tools change quickly, so learn the concepts first and the tools second. These are the layers most AI applications are built from today, with examples of widely used tools:
+
+Layer | What to understand | Tools to know
+
+Foundations | Python, data wrangling, statistics, how neural networks learn | Pandas, NumPy, scikit-learn, PyTorch
+
+Models | Using and fine-tuning pre-trained models | Hugging Face Transformers, model provider APIs
+
+Retrieval | Giving a model the right context from your own data | Vector search in PostgreSQL (pgvector) or Elasticsearch, LlamaIndex
+
+Agents and tools | Letting a model call functions and take multi-step actions safely | LangGraph, Pydantic AI, Model Context Protocol (MCP)
+
+Structured outputs | Making model responses predictable and machine-readable | JSON Schema, Pydantic, Zod
+
+Evaluation and monitoring | Measuring quality, cost and failures over time | Test sets, automated evaluations, tracing and experiment tracking such as MLflow
+
+## 4. Use AI assistants, but own the result
+
+Graduates who use AI assistants well get far more done. Those who accept output they don't understand create problems someone else has to fix. A few habits make the difference:
+
+- Write down what you want before you ask for it: inputs, outputs, edge cases.
+
+- Ask the assistant for tests first, then the code.
+
+- Read every change as if a colleague wrote it. If you can't explain it, don't merge it.
+
+- Never paste secrets, customer data or confidential code into a tool your company hasn't approved.
+
+## 5. Ethics is part of the engineering
+
+As AI becomes part of daily life, its effects on people grow, and so does regulation, such as the EU AI Act and privacy laws like Canada's PIPEDA. Graduates need to treat ethics as engineering work, not a separate topic.
+
+- Bias and fairness. Test how your system performs across different groups of users, and fix the data or the design when it doesn't.
+
+- Privacy and security. Collect only the data you need, protect it at every stage, and watch for new risks such as prompt injection in tools that read outside content.
+
+- Transparency. Tell users when they are dealing with AI, and keep a human in the loop for decisions that seriously affect people.
+
+## 6. Keep learning, on purpose
+
+The pace of change makes lifelong learning part of the job description. What works for me:
+
+- Structured learning. Courses and certifications for foundations. I completed the Certified AI Engineer program at Lambton College in 2024.
+
+- Community. Meetups, conferences and open-source projects, to hear what actually works in production.
+
+- Research and building. Small experiments and side projects. My own research project at Lambton was published in the STEM Fellowship Journal.
+
+## Conclusion
+
+The future of AI application development brings real challenges and real opportunities. Graduates who collaborate well, learn by building, measure their results, treat ethics as part of the work and keep learning will do more than adapt to change. They will lead it.
+
+Erwin MonguiDirector of Technology at Cedar Planters and Certified AI Engineer (Lambton College, 2024), based in Toronto. More about me
+
+#### Related
+
+JSON as the contract between your systems and AIReplacing random RT-PCR checks with dataFrom data analyst to data engineer
+
+---
+
+URL: https://erwinmongui.com/writing/ai-applications-json/
+Published 2024-02-06, updated 2026-09-23
+
+AI · Data
+
+# Taming the data jungle: JSON as the contract between your systems and AI.
+
+AI runs on data that rarely fits neatly into rows and columns. In 2024 I wrote about JSON as a practical tool for that problem. Since then it has become more than that: JSON is now how software and AI models talk to each other, from structured outputs and tool calls to memory and model configuration.
+
+In short
+
+Define a JSON Schema for what you expect from a model, ask the model to follow it, and validate every response before using it. The same pattern powers structured outputs, tool calling and agent protocols like MCP. Keep conversational memory and model settings in versioned JSON too, so your AI system stays predictable and easy to debug.
+
+## Beyond rows and columns
+
+Edgar F. Codd's relational model still underpins most business systems, and for good reason. But AI applications work with much more than tables:
+
+- Structured data: orders, customers and listings in relational databases.
+
+- Semi-structured data: JSON from APIs, events and logs, where fields vary from record to record.
+
+- Unstructured data: free text, documents and images.
+
+Real-world data also breaks the assumptions relational design relies on. In areas like biometrics or online advertising, there is often no reliable unique identifier, so records have to be matched by probability instead of by key. Handling this well takes solid data wrangling, and increasingly, AI models that can read and structure messy input.
+
+## Why JSON became the language of AI applications
+
+JSON is lightweight, human-readable and supported everywhere. Those qualities made it the default for web APIs. For AI, it solves a bigger problem: turning a model's free-form text into something software can rely on.
+
+### 1. Structured outputs
+
+Major model providers can now constrain a model's answer to a JSON Schema you supply. Instead of parsing text and hoping, you get a response in the shape you defined, which you then validate in code. In Python, Pydantic is the usual way to define the schema and check the result; in TypeScript, Zod plays the same role.
+
+### 2. Tool calling and agents
+
+When a model decides to call a function, such as searching a database or creating a ticket, it produces the arguments as JSON that matches the tool's schema. Agent frameworks like LangGraph and Pydantic AI are built around this. The Model Context Protocol (MCP), now a common way to connect AI assistants to tools and data, uses JSON-RPC messages under the hood.
+
+### 3. Conversational memory
+
+A useful assistant remembers context: your preferences, the last thing you asked, what is still unresolved. Storing that as a small, well-defined JSON object per user or session keeps memory explicit and easy to inspect. For long histories, pair it with vector search (for example pgvector in PostgreSQL, or Elasticsearch) to retrieve only the relevant pieces.
+
+### 4. Model configuration and reproducibility
+
+Deep learning models run on tensors, but everything around them is configuration: architecture settings, training hyperparameters, fine-tuning parameters and evaluation results. Keeping these in JSON makes experiments transparent and repeatable. The Hugging Face ecosystem works this way: a model ships its settings in a config.json file next to its weights, usually stored as safetensors. Tools like MLflow track runs and parameters in the same spirit.
+
+## A worked example: natural language search
+
+At Fincaraiz we built search that understood conversational queries and local place names (I describe it in the migration case study). With today's models, the first step of that kind of search, turning a sentence into filters, takes a few lines. First, define what a search looks like:
+
+```
+from typing import Literal
+from pydantic import BaseModel, Field
+
+class PropertySearch(BaseModel):
+    operation: Literal["buy", "rent"]
+    property_type: Literal["apartment", "house", "lot", "commercial"]
+    bedrooms: int | None = None
+    location: str = Field(description="Neighborhood, city or landmark, as the user wrote it")
+    max_price_cop: int | None = Field(None, description="Maximum price in Colombian pesos")
+
+schema = PropertySearch.model_json_schema()  # send this to the model as the required output format
+```
+
+A user types: "3-bedroom apartment to buy in Chapinero, under 500 million". With structured outputs, the model returns:
+
+```
+{
+  "operation": "buy",
+  "property_type": "apartment",
+  "bedrooms": 3,
+  "location": "Chapinero",
+  "max_price_cop": 500000000
+}
+```
+
+Then validate it before it touches your search engine:
+
+```
+search = PropertySearch.model_validate_json(model_response)
+# raises a clear error if a field is missing or has the wrong type
+```
+
+The model handles the language. Your code and your data still handle the rest: resolving "Chapinero" to its exact boundary on the map, applying the filters and ranking the results. That split is what makes AI features reliable.
+
+## Practices that keep it reliable
+
+- Schema first. Agree on the JSON shape before writing prompts or code.
+
+- Validate everything. Treat model output like user input: check it, and have a fallback when it fails.
+
+- Version your schemas. Changing a field is a breaking change for anything downstream.
+
+- Keep sensitive data out. Don't store personal data in memory objects or logs unless you need it and protect it.
+
+- Log inputs and outputs. Real examples become the test set for your evaluations.
+
+AI coding assistants help here too. They are good at drafting schemas, sample payloads, test fixtures and transformation scripts from a short description, which removes much of the tedious work. The design decisions, and the review, stay with the engineer.
+
+## The takeaway
+
+Handling diverse data well was the foundation of AI work in 2024, and it still is. What has changed is that JSON now sits at the center of it, as the contract between your systems and the models they use. Whether you are building an assistant, a recommendation system or an agent, getting that contract right is what turns an impressive demo into software people can depend on.
+
+AIJSON SchemaPydanticStructured outputsMCPPyTorchHugging Face
+
+Erwin MonguiDirector of Technology at Cedar Planters and Certified AI Engineer (Lambton College, 2024), based in Toronto. More about me
+
+#### Related
+
+Case study: NLP and map-aware search at FincaraizWhat new graduates need for a career in AICase study: data platform from zero
+
+---
+
+URL: https://erwinmongui.com/writing/rt-pcr-travel-screening-data-driven-selection/
+Published 2023-12-12, updated 2026-09-23
+
+Research · Data science
+
+# Replacing random RT-PCR checks with data-driven traveller selection.
+
+In 2023, travellers arriving at Toronto Pearson International Airport were chosen for RT-PCR report checks at random. For the STEM Fellowship Big Data and AI Challenge, four of us at Lambton College proposed a better way: combine WHO and Government of Canada COVID-19 data with each traveller's RT-PCR report to sort passengers into priority groups. Our paper was published in the challenge proceedings in the STEM Fellowship Journal.
+
+In short
+
+Random selection treats every traveller the same. Our study scored each country's current COVID-19 risk from WHO data, used Government of Canada data to find the age groups most at risk of severe illness, extracted traveller RT-PCR reports from PDF with Python, and combined the three into priority levels, from "Immediate" to "Low". Paper: Eliminating Randomness in Selecting International Passengers for RT-PCR (doi:10.17975/sfj-2023-007). Code: GitHub.
+
+## The problem
+
+By mid-2023, international travel had reopened with fewer restrictions, but COVID-19 had not gone away. New sub-variants such as Omicron "Arcturus" were spreading, and it was unclear how well existing vaccines protected against them. The numbers were still large:
+
+- 1.7M: tourists arrived in Ontario in the first quarter of 2023
+
+- 219,183: new cases reported worldwide in the 7 days to June 7, 2023 (WHO)
+
+- Random: how travellers were selected for RT-PCR report checks at Pearson
+
+RT-PCR tests were the most widely used way to detect the virus, and many travellers carried RT-PCR reports. But choosing whom to check at random ignores information that was already publicly available. Our question: could that data point the Immigration unit at Pearson to the travellers most likely to need attention?
+
+## The data
+
+Source | What we used
+
+World Health Organization | New COVID-19 cases per country in the last 7 days, and per 100,000 people
+
+Government of Canada | COVID-19 epidemiology: hospitalizations, ICU admissions and deaths, by age group and sex, over time
+
+Traveller RT-PCR reports | Reports from travellers in several countries, with test date, age, gender, location and result. Some were created from sample reports available online.
+
+## The method
+
+### 1. A risk level for every country
+
+From the WHO data, we calculated each country's share of new cases per 100,000 people over the last 7 days, then turned it into a simple risk level:
+
+```
+share (%) = cases_per_100k_last_7_days / sum(all countries) × 100
+
+risk level = 2   if share > 2%        (highly affected)
+             1   if 1% ≤ share < 2%
+             0   otherwise            (low affected)
+```
+
+### 2. Who is most at risk of severe illness
+
+We analysed six months of Government of Canada data by age, sex and outcome. People aged 70 and over made up the largest share of hospitalizations, ICU admissions and deaths, with the 50 to 69 group next. That gave us three age bands for the model: 70 and over, 50 to 69, and 0 to 49.
+
+### 3. Reading the RT-PCR reports
+
+We extracted the reports from PDF into a structured CSV file with Python: test date, result, gender, age and location, with the country derived from the location. We also added how old each report was, in days since the test date.
+
+### 4. Priority groups
+
+Combining the three gave each traveller a priority level:
+
+Priority | Age | RT-PCR report | Country risk
+
+Immediate, level 3 | 70+ | Positive, more than 14 days old | High (2)
+
+Immediate, level 2A | 70+ | Positive, less than 14 days old | High (2)
+
+Immediate, level 2B | 70+ | Positive, more than 14 days old | Low (1 or less)
+
+High, level 3 | 50 to 69 | Positive, more than 14 days old | High (2)
+
+High, level 2A | 50 to 69 | Positive, less than 14 days old | High (2)
+
+High, level 2B | 50 to 69 | Positive, more than 14 days old | Low (1 or less)
+
+Medium, level 2A | 50+ | Negative | Any
+
+Medium, level 2B | 0 to 49 | Positive | Any
+
+Low | 0 to 49 | Negative | Any
+
+Immediate priority means the traveller should be selected for an RT-PCR check. High and medium priority travellers can be sampled at random but don't need immediate attention. Everyone else is low priority.
+
+## Results
+
+Applied to the reports we collected, the model placed 2 travellers in Immediate level 2B, 8 in High level 2B and 19 in Medium level 2A. Instead of a random draw, officers would have had a short, ranked list with a reason attached to every name.
+
+> Random selection is not an optimal strategy when the data to do better is already public.
+
+## What we learned
+
+- Public data is enough to start. WHO and Government of Canada data, combined with the reports travellers already carry, supported a clear and explainable selection policy.
+
+- Simple, transparent rules are a strong first step. Every priority level can be explained in one sentence, which matters for a decision that affects people at a border.
+
+- Automated report processing is the foundation. Nothing works until reports in PDF become clean, structured data.
+
+- Collaboration and mentorship made it possible. Professor Ashish Gupta's guidance kept the work rigorous and focused.
+
+## Scope and next steps
+
+As a challenge project, the study was designed to demonstrate the approach. Taking it further would mean:
+
+- applying the method to a larger set of real traveller reports;
+
+- validating the priority rules against real screening outcomes;
+
+- reviewing, with fairness and legal experts, which traveller attributes are appropriate to use.
+
+## How we would build it with today's tools
+
+If we started the project in 2026, the same idea would go much further:
+
+### Read any report, in any format or language
+
+We wrote Python to extract fields from PDF reports with a fixed layout. Today, multimodal AI models can read PDFs, photos and scans in many languages and layouts, and return the test type, date, result and lab as structured JSON that follows a fixed schema, ready to validate. I describe that pattern in JSON as the contract between your systems and AI.
+
+### From rules to a tested model
+
+With real outcome data, such as which selected travellers actually tested positive on arrival, the rules could become a trained model. Gradient-boosted trees such as XGBoost or LightGBM are a strong, explainable choice for this kind of tabular data, and SHAP values show which factors drive each prediction, so officers still get a reason with every recommendation. The model would be tested on held-out data and compared against random selection before anyone relied on it.
+
+### Faster research with AI assistants
+
+AI coding assistants would speed up data cleaning, visualization and experiment code, the work that filled our notebooks. The research questions, the judgment calls and the checking would still be ours.
+
+### Fairness, privacy and people in the loop
+
+- Fairness: test how often each group is selected, and prefer factors about the trip and the test, like report age and current case rates at the origin, over personal characteristics wherever possible.
+
+- Privacy: treat RT-PCR results as health data under Canadian privacy law: collect the minimum, protect it, delete it when it is no longer needed.
+
+- Human decisions: the model prioritizes, an officer decides.
+
+- Monitoring: case rates and variants change weekly, so risk levels and the model need regular updates.
+
+## The paper and the code
+
+Paper title
+
+  Eliminating Randomness in Selecting International Passengers for RT-PCR
+
+Authors
+
+  Umid Ghimire, Dharmik Limbani, Erwin Mongui, Sairam Kilari (Lambton College)
+
+Mentor
+
+  Professor Ashish Gupta, Lambton College
+
+Written for
+
+  STEM Fellowship National Inter-University Big Data and AI Challenge 2023 (paper dated June 11, 2023)
+
+Published in
+
+  STEM Fellowship Journal, Leveraging open data analytics and machine learning to improve diagnosis of diseases, patients' care, and support: Proceedings from the 2023 Inter-University Big Data and AI Challenge
+
+DOI
+
+  10.17975/sfj-2023-007
+
+Code
+
+  Jupyter notebooks on GitHub: COVID-19 data visualization, RT-PCR report processing and traveller segmentation
+
+We are grateful to Professor Gupta for his mentorship, and to the STEM Fellowship for organizing the challenge and giving us the chance to contribute.
+
+Erwin MonguiDirector of Technology at Cedar Planters and Certified AI Engineer (Lambton College, 2024), based in Toronto. More about me
+
+#### Related
+
+JSON as the contract between your systems and AIWhat new graduates need for a career in AIAbout: education and credentials
+
+---
+
+URL: https://erwinmongui.com/about/
+Published 2026-09-23, updated 2026-09-26
+
+About
+
+# From junior engineer in Bogotá to Director of Technology in Toronto.
+
+I have worked in software for more than 18 years, across real estate, e-commerce and fintech. I have been a full stack developer, team lead, architect, manager, CTO and director. Along the way I learned that building teams matters as much as building software.
+
+## The path
+
+I started in 2010 as a junior engineer at Americas BPS, building C# and .NET applications for Hewlett Packard Enterprise. From there I moved into consulting at Periferia IT, where I built a payment microservice for Old Mutual that grew sales by 50% in its first year.
+
+In 2015 I joined Fincaraiz.com.co, one of Colombia's largest real estate portals. I started as Lead Software Engineer and became CTO in 2019, leading a team of 30 through a migration from a legacy monolith to microservices, with zero downtime for more than 5 million monthly visits.
+
+In 2022 I moved to Canada and earned a Certified Artificial Intelligence Engineer credential at Lambton College in Toronto. Since January 2024 I have been Director of Technology at Cedar Planters in Oakville, where I was the first technical hire and built the technology department, from CI/CD and security to the company's data platform.
+
+## What I believe about learning
+
+Many people think you have to know everything before you take on the next challenge. In my experience, you learn what the job needs once you are in it and have to do it. What counts is a track record of adapting, not already knowing everything.
+
+## How I lead.
+
+### Empowerment through accountability
+
+I set the architecture and the bar, then give senior engineers full ownership of the implementation. It grows leaders inside the team and keeps me from becoming the bottleneck.
+
+### Guided discovery
+
+I'd rather give someone a real question and a framework than the answer. That is how a data analyst on my team found a better tool for our data pipelines and became a data engineer.
+
+### Mistakes in the open
+
+When something goes wrong, we run a lessons-learned session, not a search for blame. People raise problems early when they know it is safe.
+
+### Data before opinions
+
+Lead time, cycle time and say/do ratios show where work is stuck. Then I talk to the people involved before changing anything.
+
+Recognition · 2019
+
+## Adevinta Culture Awards finalist.
+
+Recognized while I was CTO at Fincaraiz.com.co. The Culture Awards go to the people who build trust within their teams by living Adevinta's Key Behaviours: say it like it is, win and lose together, get stuff done, and always be learning.
+
+## Education and credentials.
+
+Bachelor of Computer Engineering, Fundación Universitaria Los Libertadores, Bogotá, 2013. Certified Artificial Intelligence Engineer, Lambton College, Toronto, 2024. Co-author of Eliminating Randomness in Selecting International Passengers for RT-PCR, STEM Fellowship Big Data and AI Challenge 2023, published in the STEM Fellowship Journal. Spanish native, English proficient.
+
+### Machine learning and data
+
+- Machine Learning: Natural Language Processing in Python (V2)Udemy, January 2024
+
+- Complete Machine Learning and Data Science Bootcamp 2023Udemy, September 2023
+
+- Learn Advanced Python ProgrammingUdemy, September 2023
+
+- SQL for Statistics Essential TrainingLinkedIn Learning, July 2023
+
+- Python for Data Science Essential Training, Part 1LinkedIn Learning, May 2023
+
+### Software architecture
+
+- Dive Into RefactoringRefactoring.Guru, December 2023
+
+- Software Architecture Case StudiesUdemy, November 2023
+
+- Software Architecture Security: The Complete GuideUdemy, November 2023
+
+- Microservices Architecture: The Complete GuideUdemy, October 2023
+
+- How to Become an Outstanding Solution ArchitectUdemy, October 2023
+
+- Software Architecture: REST API Design, The Complete GuideUdemy, September 2023
+
+- The Complete Guide to Becoming a Software ArchitectUdemy, May 2021
+
+- SOLID PrinciplesUdemy, May 2021
+
+### Fintech and agile delivery
+
+- Future of Fintech: Open Banking, GDPR and PSD2Udemy, March 2022
+
+- Fintech Overview: AI, Blockchain, Cloud, Data, CybersecurityUdemy, March 2022
+
+- Scrum Master Certified (SMC)SCRUMstudy, VMEdu, June 2016
+
+- Scrum Fundamentals Certified (SFC)SCRUMstudy, VMEdu, June 2016
+
+### Data, search and infrastructure
+
+- Amazon S3 Mastery: The How-To Guides for Amazon S3Udemy, March 2022
+
+- Redis, the World's Fastest Database: Beginners to AdvancedUdemy, February 2022
+
+- Django with GraphQLUdemy, February 2022
+
+- RabbitMQ PythonUdemy, May 2021
+
+- Data Processing with Logstash and FilebeatUdemy, May 2021
+
+- Complete Guide to ElasticsearchUdemy, May 2021
+
+- Git and GitHubUdemy, May 2021

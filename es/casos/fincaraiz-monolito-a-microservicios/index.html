@@ -1,0 +1,355 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Fincaraiz: de monolito a microservicios sin caídas | Erwin Mongui</title>
+<meta name="description" content="Cómo Erwin Mongui llevó Fincaraiz de ASP.NET a Django, React y Kubernetes para más de 5 millones de visitas al mes: sin caídas, 50% menos costos y búsqueda con NLP.">
+<meta name="author" content="Erwin Mongui">
+<meta name="robots" content="index, follow, max-snippet:-1, max-image-preview:large, max-video-preview:-1">
+<meta name="theme-color" content="#000000">
+<link rel="canonical" href="https://erwinmongui.com/es/casos/fincaraiz-monolito-a-microservicios/">
+<link rel="alternate" hreflang="en" href="https://erwinmongui.com/work/fincaraiz-monolith-to-microservices/">
+<link rel="alternate" hreflang="es" href="https://erwinmongui.com/es/casos/fincaraiz-monolito-a-microservicios/">
+<link rel="alternate" hreflang="x-default" href="https://erwinmongui.com/work/fincaraiz-monolith-to-microservices/">
+<link rel="alternate" type="application/rss+xml" title="Erwin Mongui: case studies and writing" href="https://erwinmongui.com/feed.xml">
+<link rel="me" href="https://www.linkedin.com/in/erwin-mongui/">
+<meta property="og:type" content="article">
+<meta property="og:site_name" content="Erwin Mongui">
+<meta property="og:locale" content="es_CO">
+<meta property="og:locale:alternate" content="en_CA">
+<meta property="og:url" content="https://erwinmongui.com/es/casos/fincaraiz-monolito-a-microservicios/">
+<meta property="og:title" content="De monolito a microservicios, sin detener una plataforma de 5 millones de visitas">
+<meta property="og:description" content="Cómo Erwin Mongui llevó Fincaraiz de ASP.NET a Django, React y Kubernetes para más de 5 millones de visitas al mes: sin caídas, 50% menos costos y búsqueda con NLP.">
+<meta property="og:image" content="https://erwinmongui.com/og-image.png">
+<meta property="og:image:width" content="1200">
+<meta property="og:image:height" content="630">
+<meta property="og:image:alt" content="Erwin Mongui logo with the words Engineering leader, Director of Technology, Toronto, Canada">
+<meta property="article:published_time" content="2026-09-23">
+<meta property="article:modified_time" content="2026-09-26">
+<meta property="article:author" content="https://www.linkedin.com/in/erwin-mongui/">
+<meta name="twitter:card" content="summary_large_image">
+<meta name="twitter:title" content="De monolito a microservicios, sin detener una plataforma de 5 millones de visitas">
+<meta name="twitter:description" content="Cómo Erwin Mongui llevó Fincaraiz de ASP.NET a Django, React y Kubernetes para más de 5 millones de visitas al mes: sin caídas, 50% menos costos y búsqueda con NLP.">
+<meta name="twitter:image" content="https://erwinmongui.com/og-image.png">
+<link rel="icon" href="/favicon.ico" sizes="16x16 32x32 48x48">
+<link rel="icon" type="image/svg+xml" href="/favicon.svg">
+<link rel="apple-touch-icon" sizes="180x180" href="/apple-touch-icon.png">
+<link rel="manifest" href="/site.webmanifest">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Manrope:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="/assets/site.css">
+<script type="application/ld+json">
+{
+ "@context": "https://schema.org",
+ "@graph": [
+  {
+   "@type": "Person",
+   "@id": "https://erwinmongui.com/#person",
+   "name": "Erwin Mongui",
+   "url": "https://erwinmongui.com/",
+   "jobTitle": "Director of Technology",
+   "worksFor": {
+    "@type": "Organization",
+    "name": "Cedar Planters"
+   },
+   "sameAs": [
+    "https://www.linkedin.com/in/erwin-mongui/"
+   ]
+  },
+  {
+   "@type": "WebSite",
+   "@id": "https://erwinmongui.com/#website",
+   "url": "https://erwinmongui.com/",
+   "name": "Erwin Mongui",
+   "publisher": {
+    "@id": "https://erwinmongui.com/#person"
+   },
+   "inLanguage": [
+    "en",
+    "es"
+   ]
+  },
+  {
+   "@type": "Article",
+   "@id": "https://erwinmongui.com/es/casos/fincaraiz-monolito-a-microservicios/#article",
+   "headline": "De monolito a microservicios, sin detener una plataforma de 5 millones de visitas",
+   "description": "Cómo Erwin Mongui llevó Fincaraiz de ASP.NET a Django, React y Kubernetes para más de 5 millones de visitas al mes: sin caídas, 50% menos costos y búsqueda con NLP.",
+   "url": "https://erwinmongui.com/es/casos/fincaraiz-monolito-a-microservicios/",
+   "mainEntityOfPage": "https://erwinmongui.com/es/casos/fincaraiz-monolito-a-microservicios/",
+   "inLanguage": "es",
+   "image": "https://erwinmongui.com/og-image.png",
+   "datePublished": "2026-09-23",
+   "dateModified": "2026-09-26",
+   "author": [
+    {
+     "@id": "https://erwinmongui.com/#person"
+    }
+   ],
+   "publisher": {
+    "@id": "https://erwinmongui.com/#person"
+   },
+   "isPartOf": {
+    "@id": "https://erwinmongui.com/#website"
+   },
+   "keywords": [
+    "migración a microservicios",
+    "patrón strangler fig",
+    "Django",
+    "Kubernetes",
+    "Elasticsearch",
+    "búsqueda geoespacial"
+   ],
+   "about": {
+    "@type": "Organization",
+    "name": "Fincaraiz.com.co",
+    "url": "https://www.fincaraiz.com.co/"
+   },
+   "articleSection": "Caso de estudio"
+  },
+  {
+   "@type": "BreadcrumbList",
+   "itemListElement": [
+    {
+     "@type": "ListItem",
+     "position": 1,
+     "name": "Inicio",
+     "item": "https://erwinmongui.com/es/"
+    },
+    {
+     "@type": "ListItem",
+     "position": 2,
+     "name": "Casos",
+     "item": "https://erwinmongui.com/es/#casos"
+    },
+    {
+     "@type": "ListItem",
+     "position": 3,
+     "name": "Migración de Fincaraiz",
+     "item": "https://erwinmongui.com/es/casos/fincaraiz-monolito-a-microservicios/"
+    }
+   ]
+  }
+ ]
+}
+</script>
+<!-- Google tag (gtag.js) -->
+<script async src="https://www.googletagmanager.com/gtag/js?id=G-LKD2WCNDV1"></script>
+<script>
+  window.dataLayer = window.dataLayer || [];
+  function gtag(){dataLayer.push(arguments);}
+  gtag('js', new Date());
+  gtag('config', 'G-LKD2WCNDV1');
+</script>
+<!-- Clarity tracking code for https://erwinmongui.com/ -->
+<script>
+    (function(c,l,a,r,i,t,y){
+        c[a]=c[a]||function(){(c[a].q=c[a].q||[]).push(arguments)};
+        t=l.createElement(r);t.async=1;t.src="https://www.clarity.ms/tag/"+i;
+        y=l.getElementsByTagName(r)[0];y.parentNode.insertBefore(t,y);
+    })(window, document, "clarity", "script", "ygo6nehxdb");
+</script>
+<script defer src="/analytics.js"></script>
+</head>
+<body>
+<a class="skip" href="#main">Ir al contenido</a>
+<header class="nav" id="nav">
+  <div class="nav-inner">
+    <a class="brand" href="/es/"><svg aria-hidden="true" viewBox="0 0 189 190"><path fill="#81ffd9" d="M9.8 184.5C4.8 181.7 2.6 174.6 5.1 169.7C5.7 168.5 10.3 163.3 15.3 158.2L24.5 149.0L15.3 139.8C10.3 134.7 5.7 129.5 5.1 128.3C2.4 123.0 5.3 115.4 10.9 113.1C17.0 110.5 19.5 112.0 33.7 126.3C41.0 133.5 47.4 140.8 48.0 142.3C49.4 146.2 49.3 152.5 47.6 156.3C46.8 158.1 40.4 165.3 33.3 172.3C21.9 183.6 19.9 185.2 16.4 185.6C14.0 185.9 11.5 185.4 9.8 184.5ZM70.7 158.0C65.1 153.6 65.1 144.4 70.7 140.0C73.0 138.2 74.7 138.0 89.6 138.0C107.4 138.0 110.2 138.6 112.6 143.1C115.5 148.8 113.5 156.5 108.5 158.8C106.8 159.6 100.1 160.0 89.6 160.0C74.7 160.0 73.0 159.8 70.7 158.0ZM136.9 158.6C135.4 157.7 133.5 155.4 132.5 153.4C131.1 150.3 131.0 149.1 131.9 145.9C133.5 140.5 137.1 138.0 143.4 138.0C153.7 138.0 160.3 134.0 161.9 126.9C162.3 125.0 162.3 113.4 161.9 101.0C160.7 67.7 157.5 46.5 151.4 32.9L148.7 27.0L145.2 29.0C138.8 32.8 133.0 38.2 129.2 44.0L125.3 49.8L122.4 48.0C109.4 39.8 87.5 39.6 73.2 47.5L69.0 49.9L67.1 46.1C65.0 42.0 54.3 31.6 49.1 28.7L46.0 26.9L43.0 33.2C39.2 41.3 36.3 54.6 34.4 72.4C32.7 89.3 32.7 89.3 28.9 92.5C24.3 96.3 18.8 96.0 14.4 91.6C11.2 88.4 11.0 87.8 11.0 81.2C11.0 63.5 16.4 36.0 22.4 23.5C28.7 10.1 35.8 4.6 46.6 4.6C53.6 4.6 60.0 7.7 70.7 16.2L77.0 21.1L82.5 20.0C89.6 18.5 105.5 18.5 112.5 20.0L117.9 21.1L124.2 16.1C138.1 4.8 148.3 2.1 158.3 6.9C174.9 15.0 184.2 50.4 184.4 107.0C184.5 137.6 184.3 138.6 174.9 148.5C167.2 156.6 160.9 159.4 149.0 159.7C142.0 160.0 138.8 159.6 136.9 158.6ZM64.3 102.5C62.6 101.8 60.4 99.8 59.6 98.1C55.5 90.3 59.6 82.2 68.3 81.3C72.6 80.8 73.2 81.0 76.5 84.3C79.4 87.2 80.0 88.5 80.0 92.2C80.0 97.4 77.9 100.7 73.4 102.6C69.3 104.3 68.4 104.3 64.3 102.5ZM121.3 102.5C117.0 100.7 114.5 96.6 114.6 91.6C114.7 88.4 115.4 87.0 118.4 84.3C120.8 82.1 123.0 81.0 125.0 81.0C137.3 81.0 141.5 97.2 130.6 102.4C126.5 104.3 125.5 104.3 121.3 102.5Z"/></svg><span>Erwin Mongui</span></a>
+    <nav class="nav-links" id="nav-links" aria-label="Principal">
+      <a href="/es/#casos">Casos</a><a href="/about/">Sobre mí</a>
+    </nav>
+    <div class="nav-right">
+      <a class="lang" href="/work/fincaraiz-monolith-to-microservices/" hreflang="en" lang="en">English</a>
+      <a class="nav-cta" href="/es/#contacto">Contacto</a>
+    </div>
+  </div>
+</header>
+<main id="main">
+<header class="doc-head stage-dark">
+    <nav class="crumbs" aria-label="Ruta de navegación"><a href="/es/">Inicio</a><span>/</span><a href="/es/#casos">Casos</a><span>/</span><span>Migración de Fincaraiz</span></nav>
+    <p class="eyebrow">Caso de estudio · Fincaraiz.com.co · 2019 a 2022</p>
+    <h1>De monolito a microservicios, sin detener una plataforma de 5 millones de visitas.</h1>
+    <p class="summary">Como CTO de Fincaraiz.com.co, uno de los principales portales inmobiliarios de Colombia, lideré la migración de un monolito ASP.NET heredado a microservicios con Django y React sobre Kubernetes. Migramos en cuatro niveles detrás de un API Gateway con Kong, mantuvimos sincronizados los datos viejos y nuevos con AWS Lambda y reconstruimos la búsqueda para que entendiera cómo la gente realmente nombra los lugares. La plataforma nunca se cayó, siguió igual de rápida y los costos de hosting y mantenimiento bajaron 50%.</p>
+    <div class="byline"><span>Por Erwin Mongui</span><span>Publicado el 23 de septiembre de 2026</span><span>11 min de lectura</span><a class="link" href="/work/fincaraiz-monolith-to-microservices/" hreflang="en" lang="en">Read in English</a></div>
+    <div class="kpi-row">
+      <div><b>50%</b><span>menos costo de hosting y mantenimiento</span></div>
+      <div><b>100%</b><span>disponibilidad durante la migración, para más de 5 millones de visitas al mes</span></div>
+      <div><b>&lt;3 s</b><span>Largest Contentful Paint, igual que el sistema anterior</span></div>
+      <div><b>30 min</b><span>tiempo de publicación de inmuebles, mantenido durante el cambio</span></div>
+    </div>
+  </header>
+  <section class="doc">
+    <div class="doc-grid">
+      <div class="prose">
+        <h2>La situación</h2>
+        <p>Fincaraiz.com.co es uno de los principales portales inmobiliarios de Colombia, parte del grupo Adevinta en ese momento. Más de 5 millones de personas lo visitaban cada mes para buscar lotes, apartamentos, casas y locales comerciales, y los agentes publicaban y actualizaban inmuebles todos los días.</p>
+        <p>Todo eso funcionaba sobre un monolito ASP.NET heredado, servido con Windows IIS en instancias virtuales de Amazon EC2, con Microsoft SQL Server para los datos y Apache Solr para la búsqueda. Se habían acumulado cuatro problemas:</p>
+        <ul>
+          <li><strong>Un monolito difícil de cambiar.</strong> Todo estaba muy acoplado, así que cada despliegue ponía en riesgo todo el sitio, y los servidores se parchaban a mano.</li>
+          <li><strong>Costos altos.</strong> Las máquinas virtuales y las licencias de Microsoft encarecían el hosting y el mantenimiento.</li>
+          <li><strong>Una búsqueda por palabras clave, no por intención.</strong> La configuración de Solr no manejaba bien la variedad de búsquedas inmobiliarias, con tipos de inmueble muy distintos.</li>
+          <li><strong>Ubicaciones imprecisas.</strong> La gente busca con nombres informales de barrios, apodos locales y frases conversacionales. El buscador no entendía la mayoría.</li>
+        </ul>
+        <p>Y una restricción por encima de todo: el sitio tenía que seguir funcionando. Sin caídas, sin inconsistencias de datos, sin picos de latencia y sin perder posiciones en buscadores.</p>
+
+        <h2>El objetivo</h2>
+        <ul>
+          <li>Reemplazar el monolito por servicios en Django y React que el equipo pudiera cambiar y desplegar de forma independiente.</li>
+          <li>Salir del software con licencia y de los servidores administrados a mano para reducir costos.</li>
+          <li>Mantener el sitio arriba todo el tiempo, para usuarios y agentes.</li>
+          <li>Mantener los Core Web Vitals iguales o mejores que el sitio anterior, y la publicación de inmuebles en su referencia de 30 minutos.</li>
+          <li>Lograr que la búsqueda entendiera lo que la gente quiere decir, incluida la forma en que nombra los lugares.</li>
+        </ul>
+
+        <h2>El enfoque: cuatro niveles, una capa a la vez</h2>
+        <p>Reescribir todo de una vez nunca fue una opción. Usé el patrón strangler fig: construir el sistema nuevo alrededor del viejo, mover el tráfico por partes y retirar el monolito cuando nada dependa de él. Para hacerlo manejable, dividí el trabajo en cuatro niveles, y cada uno hacía posible el siguiente.</p>
+        <div class="table-wrap">
+          <table>
+            <thead><tr><th>Nivel</th><th>Antes</th><th>Después</th></tr></thead>
+            <tbody>
+              <tr><td><strong>1. Plataforma</strong></td><td>EC2 con máquinas virtuales, Windows IIS, parches manuales</td><td>Contenedores Docker en Kubernetes, NGINX, CI/CD automatizado</td></tr>
+              <tr><td><strong>2. Entrada e identidad</strong></td><td>El tráfico iba directo al monolito</td><td>Kong API Gateway enruta cada solicitud, Keycloak para identidad y acceso</td></tr>
+              <tr><td><strong>3. Datos y búsqueda</strong></td><td>Microsoft SQL Server, Apache Solr</td><td>PostgreSQL para transacciones, Elasticsearch para búsqueda, Lambda sincronizando ambos mundos</td></tr>
+              <tr><td><strong>4. Servicios y frontend</strong></td><td>Un solo código en ASP.NET</td><td>Servicios en Django por dominio de negocio, frontend en React</td></tr>
+            </tbody>
+          </table>
+        </div>
+        <figure class="flow" aria-label="Arquitectura durante la migración">
+          <p class="flow-cap">Arquitectura durante la migración</p>
+          <div class="flow-row c1"><div class="node"><b>Usuarios y agentes</b><span>Más de 5 millones de visitas al mes</span></div></div>
+          <div class="arrow" aria-hidden="true"><svg viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round"><path d="M8 2v12M3 9l5 5 5-5"/></svg></div>
+          <div class="flow-row c2">
+            <div class="node key"><b>Kong API Gateway</b><span>Nivel 2: envía cada ruta al sistema viejo o al nuevo</span></div>
+            <div class="node key"><b>Keycloak</b><span>Nivel 2: una sola capa de identidad y acceso para ambos</span></div>
+          </div>
+          <div class="arrow" aria-hidden="true"><svg viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round"><path d="M8 2v12M3 9l5 5 5-5"/></svg></div>
+          <div class="flow-row c3">
+            <div class="node old"><b>Monolito ASP.NET heredado</b><span>IIS en EC2, SQL Server y Solr. Retirado por partes</span></div>
+            <div class="node key"><b>Sincronización con AWS Lambda</b><span>Nivel 3: basada en eventos, mantiene ambos almacenes idénticos</span></div>
+            <div class="node new"><b>Servicios Django y React</b><span>Nivel 4: asumen un dominio a la vez</span></div>
+          </div>
+          <div class="arrow" aria-hidden="true"><svg viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round"><path d="M8 2v12M3 9l5 5 5-5"/></svg></div>
+          <div class="flow-row c3">
+            <div class="node new"><b>PostgreSQL</b><span>Nivel 3: transacciones e integridad de datos</span></div>
+            <div class="node new"><b>Elasticsearch</b><span>Nivel 3: búsqueda con NLP y polígonos geográficos</span></div>
+            <div class="node new"><b>Celery y RabbitMQ</b><span>Publicación masiva de inmuebles</span></div>
+          </div>
+          <div class="arrow" aria-hidden="true"><svg viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round"><path d="M8 2v12M3 9l5 5 5-5"/></svg></div>
+          <div class="flow-row c1"><div class="node new"><b>Kubernetes, Docker, NGINX y CI/CD en AWS</b><span>Nivel 1: la plataforma donde corre todo lo nuevo</span></div></div>
+          <div class="flow-legend"><span><i style="border-style:dashed;background:#2a2a2d"></i>Heredado</span><span><i style="border-color:rgba(129,255,217,.6);background:#2a2a2d"></i>Nuevo</span><span><i style="background:#10263a;border-color:rgba(41,151,255,.6)"></i>Piezas de migración</span></div>
+        </figure>
+
+        <h3>Nivel 1: una plataforma para el sistema nuevo</h3>
+        <p>Antes de mover código, los servicios nuevos necesitaban dónde correr. Reemplazamos las máquinas virtuales de EC2 administradas a mano por contenedores Docker orquestados con Kubernetes, cambiamos Windows IIS por NGINX como servidor web y proxy inverso, y pusimos pipelines de CI/CD automatizados antes de cada despliegue. Desplegar pasó de ser un evento riesgoso y manual a algo rutinario, y el nuevo stack usaba menos recursos para más tráfico.</p>
+
+        <h3>Nivel 2: una sola puerta de entrada, una sola identidad</h3>
+        <p>Después pusimos Kong API Gateway delante de ambos sistemas. Desde entonces, cada solicitud pasaba por un solo punto que decidía si respondía el sistema viejo o el nuevo. Eso nos permitió mover el tráfico ruta por ruta, y devolver una ruta al sistema viejo si algo se veía mal. Keycloak dio a ambos sistemas una sola capa compartida de identidad y acceso.</p>
+
+        <h3>Nivel 3: datos y búsqueda, siempre sincronizados</h3>
+        <p>Movimos los datos transaccionales de Microsoft SQL Server a PostgreSQL, lo que mejoró la integridad y el rendimiento y eliminó el costo de licencias. La búsqueda pasó de Apache Solr a Elasticsearch, hecho para lecturas rápidas y de alto volumen. PostgreSQL manejaba lo que tenía que ser correcto; Elasticsearch, lo que tenía que ser rápido.</p>
+        <p>Lo más difícil fue operar dos sistemas al mismo tiempo. Funciones de AWS Lambda basadas en eventos copiaban cada cambio entre los almacenes viejos y nuevos en tiempo real, así que nunca se contradecían mientras los servicios se migraban uno por uno. Un inmueble publicado en cualquiera de los dos lados seguía apareciendo en la misma ventana de 30 minutos de antes.</p>
+
+        <h3>Nivel 4: servicios por dominio y un frontend nuevo</h3>
+        <p>Con la plataforma, el gateway y los datos listos, dividimos el monolito en servicios Django, uno por dominio de negocio, con un frontend en React. Cada servicio asumió su parte del sitio detrás de Kong, un dominio a la vez. El trabajo pesado, como publicar inmuebles en gran volumen, pasó a tareas en segundo plano con Celery y RabbitMQ, para que un pico de cargas de agentes no volviera lento el sitio para todos.</p>
+
+        <h2>Una búsqueda que entiende cómo la gente nombra los lugares</h2>
+        <p>Pasar la búsqueda a Elasticsearch también fue la oportunidad de hacerla más inteligente. Fue trabajo temprano con IA, años antes de la ola actual de IA generativa.</p>
+        <ul>
+          <li><strong>Consultas en lenguaje natural.</strong> Agregamos comprensión de lenguaje natural, para que la búsqueda leyera la intención de una consulta conversacional en lugar de depender de filtros.</li>
+          <li><strong>Un mapa de todo el país.</strong> Adquirimos datos cartográficos y de malla vial de Colombia: ciudades, municipios, barrios y puntos de referencia.</li>
+          <li><strong>Nombres oficiales y apodos locales.</strong> Relacionamos los nombres oficiales con los nombres informales y alias que la gente realmente usa, y convertimos límites y zonas de interés en polígonos geográficos y vectores dentro de Elasticsearch.</li>
+        </ul>
+        <p>Un ejemplo: "Zona T" es como mucha gente llama a una zona de Bogotá, pero ningún mapa oficial usa ese nombre. La búsqueda lo resolvía así:</p>
+        <figure class="flow" aria-label="Ejemplo: de un apodo local a un barrio oficial">
+          <p class="flow-cap">Ejemplo: de un apodo local a un barrio oficial</p>
+          <div class="flow-row c1"><div class="node"><b>Búsqueda del usuario</b><span>"apartamentos en Zona T"</span></div></div>
+          <div class="arrow" aria-hidden="true"><svg viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round"><path d="M8 2v12M3 9l5 5 5-5"/></svg></div>
+          <div class="flow-row c1"><div class="node"><b>Coincidencias candidatas</b><span>Zona T · Zona Rosa · El Retiro · Chapinero · referencias cercanas</span></div></div>
+          <div class="arrow" aria-hidden="true"><svg viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round"><path d="M8 2v12M3 9l5 5 5-5"/></svg></div>
+          <div class="flow-row c1"><div class="node key"><b>Normalización</b><span>Apodo y alias resueltos contra los polígonos oficiales</span></div></div>
+          <div class="arrow" aria-hidden="true"><svg viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round"><path d="M8 2v12M3 9l5 5 5-5"/></svg></div>
+          <div class="flow-row c1"><div class="node new"><b>Barrio oficial: EL RETIRO</b><span>Código 008310 · Localidad: CHAPINERO</span></div></div>
+          <div class="arrow" aria-hidden="true"><svg viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round"><path d="M8 2v12M3 9l5 5 5-5"/></svg></div>
+          <div class="flow-row c1"><div class="node new"><b>Resultados inmobiliarios</b><span>Inmuebles dentro de ese límite exacto</span></div></div>
+        </figure>
+        <p>La búsqueda pasó de comparar palabras a entender lugares.</p>
+
+        <h2>Lo que salió mal: el inicio de sesión único</h2>
+        <p>No todas las decisiones funcionaron. Keycloak era la idea correcta, una sola capa de identidad para ambos sistemas, pero era nuevo para el equipo y está construido en Java, que estaba fuera de nuestras habilidades principales. Encontramos problemas de integración que no habíamos previsto, y los vacíos en la documentación los hicieron lentos de resolver. Esa parte del proyecto tomó <strong>seis veces más</strong> de lo estimado.</p>
+        <blockquote>En herramientas críticas, que el equipo las conozca y el soporte que tengan importan tanto como sus funcionalidades.</blockquote>
+        <p>Hicimos una sesión abierta de lecciones aprendidas en lugar de buscar culpables, y agregamos un paso de evaluación para herramientas críticas: ¿el equipo conoce el stack?, ¿qué tan buena es la documentación y la comunidad?, ¿a quién llamamos cuando falle?</p>
+
+        <h2>Liderar a 30 ingenieros en el proceso</h2>
+        <ul>
+          <li><strong>Propiedad para los seniors.</strong> Diseñé la arquitectura de alto nivel y les di a los ingenieros senior la propiedad total de implementarla. Eso hizo crecer la capacidad de liderazgo dentro del equipo y evitó que yo fuera un cuello de botella.</li>
+          <li><strong>Scrum en todas las áreas.</strong> Llevamos Scrum más allá de ingeniería y acordamos una sola Definición de Terminado y un solo formato de sprint review, para que producto, ingeniería y negocio vieran el mismo avance.</li>
+          <li><strong>Meter las manos cuando importaba.</strong> Cuando el nuevo stack abrumó al equipo, lo aprendí lo bastante rápido para desbloquear a la gente directamente, hasta que tuvieron confianza por su cuenta.</li>
+          <li><strong>Hacer crecer a las personas.</strong> Acompañé a un ingeniero junior para que asumiera un módulo crítico y defendiera sus decisiones de diseño, como PostgreSQL en lugar de NoSQL. Lo promovieron a nivel medio a los cinco meses.</li>
+        </ul>
+
+        <h2>Resultados</h2>
+        <div class="table-wrap">
+          <table>
+            <thead><tr><th>Medida</th><th>Antes</th><th>Después</th></tr></thead>
+            <tbody>
+              <tr><td>Costo de hosting y mantenimiento</td><td>Máquinas virtuales y licencias de Microsoft</td><td><strong>50% menos</strong></td></tr>
+              <tr><td>Disponibilidad durante la migración</td><td>n/a</td><td><strong>100%, sin caídas</strong></td></tr>
+              <tr><td>Despliegues</td><td>Parches manuales, alto riesgo</td><td><strong>CI/CD automatizado</strong>, en contenedores</td></tr>
+              <tr><td>Largest Contentful Paint</td><td>Menos de 3 s</td><td><strong>Menos de 3 s</strong>, con un sistema más complejo</td></tr>
+              <tr><td>Tiempo de publicación de inmuebles</td><td>30 minutos</td><td><strong>30 minutos</strong>, con dos sistemas en paralelo</td></tr>
+              <tr><td>Búsqueda</td><td>Palabras clave en Apache Solr</td><td><strong>Lenguaje natural y coincidencia geográfica</strong> en Elasticsearch</td></tr>
+              <tr><td>Servidor web</td><td>Windows IIS en EC2</td><td><strong>NGINX en Kubernetes</strong>, menos recursos, más capacidad</td></tr>
+              <tr><td>APIs REST en el nuevo backend</td><td>n/a</td><td><strong>Más de 15</strong>, con 25% menos latencia</td></tr>
+            </tbody>
+          </table>
+        </div>
+
+        <h2>Lo que llevaría a la próxima migración</h2>
+        <ul>
+          <li>Construir primero la plataforma y el gateway. Después, cada movimiento es una decisión de enrutamiento que se puede deshacer.</li>
+          <li>Reservar tiempo real para mantener dos sistemas sincronizados. Es la parte más difícil y la que protege al negocio.</li>
+          <li>Elegir herramientas que el equipo ya conoce para todo lo crítico en seguridad.</li>
+          <li>Medir desde el primer día lo que sienten los usuarios, como la velocidad de la página, para que "sin regresiones" sea un número y no una esperanza.</li>
+        </ul>
+        <div class="author"><svg aria-hidden="true" viewBox="0 0 189 190"><path fill="#0071e3" d="M9.8 184.5C4.8 181.7 2.6 174.6 5.1 169.7C5.7 168.5 10.3 163.3 15.3 158.2L24.5 149.0L15.3 139.8C10.3 134.7 5.7 129.5 5.1 128.3C2.4 123.0 5.3 115.4 10.9 113.1C17.0 110.5 19.5 112.0 33.7 126.3C41.0 133.5 47.4 140.8 48.0 142.3C49.4 146.2 49.3 152.5 47.6 156.3C46.8 158.1 40.4 165.3 33.3 172.3C21.9 183.6 19.9 185.2 16.4 185.6C14.0 185.9 11.5 185.4 9.8 184.5ZM70.7 158.0C65.1 153.6 65.1 144.4 70.7 140.0C73.0 138.2 74.7 138.0 89.6 138.0C107.4 138.0 110.2 138.6 112.6 143.1C115.5 148.8 113.5 156.5 108.5 158.8C106.8 159.6 100.1 160.0 89.6 160.0C74.7 160.0 73.0 159.8 70.7 158.0ZM136.9 158.6C135.4 157.7 133.5 155.4 132.5 153.4C131.1 150.3 131.0 149.1 131.9 145.9C133.5 140.5 137.1 138.0 143.4 138.0C153.7 138.0 160.3 134.0 161.9 126.9C162.3 125.0 162.3 113.4 161.9 101.0C160.7 67.7 157.5 46.5 151.4 32.9L148.7 27.0L145.2 29.0C138.8 32.8 133.0 38.2 129.2 44.0L125.3 49.8L122.4 48.0C109.4 39.8 87.5 39.6 73.2 47.5L69.0 49.9L67.1 46.1C65.0 42.0 54.3 31.6 49.1 28.7L46.0 26.9L43.0 33.2C39.2 41.3 36.3 54.6 34.4 72.4C32.7 89.3 32.7 89.3 28.9 92.5C24.3 96.3 18.8 96.0 14.4 91.6C11.2 88.4 11.0 87.8 11.0 81.2C11.0 63.5 16.4 36.0 22.4 23.5C28.7 10.1 35.8 4.6 46.6 4.6C53.6 4.6 60.0 7.7 70.7 16.2L77.0 21.1L82.5 20.0C89.6 18.5 105.5 18.5 112.5 20.0L117.9 21.1L124.2 16.1C138.1 4.8 148.3 2.1 158.3 6.9C174.9 15.0 184.2 50.4 184.4 107.0C184.5 137.6 184.3 138.6 174.9 148.5C167.2 156.6 160.9 159.4 149.0 159.7C142.0 160.0 138.8 159.6 136.9 158.6ZM64.3 102.5C62.6 101.8 60.4 99.8 59.6 98.1C55.5 90.3 59.6 82.2 68.3 81.3C72.6 80.8 73.2 81.0 76.5 84.3C79.4 87.2 80.0 88.5 80.0 92.2C80.0 97.4 77.9 100.7 73.4 102.6C69.3 104.3 68.4 104.3 64.3 102.5ZM121.3 102.5C117.0 100.7 114.5 96.6 114.6 91.6C114.7 88.4 115.4 87.0 118.4 84.3C120.8 82.1 123.0 81.0 125.0 81.0C137.3 81.0 141.5 97.2 130.6 102.4C126.5 104.3 125.5 104.3 121.3 102.5Z"/></svg><p><b>Erwin Mongui</b>Director de Tecnología en Cedar Planters e ingeniero certificado en Inteligencia Artificial, en Toronto. Más de 18 años construyendo plataformas y los equipos que las operan.</p></div>
+      </div>
+      <aside class="aside">
+        <dl class="facts-box">
+          <div><dt>Empresa</dt><dd>Fincaraiz.com.co, grupo Adevinta</dd></div>
+          <div><dt>Mi rol</dt><dd>CTO y líder del equipo de ingeniería de software</dd></div>
+          <div><dt>Cuándo</dt><dd>2019 a 2022</dd></div>
+          <div><dt>Equipo</dt><dd>30 ingenieros</dd></div>
+          <div><dt>Patrón</dt><dd>Strangler fig, en cuatro niveles</dd></div>
+          <div><dt>Retirado</dt><dd>ASP.NET, Windows IIS, Microsoft SQL Server, Apache Solr, EC2 con máquinas virtuales</dd></div>
+        </dl>
+        <div class="related"><h4>Relacionado</h4><a href="/es/casos/fincaraiz-distribucion-de-leads/">Caso: distribución de leads para cualquier CRM</a><a href="/es/casos/cedar-planters-plataforma-de-datos/">Caso: plataforma de datos desde cero</a></div>
+      </aside>
+    </div>
+  </section>
+
+</main>
+<footer class="foot">
+  <div class="foot-inner">
+    <p>&copy; 2026 Erwin Mongui. Todos los derechos reservados.</p>
+    <nav aria-label="Footer">
+      <a href="/work/">Work</a><a href="/writing/">Writing</a><a href="/about/">About</a><a href="/es/" lang="es" hreflang="es">Español</a>
+      <a href="https://www.linkedin.com/in/erwin-mongui/" target="_blank" rel="noopener">LinkedIn</a>
+      <a href="https://www.google.com/preferences/source?q=erwinmongui.com" target="_blank" rel="noopener">Agregar como fuente preferida en Google</a>
+    </nav>
+  </div>
+</footer>
+<script>
+document.addEventListener('click', function (e) {
+  var b = e.target.closest && e.target.closest('[data-copy]');
+  if (!b || !navigator.clipboard) return;
+  var label = b.textContent;
+  navigator.clipboard.writeText(b.getAttribute('data-copy')).then(function () {
+    b.textContent = document.documentElement.lang === 'es' ? 'Copiado' : 'Copied';
+    setTimeout(function () { b.textContent = label; }, 1600);
+  });
+});
+</script>
+</body>
+</html>

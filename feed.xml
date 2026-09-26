@@ -1,0 +1,91 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<rss version="2.0" xmlns:atom="http://www.w3.org/2005/Atom">
+<channel>
+  <title>Erwin Mongui: case studies and writing</title>
+  <link>https://erwinmongui.com/</link>
+  <atom:link href="https://erwinmongui.com/feed.xml" rel="self" type="application/rss+xml"/>
+  <description>Case studies and articles by Erwin Mongui on platform architecture, data, AI and engineering leadership.</description>
+  <language>en</language>
+  <lastBuildDate>Sat, 26 Sep 2026 12:00:00 +0000</lastBuildDate>
+  <item>
+    <title>A lead distribution engine that connects to any CRM</title>
+    <link>https://erwinmongui.com/work/fincaraiz-lead-distribution/</link>
+    <guid isPermaLink="true">https://erwinmongui.com/work/fincaraiz-lead-distribution/</guid>
+    <pubDate>Sat, 26 Sep 2026 12:00:00 +0000</pubDate>
+    <category>Case study</category>
+    <description>How Erwin Mongui designed Fincaraiz&#x27;s B2B lead distribution: GraphQL, fault-tolerant retries, 100% data parity and a Connector service for six CRM platforms.</description>
+  </item>
+  <item>
+    <title>A data platform from zero, as the first technical hire</title>
+    <link>https://erwinmongui.com/work/cedar-planters-data-platform/</link>
+    <guid isPermaLink="true">https://erwinmongui.com/work/cedar-planters-data-platform/</guid>
+    <pubDate>Fri, 25 Sep 2026 12:00:00 +0000</pubDate>
+    <category>Case study</category>
+    <description>As Cedar Planters&#x27; first technical hire, Erwin Mongui replaced third-party reporting tools with one data platform. New reports went from months to hours.</description>
+  </item>
+  <item>
+    <title>Finding delivery bottlenecks with lead time and cycle time</title>
+    <link>https://erwinmongui.com/writing/lead-time-cycle-time-bottlenecks/</link>
+    <guid isPermaLink="true">https://erwinmongui.com/writing/lead-time-cycle-time-bottlenecks/</guid>
+    <pubDate>Fri, 25 Sep 2026 12:00:00 +0000</pubDate>
+    <category>Delivery</category>
+    <description>A five-step way to find where software work gets stuck using lead time, cycle time and flow metrics, confirm the cause with the team, and fix it.</description>
+  </item>
+  <item>
+    <title>How I measure engineering team health</title>
+    <link>https://erwinmongui.com/writing/engineering-team-health-metrics/</link>
+    <guid isPermaLink="true">https://erwinmongui.com/writing/engineering-team-health-metrics/</guid>
+    <pubDate>Thu, 24 Sep 2026 12:00:00 +0000</pubDate>
+    <category>Leadership</category>
+    <description>The delivery, health and impact metrics I track, how they map to DORA and SPACE, and how to tell whether AI coding assistants are really helping a team.</description>
+  </item>
+  <item>
+    <title>Monolith to microservices, without stopping a 5M-visit platform</title>
+    <link>https://erwinmongui.com/work/fincaraiz-monolith-to-microservices/</link>
+    <guid isPermaLink="true">https://erwinmongui.com/work/fincaraiz-monolith-to-microservices/</guid>
+    <pubDate>Wed, 23 Sep 2026 12:00:00 +0000</pubDate>
+    <category>Case study</category>
+    <description>How Erwin Mongui moved Fincaraiz from ASP.NET to Django, React and Kubernetes for 5M+ monthly visits: zero downtime, 50% lower costs and NLP search.</description>
+  </item>
+  <item>
+    <title>From data analyst to data engineer, through one good question</title>
+    <link>https://erwinmongui.com/writing/from-data-analyst-to-data-engineer/</link>
+    <guid isPermaLink="true">https://erwinmongui.com/writing/from-data-analyst-to-data-engineer/</guid>
+    <pubDate>Tue, 22 Sep 2026 12:00:00 +0000</pubDate>
+    <category>Leadership</category>
+    <description>How asking a data analyst to challenge our pipeline tool led to a better stack and a new data engineer. A guided discovery approach to mentoring, with AI.</description>
+  </item>
+  <item>
+    <title>Pick the tool your team can support, not the one on the shortlist</title>
+    <link>https://erwinmongui.com/writing/choose-tools-your-team-can-support/</link>
+    <guid isPermaLink="true">https://erwinmongui.com/writing/choose-tools-your-team-can-support/</guid>
+    <pubDate>Mon, 21 Sep 2026 12:00:00 +0000</pubDate>
+    <category>Architecture</category>
+    <description>A single sign-on project took six times longer than planned. What went wrong, the tool-selection scorecard we use now, and how AI assistants change it.</description>
+  </item>
+  <item>
+    <title>Shaping the future: what new graduates need for a career in AI</title>
+    <link>https://erwinmongui.com/writing/ai-careers-new-graduates/</link>
+    <guid isPermaLink="true">https://erwinmongui.com/writing/ai-careers-new-graduates/</guid>
+    <pubDate>Tue, 05 Mar 2024 12:00:00 +0000</pubDate>
+    <category>AI</category>
+    <description>An engineering manager&#x27;s view of AI careers for new graduates: collaboration, real projects, AI-assisted development, evaluation, ethics and frameworks.</description>
+  </item>
+  <item>
+    <title>Taming the data jungle: JSON as the contract between your systems and AI</title>
+    <link>https://erwinmongui.com/writing/ai-applications-json/</link>
+    <guid isPermaLink="true">https://erwinmongui.com/writing/ai-applications-json/</guid>
+    <pubDate>Tue, 06 Feb 2024 12:00:00 +0000</pubDate>
+    <category>AI</category>
+    <description>Why JSON became the contract between software and AI models: structured outputs with JSON Schema and Pydantic, tool calling, MCP, memory and model configs.</description>
+  </item>
+  <item>
+    <title>Replacing random RT-PCR checks with data-driven traveller selection</title>
+    <link>https://erwinmongui.com/writing/rt-pcr-travel-screening-data-driven-selection/</link>
+    <guid isPermaLink="true">https://erwinmongui.com/writing/rt-pcr-travel-screening-data-driven-selection/</guid>
+    <pubDate>Tue, 12 Dec 2023 12:00:00 +0000</pubDate>
+    <category>Research</category>
+    <description>Our STEM Fellowship Big Data and AI Challenge 2023 paper: using WHO and Government of Canada data to prioritize travellers for RT-PCR checks instead of at random.</description>
+  </item>
+</channel>
+</rss>

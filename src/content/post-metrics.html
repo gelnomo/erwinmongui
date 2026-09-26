@@ -1,0 +1,86 @@
+<header class="doc-head stage-dark">
+    <nav class="crumbs" aria-label="Breadcrumb"><a href="/">Home</a><span>/</span><a href="/writing/">Writing</a><span>/</span><span>Leadership</span></nav>
+    <p class="eyebrow">Leadership · Metrics</p>
+    <h1>How I measure engineering team health.</h1>
+    <p class="summary">I track three groups of numbers: how fast the team delivers, how healthy the team and its systems are, and whether the work reaches users. With AI assistants now writing much of the code, a fourth question matters too: is AI actually making the team better, or just busier?</p>
+    <div class="byline"><span>By Erwin Mongui</span><span>September 24, 2026</span><span>7 min read</span></div>
+  </header>
+  <section class="doc">
+    <div class="doc-grid">
+      <div class="prose">
+        <div class="inshort"><b>In short</b><p>Pair every speed metric with a quality or health metric, and include at least one number users would recognize. Build on established frameworks like DORA and SPACE rather than inventing your own. To judge AI assistants, watch lead time, change failure rate and review time, never lines of code.</p></div>
+
+        <h2>The metrics I track</h2>
+        <div class="table-wrap">
+          <table>
+            <thead><tr><th>Group</th><th>Metric</th><th>The question it answers</th></tr></thead>
+            <tbody>
+              <tr><td>Delivery</td><td>Lead time for changes</td><td>How long from a commit to it running in production?</td></tr>
+              <tr><td>Delivery</td><td>Deployment frequency</td><td>How often can we safely ship?</td></tr>
+              <tr><td>Delivery</td><td>Change failure rate</td><td>How often does a release cause a problem?</td></tr>
+              <tr><td>Health</td><td>Sprint say/do ratio</td><td>Do we deliver what we commit to?</td></tr>
+              <tr><td>Health</td><td>Time to onboard</td><td>How fast does a new engineer ship their first real change?</td></tr>
+              <tr><td>Health</td><td>Data parity</td><td>Do our systems agree with each other?</td></tr>
+              <tr><td>Impact</td><td>Core Web Vitals</td><td>Is the product fast for real users?</td></tr>
+              <tr><td>Impact</td><td>Reporting lead time</td><td>How long from a business question to a trusted answer?</td></tr>
+            </tbody>
+          </table>
+        </div>
+
+        <h2>Start from established frameworks</h2>
+        <p>You don't need to invent a measurement system. Two frameworks cover most of what matters:</p>
+        <ul>
+          <li><strong>DORA metrics</strong> from Google's DevOps Research and Assessment program: deployment frequency, lead time for changes, change failure rate and time to restore service. They measure how well a team delivers software.</li>
+          <li><strong>The SPACE framework</strong> looks at productivity more broadly: satisfaction and well-being, performance, activity, communication and collaboration, and efficiency and flow. It is a reminder that activity alone is never the full picture.</li>
+        </ul>
+        <p>My list above uses DORA for delivery and adds the health and impact numbers that matter for the kind of platforms I build.</p>
+
+        <h2>What the numbers looked like in practice</h2>
+        <ul>
+          <li><strong>Impact at Fincaraiz.</strong> During the migration to microservices, our user-facing number was Largest Contentful Paint. We kept it under 3 seconds, the same as the legacy site, which protected both user experience and search rankings.</li>
+          <li><strong>Data parity in lead distribution.</strong> In our B2B lead distribution system, we reconciled every lead in our reports against the partner's CRM and held a 100% match.</li>
+          <li><strong>Reporting lead time at Cedar Planters.</strong> When building the data platform, the key question was how fast a business question became a trusted dashboard.</li>
+        </ul>
+
+        <h2>Measuring the impact of AI assistants</h2>
+        <p>Most teams now use AI coding assistants. The temptation is to measure them by volume: more pull requests, more lines, more tickets closed. Those numbers go up easily and prove very little. What I watch instead:</p>
+        <div class="table-wrap">
+          <table>
+            <thead><tr><th>Watch</th><th>Healthy sign</th><th>Warning sign</th></tr></thead>
+            <tbody>
+              <tr><td>Lead time for changes</td><td>Falls, and stays down</td><td>Coding gets faster but lead time doesn't move</td></tr>
+              <tr><td>Change failure rate</td><td>Stays flat or falls</td><td>Rises as more code ships</td></tr>
+              <tr><td>Review time</td><td>Stable</td><td>Pull requests pile up waiting for review</td></tr>
+              <tr><td>Rework</td><td>Stable</td><td>More code is rewritten or reverted soon after merging</td></tr>
+              <tr><td>Developer satisfaction</td><td>People say they spend less time on toil</td><td>People feel they review more than they build</td></tr>
+            </tbody>
+          </table>
+        </div>
+        <p>A common pattern is the bottleneck moving: AI speeds up writing code, and the queue shifts to review and testing. That is not a failure, but it means the next improvement is in the review process, not in more generation.</p>
+
+        <h2>How to collect them</h2>
+        <p>Most of these numbers already live in your tools. Deployment and lead time data come from your CI/CD pipeline and Git history on GitHub or GitLab; sprint data from Jira or a similar tracker; web performance from real-user monitoring and Google Search Console. If you don't want to build dashboards yourself, engineering analytics platforms combine these sources for you. They focus on different things:</p>
+        <div class="table-wrap">
+          <table>
+            <thead><tr><th>Platform</th><th>What it is best at</th><th>Use it when</th></tr></thead>
+            <tbody>
+              <tr><td>DX</td><td>Combines regular developer surveys with data from your systems, to measure developer experience and productivity, including the adoption and impact of AI tools</td><td>You want to know where engineers lose time and whether AI assistants are really helping, not only what the pipeline says</td></tr>
+              <tr><td>LinearB</td><td>Delivery analytics from Git and project tools: DORA metrics, cycle time by stage, pull request size and review time, plus automation for parts of the pull request workflow</td><td>You want to find and fix delivery bottlenecks, especially in code review</td></tr>
+              <tr><td>Swarmia</td><td>DORA and flow metrics, a view of how effort splits between new features, maintenance and unplanned work, and team working agreements with Slack reminders</td><td>You want a team-level view of flow and focus, and help keeping agreed habits</td></tr>
+            </tbody>
+          </table>
+        </div>
+        <p>Whichever you choose, start with the question you want answered, agree with the team on what will be measured and why, and roll it out at team level first. Free options go a long way too: GitHub and GitLab insights, and Jira's cycle time and control chart reports. AI assistants are also useful here: give one an export of your ticket or pull request data and ask it to find where time goes, then verify the pattern yourself.</p>
+
+        <h2>How I use them</h2>
+        <ul>
+          <li>A number that moves the wrong way starts a conversation with the engineers involved. The data shows where; they explain why.</li>
+          <li>I look at trends across sprints and releases, not single values.</li>
+          <li>Metrics describe the system, never individual performance. The moment people feel judged by a number, they start optimizing the number.</li>
+        </ul>
+        <p>When a delivery number moves the wrong way, this is how I find the cause: <a class="link" href="/writing/lead-time-cycle-time-bottlenecks/">Finding delivery bottlenecks with lead time and cycle time</a>.</p>
+        <div class="author"><svg aria-hidden="true" viewBox="0 0 189 190"><path fill="#0071e3" d="M9.8 184.5C4.8 181.7 2.6 174.6 5.1 169.7C5.7 168.5 10.3 163.3 15.3 158.2L24.5 149.0L15.3 139.8C10.3 134.7 5.7 129.5 5.1 128.3C2.4 123.0 5.3 115.4 10.9 113.1C17.0 110.5 19.5 112.0 33.7 126.3C41.0 133.5 47.4 140.8 48.0 142.3C49.4 146.2 49.3 152.5 47.6 156.3C46.8 158.1 40.4 165.3 33.3 172.3C21.9 183.6 19.9 185.2 16.4 185.6C14.0 185.9 11.5 185.4 9.8 184.5ZM70.7 158.0C65.1 153.6 65.1 144.4 70.7 140.0C73.0 138.2 74.7 138.0 89.6 138.0C107.4 138.0 110.2 138.6 112.6 143.1C115.5 148.8 113.5 156.5 108.5 158.8C106.8 159.6 100.1 160.0 89.6 160.0C74.7 160.0 73.0 159.8 70.7 158.0ZM136.9 158.6C135.4 157.7 133.5 155.4 132.5 153.4C131.1 150.3 131.0 149.1 131.9 145.9C133.5 140.5 137.1 138.0 143.4 138.0C153.7 138.0 160.3 134.0 161.9 126.9C162.3 125.0 162.3 113.4 161.9 101.0C160.7 67.7 157.5 46.5 151.4 32.9L148.7 27.0L145.2 29.0C138.8 32.8 133.0 38.2 129.2 44.0L125.3 49.8L122.4 48.0C109.4 39.8 87.5 39.6 73.2 47.5L69.0 49.9L67.1 46.1C65.0 42.0 54.3 31.6 49.1 28.7L46.0 26.9L43.0 33.2C39.2 41.3 36.3 54.6 34.4 72.4C32.7 89.3 32.7 89.3 28.9 92.5C24.3 96.3 18.8 96.0 14.4 91.6C11.2 88.4 11.0 87.8 11.0 81.2C11.0 63.5 16.4 36.0 22.4 23.5C28.7 10.1 35.8 4.6 46.6 4.6C53.6 4.6 60.0 7.7 70.7 16.2L77.0 21.1L82.5 20.0C89.6 18.5 105.5 18.5 112.5 20.0L117.9 21.1L124.2 16.1C138.1 4.8 148.3 2.1 158.3 6.9C174.9 15.0 184.2 50.4 184.4 107.0C184.5 137.6 184.3 138.6 174.9 148.5C167.2 156.6 160.9 159.4 149.0 159.7C142.0 160.0 138.8 159.6 136.9 158.6ZM64.3 102.5C62.6 101.8 60.4 99.8 59.6 98.1C55.5 90.3 59.6 82.2 68.3 81.3C72.6 80.8 73.2 81.0 76.5 84.3C79.4 87.2 80.0 88.5 80.0 92.2C80.0 97.4 77.9 100.7 73.4 102.6C69.3 104.3 68.4 104.3 64.3 102.5ZM121.3 102.5C117.0 100.7 114.5 96.6 114.6 91.6C114.7 88.4 115.4 87.0 118.4 84.3C120.8 82.1 123.0 81.0 125.0 81.0C137.3 81.0 141.5 97.2 130.6 102.4C126.5 104.3 125.5 104.3 121.3 102.5Z"/></svg><p><b>Erwin Mongui</b>Director of Technology at Cedar Planters and Certified AI Engineer, based in Toronto. <a class="link" href="/about/">More about me</a></p></div>
+      </div>
+      <aside class="aside"><div class="related"><h4>Related</h4><a href="/writing/lead-time-cycle-time-bottlenecks/">Finding delivery bottlenecks</a><a href="/work/fincaraiz-lead-distribution/">Case study: lead distribution</a><a href="/work/fincaraiz-monolith-to-microservices/">Case study: the migration</a></div></aside>
+    </div>
+  </section>

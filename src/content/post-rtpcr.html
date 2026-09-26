@@ -1,0 +1,120 @@
+<header class="doc-head stage-dark">
+    <nav class="crumbs" aria-label="Breadcrumb"><a href="/">Home</a><span>/</span><a href="/writing/">Writing</a><span>/</span><span>Research</span></nav>
+    <p class="eyebrow">Research · Data science</p>
+    <h1>Replacing random RT-PCR checks with data-driven traveller selection.</h1>
+    <p class="summary">In 2023, travellers arriving at Toronto Pearson International Airport were chosen for RT-PCR report checks at random. For the STEM Fellowship Big Data and AI Challenge, four of us at Lambton College proposed a better way: combine WHO and Government of Canada COVID-19 data with each traveller's RT-PCR report to sort passengers into priority groups. Our paper was published in the challenge proceedings in the STEM Fellowship Journal.</p>
+    <div class="byline"><span>By Erwin Mongui, with Umid Ghimire, Dharmik Limbani and Sairam Kilari</span><span>First published December 12, 2023</span><span>Updated September 23, 2026</span><span>8 min read</span><span>Originally on <a class="link" href="https://www.linkedin.com/pulse/enhancing-international-passengers-selection-rt-pcr-erwin-mongui-yllle/" target="_blank" rel="noopener">LinkedIn</a></span></div>
+  </header>
+  <section class="doc">
+    <div class="doc-grid">
+      <div class="prose">
+        <div class="inshort"><b>In short</b><p>Random selection treats every traveller the same. Our study scored each country's current COVID-19 risk from WHO data, used Government of Canada data to find the age groups most at risk of severe illness, extracted traveller RT-PCR reports from PDF with Python, and combined the three into priority levels, from "Immediate" to "Low". Paper: <em>Eliminating Randomness in Selecting International Passengers for RT-PCR</em> (<a class="link" href="https://journal.stemfellowship.org/doi/abs/10.17975/sfj-2023-007" target="_blank" rel="noopener">doi:10.17975/sfj-2023-007</a>). Code: <a class="link" href="https://github.com/gelnomo/ART.-National-Inter-University-Big-Data-And-AI-Challenge-2023" target="_blank" rel="noopener">GitHub</a>.</p></div>
+
+        <h2>The problem</h2>
+        <p>By mid-2023, international travel had reopened with fewer restrictions, but COVID-19 had not gone away. New sub-variants such as Omicron "Arcturus" were spreading, and it was unclear how well existing vaccines protected against them. The numbers were still large:</p>
+        <div class="kpi-row kpi-3">
+          <div style="border-top-color:var(--line-light)"><b style="color:var(--blue)">1.7M</b><span style="color:var(--steel)">tourists arrived in Ontario in the first quarter of 2023</span></div>
+          <div style="border-top-color:var(--line-light)"><b style="color:var(--blue)">219,183</b><span style="color:var(--steel)">new cases reported worldwide in the 7 days to June 7, 2023 (WHO)</span></div>
+          <div style="border-top-color:var(--line-light)"><b style="color:var(--blue)">Random</b><span style="color:var(--steel)">how travellers were selected for RT-PCR report checks at Pearson</span></div>
+        </div>
+        <p>RT-PCR tests were the most widely used way to detect the virus, and many travellers carried RT-PCR reports. But choosing whom to check at random ignores information that was already publicly available. Our question: could that data point the Immigration unit at Pearson to the travellers most likely to need attention?</p>
+
+        <h2>The data</h2>
+        <div class="table-wrap">
+          <table>
+            <thead><tr><th>Source</th><th>What we used</th></tr></thead>
+            <tbody>
+              <tr><td>World Health Organization</td><td>New COVID-19 cases per country in the last 7 days, and per 100,000 people</td></tr>
+              <tr><td>Government of Canada</td><td>COVID-19 epidemiology: hospitalizations, ICU admissions and deaths, by age group and sex, over time</td></tr>
+              <tr><td>Traveller RT-PCR reports</td><td>Reports from travellers in several countries, with test date, age, gender, location and result. Some were created from sample reports available online.</td></tr>
+            </tbody>
+          </table>
+        </div>
+
+        <h2>The method</h2>
+        <h3>1. A risk level for every country</h3>
+        <p>From the WHO data, we calculated each country's share of new cases per 100,000 people over the last 7 days, then turned it into a simple risk level:</p>
+<pre><code>share (%) = cases_per_100k_last_7_days / sum(all countries) × 100
+
+risk level = 2   if share &gt; 2%        (highly affected)
+             1   if 1% ≤ share &lt; 2%
+             0   otherwise            (low affected)</code></pre>
+
+        <h3>2. Who is most at risk of severe illness</h3>
+        <p>We analysed six months of Government of Canada data by age, sex and outcome. People aged 70 and over made up the largest share of hospitalizations, ICU admissions and deaths, with the 50 to 69 group next. That gave us three age bands for the model: 70 and over, 50 to 69, and 0 to 49.</p>
+
+        <h3>3. Reading the RT-PCR reports</h3>
+        <p>We extracted the reports from PDF into a structured CSV file with Python: test date, result, gender, age and location, with the country derived from the location. We also added how old each report was, in days since the test date.</p>
+
+        <h3>4. Priority groups</h3>
+        <p>Combining the three gave each traveller a priority level:</p>
+        <div class="table-wrap">
+          <table>
+            <thead><tr><th>Priority</th><th>Age</th><th>RT-PCR report</th><th>Country risk</th></tr></thead>
+            <tbody>
+              <tr><td><strong>Immediate, level 3</strong></td><td>70+</td><td>Positive, more than 14 days old</td><td>High (2)</td></tr>
+              <tr><td><strong>Immediate, level 2A</strong></td><td>70+</td><td>Positive, less than 14 days old</td><td>High (2)</td></tr>
+              <tr><td><strong>Immediate, level 2B</strong></td><td>70+</td><td>Positive, more than 14 days old</td><td>Low (1 or less)</td></tr>
+              <tr><td><strong>High, level 3</strong></td><td>50 to 69</td><td>Positive, more than 14 days old</td><td>High (2)</td></tr>
+              <tr><td><strong>High, level 2A</strong></td><td>50 to 69</td><td>Positive, less than 14 days old</td><td>High (2)</td></tr>
+              <tr><td><strong>High, level 2B</strong></td><td>50 to 69</td><td>Positive, more than 14 days old</td><td>Low (1 or less)</td></tr>
+              <tr><td><strong>Medium, level 2A</strong></td><td>50+</td><td>Negative</td><td>Any</td></tr>
+              <tr><td><strong>Medium, level 2B</strong></td><td>0 to 49</td><td>Positive</td><td>Any</td></tr>
+              <tr><td><strong>Low</strong></td><td>0 to 49</td><td>Negative</td><td>Any</td></tr>
+            </tbody>
+          </table>
+        </div>
+        <p>Immediate priority means the traveller should be selected for an RT-PCR check. High and medium priority travellers can be sampled at random but don't need immediate attention. Everyone else is low priority.</p>
+
+        <h2>Results</h2>
+        <p>Applied to the reports we collected, the model placed <strong>2 travellers</strong> in Immediate level 2B, <strong>8</strong> in High level 2B and <strong>19</strong> in Medium level 2A. Instead of a random draw, officers would have had a short, ranked list with a reason attached to every name.</p>
+        <blockquote>Random selection is not an optimal strategy when the data to do better is already public.</blockquote>
+
+        <h2>What we learned</h2>
+        <ul>
+          <li><strong>Public data is enough to start.</strong> WHO and Government of Canada data, combined with the reports travellers already carry, supported a clear and explainable selection policy.</li>
+          <li><strong>Simple, transparent rules are a strong first step.</strong> Every priority level can be explained in one sentence, which matters for a decision that affects people at a border.</li>
+          <li><strong>Automated report processing is the foundation.</strong> Nothing works until reports in PDF become clean, structured data.</li>
+          <li><strong>Collaboration and mentorship made it possible.</strong> Professor Ashish Gupta's guidance kept the work rigorous and focused.</li>
+        </ul>
+
+        <h2>Scope and next steps</h2>
+        <p>As a challenge project, the study was designed to demonstrate the approach. Taking it further would mean:</p>
+        <ul>
+          <li>applying the method to a larger set of real traveller reports;</li>
+          <li>validating the priority rules against real screening outcomes;</li>
+          <li>reviewing, with fairness and legal experts, which traveller attributes are appropriate to use.</li>
+        </ul>
+
+        <h2>How we would build it with today's tools</h2>
+        <p>If we started the project in 2026, the same idea would go much further:</p>
+        <h3>Read any report, in any format or language</h3>
+        <p>We wrote Python to extract fields from PDF reports with a fixed layout. Today, multimodal AI models can read PDFs, photos and scans in many languages and layouts, and return the test type, date, result and lab as structured JSON that follows a fixed schema, ready to validate. I describe that pattern in <a class="link" href="/writing/ai-applications-json/">JSON as the contract between your systems and AI</a>.</p>
+        <h3>From rules to a tested model</h3>
+        <p>With real outcome data, such as which selected travellers actually tested positive on arrival, the rules could become a trained model. Gradient-boosted trees such as XGBoost or LightGBM are a strong, explainable choice for this kind of tabular data, and SHAP values show which factors drive each prediction, so officers still get a reason with every recommendation. The model would be tested on held-out data and compared against random selection before anyone relied on it.</p>
+        <h3>Faster research with AI assistants</h3>
+        <p>AI coding assistants would speed up data cleaning, visualization and experiment code, the work that filled our notebooks. The research questions, the judgment calls and the checking would still be ours.</p>
+        <h3>Fairness, privacy and people in the loop</h3>
+        <ul>
+          <li><strong>Fairness:</strong> test how often each group is selected, and prefer factors about the trip and the test, like report age and current case rates at the origin, over personal characteristics wherever possible.</li>
+          <li><strong>Privacy:</strong> treat RT-PCR results as health data under Canadian privacy law: collect the minimum, protect it, delete it when it is no longer needed.</li>
+          <li><strong>Human decisions:</strong> the model prioritizes, an officer decides.</li>
+          <li><strong>Monitoring:</strong> case rates and variants change weekly, so risk levels and the model need regular updates.</li>
+        </ul>
+
+        <h2>The paper and the code</h2>
+        <dl class="facts-box">
+          <div><dt>Paper title</dt><dd>Eliminating Randomness in Selecting International Passengers for RT-PCR</dd></div>
+          <div><dt>Authors</dt><dd>Umid Ghimire, Dharmik Limbani, Erwin Mongui, Sairam Kilari (Lambton College)</dd></div>
+          <div><dt>Mentor</dt><dd>Professor Ashish Gupta, Lambton College</dd></div>
+          <div><dt>Written for</dt><dd>STEM Fellowship National Inter-University Big Data and AI Challenge 2023 (paper dated June 11, 2023)</dd></div>
+          <div><dt>Published in</dt><dd>STEM Fellowship Journal, <em>Leveraging open data analytics and machine learning to improve diagnosis of diseases, patients' care, and support: Proceedings from the 2023 Inter-University Big Data and AI Challenge</em></dd></div>
+          <div><dt>DOI</dt><dd><a class="link" href="https://journal.stemfellowship.org/doi/abs/10.17975/sfj-2023-007" target="_blank" rel="noopener">10.17975/sfj-2023-007</a></dd></div>
+          <div><dt>Code</dt><dd><a class="link" href="https://github.com/gelnomo/ART.-National-Inter-University-Big-Data-And-AI-Challenge-2023" target="_blank" rel="noopener">Jupyter notebooks on GitHub</a>: COVID-19 data visualization, RT-PCR report processing and traveller segmentation</dd></div>
+        </dl>
+        <p>We are grateful to Professor Gupta for his mentorship, and to the STEM Fellowship for organizing the challenge and giving us the chance to contribute.</p>
+        <div class="author"><svg aria-hidden="true" viewBox="0 0 189 190"><path fill="#0071e3" d="M9.8 184.5C4.8 181.7 2.6 174.6 5.1 169.7C5.7 168.5 10.3 163.3 15.3 158.2L24.5 149.0L15.3 139.8C10.3 134.7 5.7 129.5 5.1 128.3C2.4 123.0 5.3 115.4 10.9 113.1C17.0 110.5 19.5 112.0 33.7 126.3C41.0 133.5 47.4 140.8 48.0 142.3C49.4 146.2 49.3 152.5 47.6 156.3C46.8 158.1 40.4 165.3 33.3 172.3C21.9 183.6 19.9 185.2 16.4 185.6C14.0 185.9 11.5 185.4 9.8 184.5ZM70.7 158.0C65.1 153.6 65.1 144.4 70.7 140.0C73.0 138.2 74.7 138.0 89.6 138.0C107.4 138.0 110.2 138.6 112.6 143.1C115.5 148.8 113.5 156.5 108.5 158.8C106.8 159.6 100.1 160.0 89.6 160.0C74.7 160.0 73.0 159.8 70.7 158.0ZM136.9 158.6C135.4 157.7 133.5 155.4 132.5 153.4C131.1 150.3 131.0 149.1 131.9 145.9C133.5 140.5 137.1 138.0 143.4 138.0C153.7 138.0 160.3 134.0 161.9 126.9C162.3 125.0 162.3 113.4 161.9 101.0C160.7 67.7 157.5 46.5 151.4 32.9L148.7 27.0L145.2 29.0C138.8 32.8 133.0 38.2 129.2 44.0L125.3 49.8L122.4 48.0C109.4 39.8 87.5 39.6 73.2 47.5L69.0 49.9L67.1 46.1C65.0 42.0 54.3 31.6 49.1 28.7L46.0 26.9L43.0 33.2C39.2 41.3 36.3 54.6 34.4 72.4C32.7 89.3 32.7 89.3 28.9 92.5C24.3 96.3 18.8 96.0 14.4 91.6C11.2 88.4 11.0 87.8 11.0 81.2C11.0 63.5 16.4 36.0 22.4 23.5C28.7 10.1 35.8 4.6 46.6 4.6C53.6 4.6 60.0 7.7 70.7 16.2L77.0 21.1L82.5 20.0C89.6 18.5 105.5 18.5 112.5 20.0L117.9 21.1L124.2 16.1C138.1 4.8 148.3 2.1 158.3 6.9C174.9 15.0 184.2 50.4 184.4 107.0C184.5 137.6 184.3 138.6 174.9 148.5C167.2 156.6 160.9 159.4 149.0 159.7C142.0 160.0 138.8 159.6 136.9 158.6ZM64.3 102.5C62.6 101.8 60.4 99.8 59.6 98.1C55.5 90.3 59.6 82.2 68.3 81.3C72.6 80.8 73.2 81.0 76.5 84.3C79.4 87.2 80.0 88.5 80.0 92.2C80.0 97.4 77.9 100.7 73.4 102.6C69.3 104.3 68.4 104.3 64.3 102.5ZM121.3 102.5C117.0 100.7 114.5 96.6 114.6 91.6C114.7 88.4 115.4 87.0 118.4 84.3C120.8 82.1 123.0 81.0 125.0 81.0C137.3 81.0 141.5 97.2 130.6 102.4C126.5 104.3 125.5 104.3 121.3 102.5Z"/></svg><p><b>Erwin Mongui</b>Director of Technology at Cedar Planters and Certified AI Engineer (Lambton College, 2024), based in Toronto. <a class="link" href="/about/">More about me</a></p></div>
+      </div>
+      <aside class="aside"><div class="related"><h4>Related</h4><a href="/writing/ai-applications-json/">JSON as the contract between your systems and AI</a><a href="/writing/ai-careers-new-graduates/">What new graduates need for a career in AI</a><a href="/about/">About: education and credentials</a></div></aside>
+    </div>
+  </section>
