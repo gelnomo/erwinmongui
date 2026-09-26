@@ -16,7 +16,7 @@ PAIRS = [
     ('<title>Erwin Mongui, Engineering Leader and Director of Technology in Toronto</title>',
      '<title>Erwin Mongui, líder de ingeniería y Director de Tecnología en Toronto</title>'),
     ('<meta name="description" content="Erwin Mongui, software engineering leader in Toronto: Director of Technology at Cedar Planters, Certified AI Engineer, 18+ years building customer platforms.">',
-     '<meta name="description" content="Erwin Mongui, líder de ingeniería de software en Toronto: Director de Tecnología en Cedar Planters, ingeniero certificado en IA, más de 18 años construyendo plataformas.">'),
+     '<meta name="description" content="Erwin Mongui, líder de ingeniería de software en Toronto: Director de Tecnología en Cedar Planters, ingeniero certificado en IA, 18+ años creando plataformas.">'),
     ('<link rel="canonical" href="https://erwinmongui.com/">', '<link rel="canonical" href="https://erwinmongui.com/es/">'),
     ('<link rel="alternate" type="application/rss+xml" title="Erwin Mongui: case studies and writing" href="https://erwinmongui.com/feed.xml">',
      '<link rel="alternate" type="application/rss+xml" title="Erwin Mongui: casos y artículos" href="https://erwinmongui.com/es/feed.xml">'),
@@ -28,7 +28,7 @@ PAIRS = [
     ('<meta name="twitter:title" content="Erwin Mongui, Engineering Leader and Director of Technology">',
      '<meta name="twitter:title" content="Erwin Mongui, líder de ingeniería y Director de Tecnología">'),
     ('content="18+ years building customer-facing platforms and the teams that run them. Director of Technology at Cedar Planters, Certified AI Engineer, Toronto."',
-     'content="Más de 18 años construyendo plataformas para clientes y los equipos que las operan. Director de Tecnología en Cedar Planters, ingeniero certificado en IA, Toronto."'),
+     'content="18+ años creando plataformas para clientes y los equipos que las operan. Director de Tecnología en Cedar Planters, ingeniero certificado en IA, Toronto."'),
     ('content="Erwin Mongui logo with the words Engineering leader, Director of Technology, Toronto, Canada"',
      'content="Logo de Erwin Mongui con las palabras Engineering leader, Director of Technology, Toronto, Canada"'),
 

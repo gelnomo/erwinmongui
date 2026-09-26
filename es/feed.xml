@@ -45,7 +45,7 @@
     <guid isPermaLink="true">https://erwinmongui.com/es/casos/fincaraiz-monolito-a-microservicios/</guid>
     <pubDate>Wed, 23 Sep 2026 12:00:00 +0000</pubDate>
     <category>Caso de estudio</category>
-    <description>Cómo Erwin Mongui llevó Fincaraiz de ASP.NET a Django, React y Kubernetes para más de 5 millones de visitas al mes: sin caídas, 50% menos costos y búsqueda con NLP.</description>
+    <description>Erwin Mongui migró Fincaraiz de ASP.NET a Django, React y Kubernetes con más de 5 millones de visitas al mes: sin caídas, 50% menos costos y búsqueda con NLP.</description>
   </item>
   <item>
     <title>De analista de datos a ingeniero de datos, gracias a una buena pregunta</title>
@@ -53,7 +53,7 @@
     <guid isPermaLink="true">https://erwinmongui.com/es/articulos/de-analista-de-datos-a-ingeniero-de-datos/</guid>
     <pubDate>Tue, 22 Sep 2026 12:00:00 +0000</pubDate>
     <category>Liderazgo</category>
-    <description>Cómo pedirle a un analista que cuestionara nuestra herramienta de pipelines llevó a un mejor stack y a un nuevo ingeniero de datos. Descubrimiento guiado, con IA.</description>
+    <description>Pedirle a un analista que cuestionara nuestra herramienta de pipelines nos dio un mejor stack y un nuevo ingeniero de datos. Descubrimiento guiado, con IA.</description>
   </item>
   <item>
     <title>Elige la herramienta que tu equipo puede sostener, no la que encabeza la lista</title>
