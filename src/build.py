@@ -14,6 +14,8 @@ Running `python3 src/build.py` from the repository root writes:
   <url>/index.html   every page in pages.json, with head tags, structured data,
                      navigation, footer and tracking scripts
   404.html           the page GitHub Pages shows for a missing address
+  es/index.html      the Spanish homepage: index.html with the translations
+                     in home_es.py applied, so it keeps the same effects
   sitemap.xml        every page, with hreflang alternates
   feed.xml           RSS feed of case studies and articles (English)
   es/feed.xml        the same feed for the Spanish pages
@@ -309,6 +311,45 @@ def render(p, by_key):
 """
 
 
+# ---------- Spanish homepage ----------
+
+def render_home_es():
+    """/es/index.html is the English homepage with every string translated
+    (see home_es.py), so both languages share the same design, scroll effects
+    and tracking. Returns the page and the English strings that no longer match."""
+    import sys
+    sys.path.insert(0, str(SRC))
+    import home_es
+
+    src = (ROOT / "index.html").read_text()
+    m = re.search(r'(<script type="application/ld\+json">\n)(.*?)(\n</script>)', src, re.S)
+    data = json.loads(m.group(2))
+    out = src[:m.start(2)] + "__JSONLD__" + src[m.end(2):]
+
+    missing = []
+    for en, es in sorted(home_es.PAIRS, key=lambda pair: -len(pair[0])):
+        if en not in out:
+            missing.append(en)
+            continue
+        out = out.replace(en, es)
+
+    strip = lambda t: html.unescape(re.sub(r"<[^>]+>", "", t)).strip()
+    facts = re.findall(r'<div class="fact">\s*<h3>(.*?)</h3>\s*<p>(.*?)</p>', out, re.S)
+    for node in data.get("@graph", []):
+        kind = node.get("@type")
+        if kind == "Person" and "description" in node:
+            node["description"] = home_es.PERSON_DESCRIPTION
+        elif kind == "ProfilePage":
+            node.update({"@id": SITE + "/es/#profile", "url": SITE + "/es/", "name": home_es.PROFILE_NAME,
+                         "description": home_es.PROFILE_DESCRIPTION, "inLanguage": "es"})
+        elif kind == "FAQPage":
+            node.update({"@id": SITE + "/es/#facts", "url": SITE + "/es/#facts", "inLanguage": "es",
+                         "mainEntity": [{"@type": "Question", "name": strip(q),
+                                         "acceptedAnswer": {"@type": "Answer", "text": strip(a)}} for q, a in facts]})
+    out = out.replace("__JSONLD__", json.dumps(data, ensure_ascii=False, indent=2))
+    return out, missing
+
+
 # ---------- 404 page ----------
 
 def render_404(pages, by_key):
@@ -553,10 +594,17 @@ def llms_full(pages, by_key):
 def main():
     pages, by_key = load_pages()
     for p in pages:
+        if p["key"] == "es":
+            continue  # generated from index.html below
         out = ROOT / p["url"].strip("/") / "index.html"
         out.parent.mkdir(parents=True, exist_ok=True)
         out.write_text(render(p, by_key))
         print("wrote", out.relative_to(ROOT))
+    es_home, missing = render_home_es()
+    (ROOT / "es" / "index.html").write_text(es_home)
+    print("wrote es/index.html (translated homepage)")
+    for en in missing:
+        print("WARNING: homepage text has no Spanish translation any more, update src/home_es.py:", en[:90])
     (ROOT / "404.html").write_text(render_404(pages, by_key))
     (ROOT / "sitemap.xml").write_text(sitemap(pages, by_key))
     (ROOT / "feed.xml").write_text(feed(pages, "en"))
