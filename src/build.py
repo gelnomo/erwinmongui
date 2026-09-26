@@ -57,7 +57,7 @@ TEXT = {
                    ("Skills", "/#skills"), ("Case studies", "/work/"), ("Writing", "/writing/"), ("Quick facts", "/#facts")],
            "footer": [("Case studies", "/work/"), ("Writing", "/writing/"), ("About", "/about/")]},
     "es": {"home": "/es/", "contact": ("Contacto", "/es/#contacto"), "switch": ("English", "en"), "skip": "Ir al contenido",
-           "rights": "Todos los derechos reservados.", "pref": "Agregar como fuente preferida en Google", "nav_label": "Secciones",
+           "rights": "Todos los derechos reservados.", "pref": "Añadir como fuente preferida en Google", "nav_label": "Secciones",
            "menu": "Abrir menú",
            "nav": [("Sobre mí", "/about/"), ("Experiencia", "/es/#experience"), ("Impacto", "/es/#impact"), ("IA", "/es/#ai"),
                    ("Habilidades", "/es/#skills"), ("Casos", "/es/#casos"), ("Artículos", "/es/articulos/"), ("Preguntas", "/es/#facts")],
@@ -213,6 +213,7 @@ def head(p, by_key):
 <link href="https://fonts.googleapis.com/css2?family=Manrope:wght@400;500;600;700;800&display=swap" rel="stylesheet">
 <link rel="stylesheet" href="/assets/site.css">
 <link rel="stylesheet" href="/assets/chrome.css">
+{PUBLISHER_JS if p["type"] in ("case", "post") else ""}
 <script type="application/ld+json">
 {jsonld(p, by_key)}
 </script>
@@ -233,6 +234,10 @@ def head(p, by_key):
     }})(window, document, "clarity", "script", "ygo6nehxdb");
 </script>
 <script defer src="/analytics.js"></script>"""
+
+
+PUBLISHER_JS = """<!-- Google preferred sources button (https://developers.google.com/search/docs/appearance/preferred-sources) -->
+<script async src="https://news.google.com/swg/js/v1/publisher.js"></script>"""
 
 
 def feed_link(p):
@@ -324,8 +329,28 @@ def inject(page, name, content):
     return page[:a] + block + page[b:]
 
 
+PREFERRED = {
+    "en": ("Get my next case studies and articles in Google Search.", "Add erwinmongui.com as a preferred source on Google", "Follow in Google"),
+    "es": ("Recibe mis próximos casos y artículos en la Búsqueda de Google.", "Añade erwinmongui.com como fuente preferida en Google", "Seguir en Google"),
+}
+
+
+def preferred_strip(lang):
+    """Google's Add to Preferred Sources button, at the end of case studies and articles."""
+    text, fallback, label = PREFERRED[lang]
+    return f"""<section class="ps-strip" aria-label="{label}">
+  <div class="ps-inner">
+    <p>{text}</p>
+    <div class="preferred-source" google-add-preferred-source-btn data-theme="dark" data-lang="{lang}"></div>
+    <noscript><a class="link" href="https://www.google.com/preferences/source?q=erwinmongui.com">{fallback}</a></noscript>
+  </div>
+</section>"""
+
+
 def render(p, by_key):
     body = (SRC / "content" / (p["key"] + ".html")).read_text().replace("__MARK__", MARK_PATH)
+    if p["type"] in ("case", "post"):
+        body += "\n" + preferred_strip(p["lang"])
     return f"""<!DOCTYPE html>
 <html lang="{p["lang"]}">
 <head>
@@ -630,7 +655,26 @@ def llms_full(pages, by_key):
 
 # ---------- main ----------
 
+def check_css():
+    """Stops the build if a stylesheet has unbalanced braces: a stray } makes
+    browsers drop the next rule without any visible error."""
+    sheets = {"assets/site.css": (ROOT / "assets" / "site.css").read_text(),
+              "assets/chrome.css": (ROOT / "assets" / "chrome.css").read_text()}
+    inline = re.search(r"<style>(.*?)</style>", (ROOT / "index.html").read_text(), re.S)
+    if inline:
+        sheets["index.html <style>"] = inline.group(1)
+    for name, css in sheets.items():
+        depth = 0
+        for ch in re.sub(r"/\*.*?\*/", "", css, flags=re.S):
+            depth += (ch == "{") - (ch == "}")
+            if depth < 0:
+                break
+        if depth != 0:
+            raise SystemExit(f"CSS error in {name}: unbalanced braces. Fix it before building.")
+
+
 def main():
+    check_css()
     pages, by_key = load_pages()
     for p in pages:
         if p["key"] == "es":
