@@ -2,6 +2,13 @@
 
 Notable changes to erwinmongui.com. Each version has a `## vX.Y.Z` heading; pushing a matching tag, or running the Release workflow from the Actions tab with that version, publishes the section as a GitHub release (see `.github/workflows/release.yml`).
 
+## v1.6.0 (2026-09-28)
+
+### Analytics
+
+- Ahrefs Web Analytics on every page, homepage and Spanish pages included. The tag is written by `tracking()` in the build, after Clarity, so new pages get it too.
+- The privacy and cookies page, in English and Spanish, lists Ahrefs Web Analytics among the services the site uses.
+
 ## v1.5.0 (2026-09-28)
 
 ### Privacy and consent

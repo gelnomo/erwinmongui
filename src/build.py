@@ -258,7 +258,7 @@ CMP_JS = """<!-- Google consent message (AdSense > Privacy & messaging) for page
 
 
 def tracking(context_js, ads=False):
-    """Consent defaults, the consent message, Google Analytics, Clarity and the
+    """Consent defaults, the consent message, Google Analytics, Clarity, Ahrefs and the
     site's event layer, in the order they must load. Every page uses this block:
     the build injects it into index.html between the tracking markers."""
     regions = ", ".join(f"'{r}'" for r in CONSENT_REGIONS)
@@ -286,6 +286,8 @@ def tracking(context_js, ads=False):
         y=l.getElementsByTagName(r)[0];y.parentNode.insertBefore(t,y);
     }})(window, document, "clarity", "script", "ygo6nehxdb");
 </script>
+<!-- Ahrefs Web Analytics -->
+<script src="https://analytics.ahrefs.com/analytics.js" data-key="rdCxWS4nTARbSdPhwLuAmg" async></script>
 <!-- Passes the consent choice to Clarity and shows the footer's privacy settings link -->
 <script defer src="/assets/consent.js"></script>
 <!-- Site event tracking (contact clicks, navigation, sections, scroll depth, reading) -->

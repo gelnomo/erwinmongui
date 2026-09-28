@@ -18,11 +18,15 @@ Every page sets Google Consent Mode v2 defaults before any tag loads (`tracking(
 
 The homepages load the consent message through the AdSense tag. Every other page loads Google's standalone consent tag. `assets/consent.js` passes the answer to Clarity (`clarity('consentv2', …)`), and shows the footer's Privacy settings link, which reopens the message.
 
+## Ahrefs Web Analytics
+
+Every page also loads Ahrefs Web Analytics (`analytics.ahrefs.com/analytics.js`, site key `rdCxWS4nTARbSdPhwLuAmg`), written by `tracking()` in `src/build.py` after Clarity. It counts page views and referrers in the Ahrefs dashboard and receives none of the custom events above.
+
 ## Testing
 
 Open the site with `?ga_debug=1`. Every event is printed to the browser console as `[ga4] event_name {…}` and flagged with `debug_mode`, so it shows up in real time in GA4 under **Admin > DebugView**. Open with `?ga_debug=0` to turn it off. The flag is remembered in `localStorage`.
 
-Automated browser tests must block `google-analytics.com` and `/g/collect` requests, or their visits count as real traffic.
+Automated browser tests must block `google-analytics.com`, `/g/collect` and `analytics.ahrefs.com` requests, or their visits count as real traffic.
 
 ## Events
 
