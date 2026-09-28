@@ -2,6 +2,23 @@
 
 Notable changes to erwinmongui.com. Each version has a `## vX.Y.Z` heading; pushing a matching tag, or running the Release workflow from the Actions tab with that version, publishes the section as a GitHub release (see `.github/workflows/release.yml`).
 
+## v1.5.0 (2026-09-28)
+
+### Privacy and consent
+
+- Google Consent Mode v2 on every page. Visitors in the EEA, the UK and Switzerland start with ads and analytics storage denied until they answer Google's consent message (AdSense > Privacy & messaging). Everyone else starts granted.
+- Google's consent message now also loads on pages without ads, and the visitor's answer is passed to Microsoft Clarity.
+- New privacy and cookies page, in English (/privacy/) and Spanish (/es/privacidad/), linked from every footer. Where the consent message applies, the footer also shows a Privacy settings link that reopens it.
+- The consent, AdSense, Google Analytics and Clarity tags are written by one function in the build for every page, homepage included.
+
+### Profiles
+
+- Medium profile (https://medium.com/@erwinmongui) added to the footer, to the Person structured data (`sameAs`) and to llms.txt.
+
+### Build
+
+- New Build workflow: every pull request runs `src/build.py`, and if the generated pages are out of date it commits the rebuilt files to the pull request's branch. Edits made directly on GitHub no longer need a local build. The build's CSS and meta description checks fail the pull request when something is wrong.
+
 ## v1.4.1 (2026-09-26)
 
 ### Search engines

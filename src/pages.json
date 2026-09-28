@@ -910,5 +910,49 @@
       "url": "https://journal.stemfellowship.org/doi/abs/10.17975/sfj-2023-007"
     },
     "code": "https://github.com/gelnomo/ART.-National-Inter-University-Big-Data-And-AI-Challenge-2023"
+  },
+  {
+    "key": "privacy",
+    "type": "legal",
+    "lang": "en",
+    "url": "/privacy/",
+    "alternate": "es-privacy",
+    "title": "Privacy and cookies | Erwin Mongui",
+    "description": "What erwinmongui.com measures, the services it uses (Google Analytics, Microsoft Clarity, AdSense) and how to change your cookie and consent choices.",
+    "headline": "Privacy and cookies",
+    "breadcrumbs": [
+      [
+        "Home",
+        "/"
+      ],
+      [
+        "Privacy",
+        "/privacy/"
+      ]
+    ],
+    "published": "2026-09-28",
+    "modified": "2026-09-28"
+  },
+  {
+    "key": "es-privacy",
+    "type": "legal",
+    "lang": "es",
+    "url": "/es/privacidad/",
+    "alternate": "privacy",
+    "title": "Privacidad y cookies | Erwin Mongui",
+    "description": "Qué mide erwinmongui.com, qué servicios usa (Google Analytics, Microsoft Clarity, AdSense) y cómo cambiar tus preferencias de cookies y consentimiento.",
+    "headline": "Privacidad y cookies",
+    "breadcrumbs": [
+      [
+        "Inicio",
+        "/es/"
+      ],
+      [
+        "Privacidad",
+        "/es/privacidad/"
+      ]
+    ],
+    "published": "2026-09-28",
+    "modified": "2026-09-28"
   }
 ]

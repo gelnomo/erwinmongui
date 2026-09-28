@@ -186,4 +186,18 @@
     <xhtml:link rel="alternate" hreflang="es" href="https://erwinmongui.com/es/articulos/seleccion-de-viajeros-rt-pcr-basada-en-datos/"/>
     <xhtml:link rel="alternate" hreflang="x-default" href="https://erwinmongui.com/writing/rt-pcr-travel-screening-data-driven-selection/"/>
   </url>
+  <url>
+    <loc>https://erwinmongui.com/privacy/</loc>
+    <lastmod>2026-09-28</lastmod>
+    <xhtml:link rel="alternate" hreflang="en" href="https://erwinmongui.com/privacy/"/>
+    <xhtml:link rel="alternate" hreflang="es" href="https://erwinmongui.com/es/privacidad/"/>
+    <xhtml:link rel="alternate" hreflang="x-default" href="https://erwinmongui.com/privacy/"/>
+  </url>
+  <url>
+    <loc>https://erwinmongui.com/es/privacidad/</loc>
+    <lastmod>2026-09-28</lastmod>
+    <xhtml:link rel="alternate" hreflang="en" href="https://erwinmongui.com/privacy/"/>
+    <xhtml:link rel="alternate" hreflang="es" href="https://erwinmongui.com/es/privacidad/"/>
+    <xhtml:link rel="alternate" hreflang="x-default" href="https://erwinmongui.com/privacy/"/>
+  </url>
 </urlset>

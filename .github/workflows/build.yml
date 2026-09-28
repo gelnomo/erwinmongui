@@ -1,0 +1,54 @@
+# Regenerates the site on every pull request, so edits made directly on GitHub
+# (src/pages.json, src/content/*.html, index.html, src/home_es.py, ...) reach the
+# generated pages without running `python3 src/build.py` locally.
+#   - The build's own checks run first: CSS braces and meta description length.
+#     If one fails, this check fails and names the file.
+#   - If the generated files are out of date, the workflow commits the rebuilt
+#     files to the pull request's branch. Merge after that commit appears.
+name: Build
+
+on:
+  pull_request:
+  workflow_dispatch:
+
+permissions:
+  contents: write
+
+concurrency:
+  group: build-${{ github.head_ref || github.ref }}
+  cancel-in-progress: true
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          # The branch itself, not the merge preview, so the rebuilt files can be pushed to it.
+          ref: ${{ github.head_ref || github.ref_name }}
+
+      - uses: actions/setup-python@v5
+        with:
+          python-version: "3.12"
+
+      - name: Build the site
+        run: python3 src/build.py
+
+      - name: Commit the regenerated pages
+        env:
+          SAME_REPO: ${{ github.event_name != 'pull_request' || github.event.pull_request.head.repo.full_name == github.repository }}
+        run: |
+          if git diff --quiet && [ -z "$(git ls-files --others --exclude-standard)" ]; then
+            echo "Generated pages are up to date."
+            exit 0
+          fi
+          git status --short
+          if [ "$SAME_REPO" != "true" ] || [ "$(git rev-parse --abbrev-ref HEAD)" = "main" ]; then
+            echo "::error::The generated pages are out of date. Run python3 src/build.py and commit the result."
+            exit 1
+          fi
+          git config user.name "github-actions[bot]"
+          git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
+          git add -A
+          git commit -m "Regenerate pages with src/build.py"
+          git push

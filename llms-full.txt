@@ -4,6 +4,7 @@
 
 Canonical profile: https://erwinmongui.com/
 LinkedIn: https://www.linkedin.com/in/erwin-mongui/
+Medium: https://medium.com/@erwinmongui
 Contact: https://erwinmongui.com/#contact (email and LinkedIn buttons)
 
 ## Current role

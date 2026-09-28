@@ -54,3 +54,5 @@
 .foot-brand svg{width:18px;height:18px}
 .foot a{text-decoration:none;color:#a1a1a6}
 .foot a:hover{color:#fff}
+.foot-consent{font:inherit;color:#a1a1a6;background:none;border:0;padding:0;cursor:pointer}
+.foot-consent:hover{color:#fff}
