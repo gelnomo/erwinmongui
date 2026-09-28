@@ -25,6 +25,9 @@ The site is served by GitHub Pages from the default branch of this repository. T
 | `feed.xml`, `es/feed.xml` | RSS feeds of case studies and articles, in English and Spanish (generated) |
 | `llms-full.txt` | Full text of every case study and article for AI assistants (generated) |
 | `analytics.js` | Custom GA4 events. Documented in [ANALYTICS.md](ANALYTICS.md) |
+| `assets/consent.js` | Passes the visitor's answer to Google's consent message on to Microsoft Clarity, and shows the footer's Privacy settings link where the message applies. The consent defaults, AdSense, Google Analytics and Clarity tags come from `tracking()` in `src/build.py`, which also writes them into `index.html` between the `tracking` markers |
+| `privacy/`, `es/privacidad/` | Privacy and cookies page, in English and Spanish (generated from `src/content/privacy.html` and `es-privacy.html`) |
+| `.github/workflows/build.yml` | Runs `src/build.py` on every pull request and commits the regenerated pages to the pull request's branch, so edits made on GitHub need no local build |
 | `ads.txt` | Authorised seller entry for Google AdSense |
 | `robots.txt`, `sitemap.xml`, `llms.txt` | Crawler and search metadata (`sitemap.xml` and `llms.txt` are generated) |
 | `site.webmanifest`, `favicon*`, `apple-touch-icon.png` | Icons and web app manifest |

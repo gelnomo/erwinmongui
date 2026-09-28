@@ -40,6 +40,7 @@ SITE = "https://erwinmongui.com"
 PERSON_ID = SITE + "/#person"
 WEBSITE_ID = SITE + "/#website"
 LINKEDIN = "https://www.linkedin.com/in/erwin-mongui/"
+MEDIUM = "https://medium.com/@erwinmongui"
 EMAIL = "erwinmongui@gmail.com"
 OG_IMAGE = SITE + "/og-image.png"
 HOME = {"key": "home", "url": "/", "lang": "en", "headline": "Erwin Mongui", "modified": "2026-09-26",
@@ -51,13 +52,13 @@ MARK_PATH = (ROOT / "src" / "mark.path").read_text().strip()
 
 TEXT = {
     "en": {"home": "/", "contact": ("Contact", "/#contact"), "switch": ("Español", "es"), "skip": "Skip to content",
-           "rights": "All rights reserved.", "pref": "Add as a preferred source on Google", "nav_label": "Sections",
+           "rights": "All rights reserved.", "pref": "Add as a preferred source on Google", "privacy": ("Privacy", "/privacy/"), "consent": "Privacy settings", "nav_label": "Sections",
            "menu": "Open menu",
            "nav": [("About", "/about/"), ("Experience", "/#experience"), ("Impact", "/#impact"), ("AI", "/#ai"),
                    ("Skills", "/#skills"), ("Case studies", "/work/"), ("Writing", "/writing/"), ("Quick facts", "/#facts")],
            "footer": [("Case studies", "/work/"), ("Writing", "/writing/"), ("About", "/about/")]},
     "es": {"home": "/es/", "contact": ("Contacto", "/es/#contacto"), "switch": ("English", "en"), "skip": "Ir al contenido",
-           "rights": "Todos los derechos reservados.", "pref": "Añadir como fuente preferida en Google", "nav_label": "Secciones",
+           "rights": "Todos los derechos reservados.", "pref": "Añadir como fuente preferida en Google", "privacy": ("Privacidad", "/es/privacidad/"), "consent": "Configuración de privacidad", "nav_label": "Secciones",
            "menu": "Abrir menú",
            "nav": [("Sobre mí", "/about/"), ("Experiencia", "/es/#experience"), ("Impacto", "/es/#impact"), ("IA", "/es/#ai"),
                    ("Habilidades", "/es/#skills"), ("Casos", "/es/#casos"), ("Artículos", "/es/articulos/"), ("Preguntas", "/es/#facts")],
@@ -86,7 +87,7 @@ def esc(s):
 def person_node():
     return {"@type": "Person", "@id": PERSON_ID, "name": "Erwin Mongui", "url": SITE + "/",
             "jobTitle": "Director of Technology", "worksFor": {"@type": "Organization", "name": "Cedar Planters"},
-            "sameAs": [LINKEDIN]}
+            "sameAs": [LINKEDIN, MEDIUM]}
 
 
 def website_node():
@@ -130,6 +131,10 @@ def jsonld(p, by_key):
         graph.append({"@type": "AboutPage", "@id": url, "url": url, "name": p["headline"],
                       "description": p["description"], "inLanguage": "en", "mainEntity": {"@id": PERSON_ID},
                       "isPartOf": {"@id": WEBSITE_ID}, "dateModified": p["modified"]})
+    elif t == "legal":
+        graph.append({"@type": "WebPage", "@id": url, "url": url, "name": p["headline"],
+                      "description": p["description"], "inLanguage": p["lang"],
+                      "isPartOf": {"@id": WEBSITE_ID}, "dateModified": p["modified"]})
     elif t == "home-es":
         graph.append({"@type": "ProfilePage", "@id": url, "url": url, "name": p["title"],
                       "description": p["description"], "inLanguage": "es", "mainEntity": {"@id": PERSON_ID},
@@ -164,7 +169,9 @@ def alternates(p, by_key):
     return "\n".join(tags)
 
 
-CONTENT_GROUPS = {"case": "Case study", "post": "Article", "collection": "Listing", "about": "About", "home-es": "Home"}
+NOT_FOUND_CONTEXT = "{content_group: 'Not found', content_id: 'not-found', site_language: location.pathname.indexOf('/es/') === 0 ? 'es' : 'en'}"
+HOME_CONTEXT = "{content_group: 'Home', content_id: 'home', site_language: document.documentElement.lang === 'es' ? 'es' : 'en'}"
+CONTENT_GROUPS = {"case": "Case study", "post": "Article", "collection": "Listing", "about": "About", "legal": "Legal", "home-es": "Home"}
 
 
 def site_context(p):
@@ -232,13 +239,43 @@ def head(p, by_key):
 <script type="application/ld+json">
 {jsonld(p, by_key)}
 </script>
-<!-- Google tag (gtag.js) -->
-<script async src="https://www.googletagmanager.com/gtag/js?id=G-LKD2WCNDV1"></script>
+{tracking(site_context(p))}"""
+
+
+# Visitors in these regions start with every Google storage type denied until they
+# answer the consent message: the EEA, the United Kingdom and Switzerland.
+CONSENT_REGIONS = ["AT", "BE", "BG", "HR", "CY", "CZ", "DK", "EE", "FI", "FR", "DE", "GR", "HU", "IE", "IT",
+                   "LV", "LT", "LU", "MT", "NL", "PL", "PT", "RO", "SK", "SI", "ES", "SE", "IS", "LI", "NO",
+                   "GB", "CH"]
+
+ADSENSE_JS = """<!-- Google AdSense. It also shows the consent message set up in AdSense > Privacy & messaging -->
+<script async src="https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js?client=ca-pub-1778464975767585" crossorigin="anonymous"></script>"""
+
+# Google's certified consent message (CMP) for pages without the AdSense tag.
+CMP_JS = """<!-- Google consent message (AdSense > Privacy & messaging) for pages without ads -->
+<script async src="https://fundingchoicesmessages.google.com/i/pub-1778464975767585?ers=1"></script>
+<script>(function() {function signalGooglefcPresent() {if (!window.frames['googlefcPresent']) {if (document.body) {const iframe = document.createElement('iframe'); iframe.style = 'width: 0; height: 0; border: none; z-index: -1000; left: -1000px; top: -1000px;'; iframe.style.display = 'none'; iframe.name = 'googlefcPresent'; document.body.appendChild(iframe);} else {setTimeout(signalGooglefcPresent, 0);}}}signalGooglefcPresent();})();</script>"""
+
+
+def tracking(context_js, ads=False):
+    """Consent defaults, the consent message, Google Analytics, Clarity and the
+    site's event layer, in the order they must load. Every page uses this block:
+    the build injects it into index.html between the tracking markers."""
+    regions = ", ".join(f"'{r}'" for r in CONSENT_REGIONS)
+    return f"""<!-- Google Consent Mode v2 defaults: denied in the EEA, the UK and Switzerland until the visitor answers the consent message, granted elsewhere -->
 <script>
   window.dataLayer = window.dataLayer || [];
   function gtag(){{dataLayer.push(arguments);}}
+  gtag('consent', 'default', {{ad_storage: 'denied', ad_user_data: 'denied', ad_personalization: 'denied', analytics_storage: 'denied', region: [{regions}], wait_for_update: 500}});
+  gtag('consent', 'default', {{ad_storage: 'granted', ad_user_data: 'granted', ad_personalization: 'granted', analytics_storage: 'granted'}});
+  gtag('set', 'ads_data_redaction', true);
+</script>
+{ADSENSE_JS if ads else CMP_JS}
+<!-- Google tag (gtag.js) -->
+<script async src="https://www.googletagmanager.com/gtag/js?id=G-LKD2WCNDV1"></script>
+<script>
   gtag('js', new Date());
-  window.siteContext = {site_context(p)};
+  window.siteContext = {context_js};
   gtag('config', 'G-LKD2WCNDV1', window.siteContext);
 </script>
 <!-- Clarity tracking code for https://erwinmongui.com/ -->
@@ -249,6 +286,9 @@ def head(p, by_key):
         y=l.getElementsByTagName(r)[0];y.parentNode.insertBefore(t,y);
     }})(window, document, "clarity", "script", "ygo6nehxdb");
 </script>
+<!-- Passes the consent choice to Clarity and shows the footer's privacy settings link -->
+<script defer src="/assets/consent.js"></script>
+<!-- Site event tracking (contact clicks, navigation, sections, scroll depth, reading) -->
 <script defer src="/analytics.js"></script>"""
 
 
@@ -310,11 +350,15 @@ def site_footer(lang, switch_href, is_home=False):
     links.append(f'<a href="{switch_href}" lang="{other}" hreflang="{other}">{label}</a>')
     links.append(f'<a href="https://www.google.com/preferences/source?q=erwinmongui.com" target="_blank" rel="noopener">{t["pref"]}</a>')
     links.append(f'<a href="{LINKEDIN}" target="_blank" rel="noopener">LinkedIn</a>')
+    links.append(f'<a href="{MEDIUM}" target="_blank" rel="noopener me">Medium</a>')
+    links.append(f'<a href="{t["privacy"][1]}">{t["privacy"][0]}</a>')
+    # Shown by assets/consent.js only where the consent message applies (EEA, UK, Switzerland).
+    links.append(f'<button type="button" class="foot-consent" hidden>{t["consent"]}</button>')
     return f"""<footer class="foot">
   <div class="foot-inner">
     <p class="foot-brand"><svg aria-hidden="true" focusable="false" viewBox="0 0 189 190"><path fill="#81ffd9" d="{MARK_PATH}"/></svg><span>Erwin Mongui, Toronto</span></p>
     <p class="foot-copy">&copy; {date.today().year} Erwin Mongui. {t["rights"]}</p>
-    <p>{" &middot; ".join(links)}</p>
+    <p>{" &middot; ".join(links[:-1])}<span class="foot-consent-wrap" hidden> &middot; {links[-1].replace(" hidden>", ">")}</span></p>
   </div>
 </footer>"""
 
@@ -458,24 +502,7 @@ def render_404(pages, by_key):
 <link href="https://fonts.googleapis.com/css2?family=Manrope:wght@400;500;600;700;800&display=swap" rel="stylesheet">
 <link rel="stylesheet" href="/assets/site.css">
 <link rel="stylesheet" href="/assets/chrome.css">
-<!-- Google tag (gtag.js) -->
-<script async src="https://www.googletagmanager.com/gtag/js?id=G-LKD2WCNDV1"></script>
-<script>
-  window.dataLayer = window.dataLayer || [];
-  function gtag(){{dataLayer.push(arguments);}}
-  gtag('js', new Date());
-  window.siteContext = {{content_group: 'Not found', content_id: 'not-found', site_language: location.pathname.indexOf('/es/') === 0 ? 'es' : 'en'}};
-  gtag('config', 'G-LKD2WCNDV1', window.siteContext);
-</script>
-<!-- Clarity tracking code for https://erwinmongui.com/ -->
-<script>
-    (function(c,l,a,r,i,t,y){{
-        c[a]=c[a]||function(){{(c[a].q=c[a].q||[]).push(arguments)}};
-        t=l.createElement(r);t.async=1;t.src="https://www.clarity.ms/tag/"+i;
-        y=l.getElementsByTagName(r)[0];y.parentNode.insertBefore(t,y);
-    }})(window, document, "clarity", "script", "ygo6nehxdb");
-</script>
-<script defer src="/analytics.js"></script>
+{tracking(NOT_FOUND_CONTEXT)}
 </head>
 <body class="chrome-sticky">
 {nav(p, by_key)}
@@ -710,6 +737,14 @@ def check_descriptions():
                 raise SystemExit(f"SEO error in {name}: {m.group(1)} has {n} characters, keep it between 25 and 160.")
 
 
+def inject_tracking(page, block):
+    """Replaces whatever sits between the tracking markers in index.html."""
+    start = page.index("<!-- tracking:")
+    start = page.index("-->", start) + len("-->")
+    end = page.index("<!-- /tracking -->")
+    return page[:start] + "\n" + block + "\n" + page[end:]
+
+
 def main():
     check_css()
     pages, by_key = load_pages()
@@ -722,6 +757,7 @@ def main():
         print("wrote", out.relative_to(ROOT))
     index = (ROOT / "index.html").read_text()
     index = inject(index, "header", site_header("en", "/", "/es/", is_home=True))
+    index = inject_tracking(index, tracking(HOME_CONTEXT, ads=True))
     index = inject(index, "footer", site_footer("en", "/es/", is_home=True))
     (ROOT / "index.html").write_text(index)
     print("updated the header and footer in index.html")

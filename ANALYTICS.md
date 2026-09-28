@@ -10,6 +10,14 @@ erwinmongui.com sends events to Google Analytics 4 property `G-LKD2WCNDV1`.
 - All custom events are defined in `analytics.js`. The only other `gtag` call is `page_not_found`, on the 404 page.
 - No personal data is sent. Email links send `method: email`, never the address. The only page text sent is text that already appears on the page, truncated to 100 characters.
 
+## Consent
+
+Every page sets Google Consent Mode v2 defaults before any tag loads (`tracking()` in `src/build.py`):
+- In the EEA, the UK and Switzerland, `ad_storage`, `ad_user_data`, `ad_personalization` and `analytics_storage` start **denied**. They stay denied until the visitor answers Google's consent message, which is set up in AdSense > Privacy & messaging. While denied, GA4 sends cookieless pings and GA models the gaps.
+- Everywhere else they start **granted**.
+
+The homepages load the consent message through the AdSense tag. Every other page loads Google's standalone consent tag. `assets/consent.js` passes the answer to Clarity (`clarity('consentv2', …)`), and shows the footer's Privacy settings link, which reopens the message.
+
 ## Testing
 
 Open the site with `?ga_debug=1`. Every event is printed to the browser console as `[ga4] event_name {…}` and flagged with `debug_mode`, so it shows up in real time in GA4 under **Admin > DebugView**. Open with `?ga_debug=0` to turn it off. The flag is remembered in `localStorage`.
