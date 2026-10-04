@@ -16,6 +16,14 @@
     <description>Revisiting our 2023 Kaggle bank marketing model: seven bugs, a rebuilt pipeline, and why tuning the F1 threshold beat every model change.</description>
   </item>
   <item>
+    <title>51,000 ads, 190 rows: revisiting a Kijiji visit-prediction model</title>
+    <link>https://erwinmongui.com/writing/kijiji-car-ads-visit-prediction-rebuild/</link>
+    <guid isPermaLink="true">https://erwinmongui.com/writing/kijiji-car-ads-visit-prediction-rebuild/</guid>
+    <pubDate>Sun, 04 Oct 2026 12:00:00 +0000</pubDate>
+    <category>Data science</category>
+    <description>Revisiting our 2023 Kijiji car-ad visit model: a leaked model choice, 51,000 ads squeezed into 190 rows, and a rebuild that beats the baseline by 41%.</description>
+  </item>
+  <item>
     <title>A lead distribution engine that connects to any CRM</title>
     <link>https://erwinmongui.com/work/fincaraiz-lead-distribution/</link>
     <guid isPermaLink="true">https://erwinmongui.com/work/fincaraiz-lead-distribution/</guid>

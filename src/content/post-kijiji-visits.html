@@ -1,0 +1,105 @@
+<header class="doc-head stage-dark">
+    <nav class="crumbs" aria-label="Breadcrumb"><a href="/">Home</a><span>/</span><a href="/writing/">Writing</a><span>/</span><span>Data science</span></nav>
+    <p class="eyebrow">Data science · Machine learning</p>
+    <h1>51,000 ads, 190 rows: revisiting a Kijiji visit-prediction model.</h1>
+    <p class="summary">In 2023, my team built a model to predict how many visits a Kijiji car ad receives. The charts looked good and the report said the predictions followed the real values. Three years later I read the code again and found that the model had been trained on about 190 rows instead of 51,000 ads, and that the way it picked its predictions looked at the answer. Here is what went wrong, how I rebuilt it, and what the data actually says about visits.</p>
+    <div class="byline"><span>By Erwin Mongui</span><span>October 4, 2026</span><span>7 min read</span><a class="link" href="/es/articulos/prediccion-de-visitas-en-anuncios-de-kijiji/" hreflang="es" lang="es">Leer en español</a></div>
+  </header>
+  <section class="doc">
+    <div class="doc-grid">
+      <div class="prose">
+        <div class="inshort"><b>In short</b><p>The 2023 pipeline grouped the ads into city-month totals, removed every visit count that any of six outlier detectors flagged, and chose, for each row, whichever of three models came closest to the real value. The rebuild predicts visits for each ad, keeps every preprocessing step inside cross-validation and scores a held-out test set once. Gradient boosting cuts the mean absolute error by about <strong>41%</strong> against a median baseline (158 vs 266 visits). The strongest driver of visits is not the car: it is how long the ad has been online. Code: <a class="link" href="https://github.com/gelnomo/training-ml-python-kijiji" target="_blank" rel="noopener">GitHub</a>.</p></div>
+
+        <h2>The problem</h2>
+        <p>Kijiji is one of Canada's largest online classifieds sites, and cars are among its busiest categories. Visits are the top of the sales funnel: an ad nobody opens does not sell. A model that predicts visits from what is in the listing can tell a seller that an ad is under-performing compared with similar ads, help rank listings, and give dealers a benchmark for their inventory.</p>
+        <div class="kpi-row kpi-3">
+          <div style="border-top-color:var(--line-light)"><b style="color:var(--blue)">51,343</b><span style="color:var(--steel)">car ads scraped from Kijiji, 28 columns each</span></div>
+          <div style="border-top-color:var(--line-light)"><b style="color:var(--blue)">1 day</b><span style="color:var(--steel)">all ads were collected on August 27, 2022</span></div>
+          <div style="border-top-color:var(--line-light)"><b style="color:var(--blue)">75</b><span style="color:var(--steel)">median visits per ad; the maximum is 54,064</span></div>
+        </div>
+        <p>The data is a public Kaggle dataset (<a class="link" href="https://www.kaggle.com/datasets/hossaingh/kijiji-car-sales-ads" target="_blank" rel="noopener">kijiji-car-sales-ads</a>, CC BY-NC-SA 4.0) covering twelve Kijiji regions in British Columbia, Alberta, Ontario and Quebec. We worked on it as Group 6: Camilo Florez, Yasar Mansuri, Syed Zumair and me.</p>
+
+        <h2>What we built in 2023</h2>
+        <p>We started in a Jupyter notebook and then moved the project to a Python command-line program. It cleaned the data, drew about a dozen exploratory charts, removed outliers, and trained three regressors (linear regression, random forest and gradient boosting) separately for each city on a 60/40 split. The report compared mean real visits with mean predicted visits per year and concluded that the predictions "have similar behavior to the real ones". Random forest was "chosen" for about half of the rows, and a full run took about 30 minutes.</p>
+        <p>Looking back, two things in the write-up should have worried us. The README described the project as <em>price</em> prediction, although the target was visits. And it read the charts as seasonality: July and August "are the great months", and most ads were published in August, "related to the Summer season".</p>
+
+        <h2>Going back: five problems</h2>
+        <p>Reading the code in 2026, I found problems that meant the 2023 results could not be trusted:</p>
+        <ul>
+          <li><strong>The model looked at the answer.</strong> For every row, the code computed each model's error against the real visit count and kept the prediction with the smallest error. That is choosing the answer closest to the truth after seeing the truth, so the reported accuracy was not something the model could deliver on a new ad.</li>
+          <li><strong>51,000 ads became about 190 rows.</strong> Just before training, the data was grouped into total visits by city, month and year. The only features left were the month and the year. That leaves between 2 and 22 rows per city to train on, and the predictions were then made on every row, training rows included.</li>
+          <li><strong>Outliers removed by a union of six detectors.</strong> Any visit count flagged by Z score, robust Z score, IQR, percentile trimming, DBSCAN <em>or</em> Isolation Forest was deleted. The DBSCAN and Isolation Forest helpers had indexing bugs, and the very popular ads they removed were real, not errors.</li>
+          <li><strong>Values written to the wrong rows.</strong> Imputed values were assigned back with misaligned indexes, and the target itself was imputed instead of dropping ads without a visit count.</li>
+          <li><strong>A "no" that meant yes.</strong> The <code>--storage_model no</code> option was stored as an enum member, which Python treats as true, so the models were always saved.</li>
+        </ul>
+        <p>None of these is exotic. Selecting results with the label, aggregating away the unit you want to predict, and deleting inconvenient data are mistakes I have also seen in production code. A chart of mean predicted against mean actual hides all three, because averages agree even when individual predictions do not.</p>
+
+        <h2>Reading the data correctly</h2>
+        <p>Before modelling again, I had to understand what the <code>visit</code> column really is. Two facts changed everything:</p>
+        <ul>
+          <li><strong>It is a snapshot, not a time series.</strong> The file contains only the ads that were still online on the scrape date. Older ads had more time to sell and disappear, so the further back the publish month, the fewer ads remain. August "dominates" because of when the data was collected, not because of summer demand.</li>
+          <li><strong>Visits are cumulative.</strong> The column counts every visit since the ad was published, so an ad that has been online for two months has had far more chances to be seen than one posted yesterday. The age of the ad has to be a feature.</li>
+        </ul>
+        <p>Visits are also extremely skewed: median 75, mean 294, 99th percentile about 3,350. A few viral ads would dominate any model trained on raw counts, so the new models learn <code>log(1 + visits)</code> and convert back.</p>
+
+        <h2>The rebuild</h2>
+        <p>The new pipeline predicts visits for each ad. It cleans what is clearly wrong (placeholder prices under $100, odometers over 1,000,000 km, model years before 1940, ads without a visit count) and keeps 50,540 ads. Imputation, scaling and one-hot encoding happen inside a scikit-learn <code>Pipeline</code>, so they are learnt from the training folds only. Outlier detectors are still there, now vectorised and correct, but only to report: they disagree wildly, flagging between 0.04% and 16% of the ads, which is a good reason not to delete rows based on any one of them.</p>
+        <p>The split is 80/20, stratified on visit deciles. Four candidates are compared with 5-fold cross-validation on the training set, and the winner is scored once on the test set:</p>
+        <div class="table-wrap">
+          <table>
+            <thead><tr><th>Model (5-fold CV)</th><th>MAE (visits)</th><th>R²</th><th>R² (log scale)</th></tr></thead>
+            <tbody>
+              <tr><td><strong>Gradient boosting</strong></td><td><strong>164 ± 6</strong></td><td><strong>0.40</strong></td><td><strong>0.82</strong></td></tr>
+              <tr><td>Random forest</td><td>177 ± 7</td><td>0.30</td><td>0.80</td></tr>
+              <tr><td>Ridge regression</td><td>194 ± 7</td><td>0.24</td><td>0.75</td></tr>
+              <tr><td><em>Baseline: always the median</em></td><td>273 ± 7</td><td>−0.07</td><td>−0.01</td></tr>
+            </tbody>
+          </table>
+        </div>
+        <p>On the 10,108 test ads, never seen during training or selection, gradient boosting has a mean absolute error of 158 visits against 266 for the baseline, and a median error of 32 visits against 70. Test scores match cross-validation, so the model is not overfitting. The full run takes about two minutes in my environment, instead of 30.</p>
+        <p>The two R² columns tell different stories, and both are true. On the log scale, 0.82 means the model gets the order of magnitude right: it knows a 20-visit ad from a 2,000-visit ad. On raw visits, 0.40 means it misses the size of the rare viral ads, which it under-predicts.</p>
+        <blockquote>A chart of averages can agree perfectly with reality while every individual prediction is wrong. Evaluate at the level where the decision is made.</blockquote>
+
+        <h2>What drives visits</h2>
+        <p>Permutation importance, how much the test error grows when one feature is shuffled, puts <strong>ad age</strong> far ahead of everything else, followed by car age, price, city and seller type. Equipment flags, colour and the day of the week the ad was posted add almost nothing. The exploratory analysis points the same way:</p>
+        <ul>
+          <li><strong>Private sellers get about three times the visits of dealers</strong> for used cars (median 226 vs 67). New cars from dealers get a median of only 8.</li>
+          <li><strong>Older, cheaper, higher-mileage cars attract more visits.</strong> Spearman correlation with visits: car age +0.55, kilometres +0.47, ad age +0.35, price −0.35.</li>
+          <li><strong>Region matters a lot.</strong> Calgary (median 115) and the City of Toronto (112) get many more visits per ad than Vancouver (11) or the North Shore (8).</li>
+        </ul>
+        <p>These are associations in one snapshot, not causes. A private seller's used sedan probably draws a different audience from a dealer's new truck, and the model cannot separate the two.</p>
+
+        <h2>What I learned</h2>
+        <ul>
+          <li><strong>Never choose a prediction using the label.</strong> If the real value takes part in selecting the output, the score measures the selection, not the model.</li>
+          <li><strong>Model at the level of the decision.</strong> The question was about one ad. Aggregating to city-month totals threw away the data and the question with it.</li>
+          <li><strong>Understand how the data was collected.</strong> One scrape date explains both the "seasonality" and why ad age matters most.</li>
+          <li><strong>Report outliers before deleting them.</strong> When six detectors disagree by a factor of 400, none of them is telling you the truth about your data.</li>
+          <li><strong>Start with a baseline.</strong> "Always predict the median" gives every other number its meaning.</li>
+          <li><strong>Test the plumbing.</strong> The new repository has a pytest suite on synthetic data and runs it with ruff in GitHub Actions on every push. A test would have caught the "no means yes" bug.</li>
+        </ul>
+
+        <h2>Where AI assistants fit</h2>
+        <p>As with my <a class="link" href="/writing/bank-marketing-model-threshold-over-model/">revisit of a bank marketing classifier</a>, I used an AI coding assistant to read the old code, trace where the data was being reshaped, and write the new pipeline and tests. It was quick to spot that the model selection used the label, and quick to write cross-validation boilerplate. Deciding what the target really meant, which framing the business would use and which results were worth reporting was still my job.</p>
+
+        <h2>Next steps</h2>
+        <ul>
+          <li><strong>Fix the survivorship bias.</strong> Ads that sold quickly, often the most attractive ones, are missing from a single snapshot. Several scrapes would allow a better target, such as visits in the first seven days.</li>
+          <li><strong>Add the missing signals.</strong> Photos, description text and promoted status are not in the data, and probably explain much of what the model misses on viral ads.</li>
+          <li><strong>Tune.</strong> A randomized search on gradient boosting and target encoding for high-cardinality columns like model and trim.</li>
+        </ul>
+
+        <h2>The project and the code</h2>
+        <dl class="facts-box">
+          <div><dt>Dataset</dt><dd><a class="link" href="https://www.kaggle.com/datasets/hossaingh/kijiji-car-sales-ads" target="_blank" rel="noopener">Kijiji car sales ads</a> on Kaggle, scraped on August 27, 2022, CC BY-NC-SA 4.0</dd></div>
+          <div><dt>Team (2023)</dt><dd>Group 6: Erwin Mongui, Camilo Florez, Yasar Mansuri, Syed Zumair</dd></div>
+          <div><dt>Model (2026)</dt><dd>HistGradientBoostingRegressor on log(1 + visits), chosen by 5-fold cross-validation</dd></div>
+          <div><dt>Test result</dt><dd>MAE 158 visits vs 266 for the median baseline; median error 32 visits; R² 0.82 on the log scale</dd></div>
+          <div><dt>Stack</dt><dd>Python, pandas, scikit-learn, matplotlib, pytest, ruff, GitHub Actions</dd></div>
+          <div><dt>Code</dt><dd><a class="link" href="https://github.com/gelnomo/training-ml-python-kijiji" target="_blank" rel="noopener">training-ml-python-kijiji on GitHub</a>: the rebuilt pipeline, charts, tests and the full write-up</dd></div>
+        </dl>
+        <div class="author"><svg aria-hidden="true" viewBox="0 0 189 190"><path fill="#0071e3" d="__MARK__"/></svg><p><b>Erwin Mongui</b>Director of Technology at Cedar Planters and Certified AI Engineer (Lambton College, 2024), based in Toronto. <a class="link" href="/about/">More about me</a></p></div>
+      </div>
+      <aside class="aside"><div class="related"><h4>Related</h4><a href="/writing/bank-marketing-model-threshold-over-model/">The threshold mattered more than the model</a><a href="/writing/rt-pcr-travel-screening-data-driven-selection/">Replacing random RT-PCR checks with data-driven traveller selection</a><a href="/writing/from-data-analyst-to-data-engineer/">From data analyst to data engineer</a></div></aside>
+    </div>
+  </section>

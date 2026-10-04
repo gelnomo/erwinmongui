@@ -158,6 +158,7 @@
     "description": "Articles by Erwin Mongui on choosing tools, growing engineers, measuring team health, delivery bottlenecks and building with AI, from 18 years of shipping.",
     "headline": "Writing",
     "items": [
+      "post-kijiji-visits",
       "post-bank-marketing",
       "post-bottlenecks",
       "post-metrics",
@@ -493,6 +494,45 @@
     "alternate": "es-post-bank-marketing"
   },
   {
+    "key": "post-kijiji-visits",
+    "type": "post",
+    "lang": "en",
+    "url": "/writing/kijiji-car-ads-visit-prediction-rebuild/",
+    "title": "51,000 ads, 190 rows: revisiting a Kijiji visit model | Erwin Mongui",
+    "description": "Revisiting our 2023 Kijiji car-ad visit model: a leaked model choice, 51,000 ads squeezed into 190 rows, and a rebuild that beats the baseline by 41%.",
+    "headline": "51,000 ads, 190 rows: revisiting a Kijiji visit-prediction model",
+    "section": "Data science",
+    "keywords": [
+      "machine learning",
+      "regression",
+      "data leakage",
+      "Kijiji",
+      "gradient boosting",
+      "cross-validation",
+      "scikit-learn",
+      "outliers",
+      "survivorship bias"
+    ],
+    "code": "https://github.com/gelnomo/training-ml-python-kijiji",
+    "breadcrumbs": [
+      [
+        "Home",
+        "/"
+      ],
+      [
+        "Writing",
+        "/writing/"
+      ],
+      [
+        "Kijiji visit prediction",
+        "/writing/kijiji-car-ads-visit-prediction-rebuild/"
+      ]
+    ],
+    "published": "2026-10-04",
+    "modified": "2026-10-04",
+    "alternate": "es-post-kijiji-visits"
+  },
+  {
     "key": "about",
     "type": "about",
     "lang": "en",
@@ -664,6 +704,7 @@
     "description": "Artículos de Erwin Mongui sobre cómo elegir herramientas, formar ingenieros, medir la salud de los equipos, cuellos de botella y construir con IA.",
     "headline": "Artículos",
     "items": [
+      "es-post-kijiji-visits",
       "es-post-bank-marketing",
       "es-post-bottlenecks",
       "es-post-metrics",
@@ -986,6 +1027,45 @@
       [
         "Clasificador de marketing bancario",
         "/es/articulos/modelo-de-marketing-bancario-umbral-antes-que-modelo/"
+      ]
+    ],
+    "published": "2026-10-04",
+    "modified": "2026-10-04"
+  },
+  {
+    "key": "es-post-kijiji-visits",
+    "type": "post",
+    "lang": "es",
+    "url": "/es/articulos/prediccion-de-visitas-en-anuncios-de-kijiji/",
+    "title": "51,000 anuncios, 190 filas: un modelo de visitas para Kijiji | Erwin Mongui",
+    "description": "Revisando nuestro modelo de visitas de anuncios de Kijiji de 2023: una fuga en la elección del modelo, 190 filas en vez de 51,000 y un 41% menos de error.",
+    "headline": "51,000 anuncios, 190 filas: revisando un modelo de visitas para Kijiji",
+    "section": "Ciencia de datos",
+    "keywords": [
+      "machine learning",
+      "regresión",
+      "fuga de datos",
+      "Kijiji",
+      "gradient boosting",
+      "validación cruzada",
+      "scikit-learn",
+      "valores atípicos",
+      "sesgo de supervivencia"
+    ],
+    "code": "https://github.com/gelnomo/training-ml-python-kijiji",
+    "alternate": "post-kijiji-visits",
+    "breadcrumbs": [
+      [
+        "Inicio",
+        "/es/"
+      ],
+      [
+        "Artículos",
+        "/es/articulos/"
+      ],
+      [
+        "Predicción de visitas en Kijiji",
+        "/es/articulos/prediccion-de-visitas-en-anuncios-de-kijiji/"
       ]
     ],
     "published": "2026-10-04",
