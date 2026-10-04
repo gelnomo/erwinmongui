@@ -1,0 +1,105 @@
+<header class="doc-head stage-dark">
+    <nav class="crumbs" aria-label="Ruta de navegación"><a href="/es/">Inicio</a><span>/</span><a href="/es/articulos/">Artículos</a><span>/</span><span>Ciencia de datos</span></nav>
+    <p class="eyebrow">Ciencia de datos · Machine learning</p>
+    <h1>51,000 anuncios, 190 filas: revisando un modelo de visitas para Kijiji.</h1>
+    <p class="summary">En 2023, mi equipo construyó un modelo para predecir cuántas visitas recibe un anuncio de autos en Kijiji. Los gráficos se veían bien y el informe decía que las predicciones seguían a los valores reales. Tres años después volví a leer el código y encontré que el modelo se había entrenado con unas 190 filas en lugar de 51,000 anuncios, y que la forma de elegir sus predicciones miraba la respuesta. Esto es lo que salió mal, cómo lo reconstruí y lo que los datos dicen de verdad sobre las visitas.</p>
+    <div class="byline"><span>Por Erwin Mongui</span><span>4 de octubre de 2026</span><span>7 min de lectura</span><a class="link" href="/writing/kijiji-car-ads-visit-prediction-rebuild/" hreflang="en" lang="en">Read in English</a></div>
+  </header>
+  <section class="doc">
+    <div class="doc-grid">
+      <div class="prose">
+        <div class="inshort"><b>En resumen</b><p>El pipeline de 2023 agrupaba los anuncios en totales por ciudad y mes, eliminaba cada conteo de visitas que marcara cualquiera de seis detectores de atípicos y elegía, para cada fila, el modelo que más se acercaba al valor real. La reconstrucción predice las visitas de cada anuncio, mantiene todo el preprocesamiento dentro de la validación cruzada y evalúa un conjunto de prueba una sola vez. Gradient boosting reduce el error absoluto medio en cerca de un <strong>41%</strong> frente a una línea base de la mediana (158 contra 266 visitas). Lo que más explica las visitas no es el auto: es cuánto tiempo lleva publicado el anuncio. Código: <a class="link" href="https://github.com/gelnomo/training-ml-python-kijiji" target="_blank" rel="noopener">GitHub</a>.</p></div>
+
+        <h2>El problema</h2>
+        <p>Kijiji es uno de los sitios de clasificados en línea más grandes de Canadá, y los autos son una de sus categorías más activas. Las visitas son la parte alta del embudo de ventas: un anuncio que nadie abre no se vende. Un modelo que predice visitas a partir del contenido del anuncio puede decirle a un vendedor que su anuncio rinde menos que otros parecidos, ayudar a ordenar los listados y dar a los concesionarios una referencia para su inventario.</p>
+        <div class="kpi-row kpi-3">
+          <div style="border-top-color:var(--line-light)"><b style="color:var(--blue)">51,343</b><span style="color:var(--steel)">anuncios de autos extraídos de Kijiji, con 28 columnas cada uno</span></div>
+          <div style="border-top-color:var(--line-light)"><b style="color:var(--blue)">1 día</b><span style="color:var(--steel)">todos se recolectaron el 27 de agosto de 2022</span></div>
+          <div style="border-top-color:var(--line-light)"><b style="color:var(--blue)">75</b><span style="color:var(--steel)">visitas por anuncio en la mediana; el máximo es 54,064</span></div>
+        </div>
+        <p>Los datos son un dataset público de Kaggle (<a class="link" href="https://www.kaggle.com/datasets/hossaingh/kijiji-car-sales-ads" target="_blank" rel="noopener">kijiji-car-sales-ads</a>, CC BY-NC-SA 4.0) que cubre doce regiones de Kijiji en Columbia Británica, Alberta, Ontario y Quebec. Trabajamos en él como Grupo 6: Camilo Florez, Yasar Mansuri, Syed Zumair y yo.</p>
+
+        <h2>Lo que construimos en 2023</h2>
+        <p>Empezamos en un notebook de Jupyter y después pasamos el proyecto a un programa de línea de comandos en Python. Limpiaba los datos, generaba una docena de gráficos exploratorios, eliminaba atípicos y entrenaba tres regresores (regresión lineal, random forest y gradient boosting) por separado para cada ciudad, con una división 60/40. El informe comparaba el promedio de visitas reales con el promedio de visitas predichas por año y concluía que las predicciones tenían "un comportamiento similar a las reales". Random forest se "eligió" para cerca de la mitad de las filas, y una ejecución completa tardaba unos 30 minutos.</p>
+        <p>Viéndolo hoy, dos cosas del informe debieron preocuparnos. El README describía el proyecto como predicción del <em>precio</em>, aunque el objetivo eran las visitas. Y leía los gráficos como estacionalidad: julio y agosto eran "los grandes meses" y la mayoría de anuncios se publicó en agosto, algo "relacionado con el verano".</p>
+
+        <h2>Al volver: cinco problemas</h2>
+        <p>Al leer el código en 2026 encontré problemas que impedían confiar en los resultados de 2023:</p>
+        <ul>
+          <li><strong>El modelo miraba la respuesta.</strong> Para cada fila, el código calculaba el error de cada modelo contra las visitas reales y se quedaba con la predicción de menor error. Eso es escoger la respuesta más cercana a la verdad después de ver la verdad, así que la precisión reportada no era algo que el modelo pudiera lograr con un anuncio nuevo.</li>
+          <li><strong>51,000 anuncios se convirtieron en unas 190 filas.</strong> Justo antes de entrenar, los datos se agrupaban en el total de visitas por ciudad, mes y año. Las únicas variables que quedaban eran el mes y el año. Eso deja entre 2 y 22 filas por ciudad para entrenar, y luego se predecía sobre todas las filas, incluidas las de entrenamiento.</li>
+          <li><strong>Atípicos eliminados por la unión de seis detectores.</strong> Se borraba cualquier conteo de visitas marcado por Z score, Z score robusto, IQR, recorte por percentiles, DBSCAN <em>o</em> Isolation Forest. Las funciones de DBSCAN e Isolation Forest tenían errores de índices, y los anuncios muy populares que eliminaban eran reales, no errores.</li>
+          <li><strong>Valores escritos en las filas equivocadas.</strong> Los valores imputados se asignaban de vuelta con índices desalineados, y se imputaba el propio objetivo en lugar de descartar los anuncios sin conteo de visitas.</li>
+          <li><strong>Un "no" que significaba sí.</strong> La opción <code>--storage_model no</code> se guardaba como un miembro de enum, que Python evalúa como verdadero, así que los modelos se guardaban siempre.</li>
+        </ul>
+        <p>Ninguno de estos errores es raro. Elegir resultados usando la etiqueta, agregar hasta perder la unidad que se quiere predecir y borrar datos incómodos son errores que también he visto en código de producción. Un gráfico de promedio predicho contra promedio real esconde los tres, porque los promedios coinciden aunque las predicciones individuales no.</p>
+
+        <h2>Leer bien los datos</h2>
+        <p>Antes de modelar otra vez, tenía que entender qué es realmente la columna <code>visit</code>. Dos hechos lo cambiaron todo:</p>
+        <ul>
+          <li><strong>Es una foto, no una serie de tiempo.</strong> El archivo solo contiene los anuncios que seguían en línea el día de la extracción. Los anuncios más antiguos tuvieron más tiempo para venderse y desaparecer, así que cuanto más atrás el mes de publicación, menos anuncios quedan. Agosto "domina" por la fecha en que se recolectaron los datos, no por la demanda de verano.</li>
+          <li><strong>Las visitas son acumuladas.</strong> La columna cuenta todas las visitas desde que se publicó el anuncio, así que un anuncio con dos meses en línea ha tenido muchas más oportunidades de ser visto que uno publicado ayer. La antigüedad del anuncio tiene que ser una variable.</li>
+        </ul>
+        <p>Las visitas además están muy sesgadas: mediana 75, media 294, percentil 99 de unas 3,350. Unos pocos anuncios virales dominarían cualquier modelo entrenado con los conteos brutos, así que los modelos nuevos aprenden <code>log(1 + visitas)</code> y luego convierten de vuelta.</p>
+
+        <h2>La reconstrucción</h2>
+        <p>El nuevo pipeline predice las visitas de cada anuncio. Limpia lo que está claramente mal (precios de relleno por debajo de 100 dólares, odómetros de más de 1,000,000 km, años de modelo anteriores a 1940, anuncios sin conteo de visitas) y conserva 50,540 anuncios. La imputación, el escalado y el one-hot encoding ocurren dentro de un <code>Pipeline</code> de scikit-learn, así que solo aprenden de los folds de entrenamiento. Los detectores de atípicos siguen ahí, ahora vectorizados y correctos, pero solo para reportar: no se ponen de acuerdo, marcan entre el 0.04% y el 16% de los anuncios, lo cual es una buena razón para no borrar filas basándose en ninguno.</p>
+        <p>La división es 80/20, estratificada por deciles de visitas. Cuatro candidatos se comparan con validación cruzada de 5 folds sobre el conjunto de entrenamiento, y el ganador se evalúa una sola vez sobre el conjunto de prueba:</p>
+        <div class="table-wrap">
+          <table>
+            <thead><tr><th>Modelo (CV de 5 folds)</th><th>MAE (visitas)</th><th>R²</th><th>R² (escala log)</th></tr></thead>
+            <tbody>
+              <tr><td><strong>Gradient boosting</strong></td><td><strong>164 ± 6</strong></td><td><strong>0.40</strong></td><td><strong>0.82</strong></td></tr>
+              <tr><td>Random forest</td><td>177 ± 7</td><td>0.30</td><td>0.80</td></tr>
+              <tr><td>Regresión ridge</td><td>194 ± 7</td><td>0.24</td><td>0.75</td></tr>
+              <tr><td><em>Línea base: siempre la mediana</em></td><td>273 ± 7</td><td>−0.07</td><td>−0.01</td></tr>
+            </tbody>
+          </table>
+        </div>
+        <p>En los 10,108 anuncios de prueba, que nunca se vieron durante el entrenamiento ni la selección, gradient boosting tiene un error absoluto medio de 158 visitas contra 266 de la línea base, y un error mediano de 32 visitas contra 70. Los resultados de prueba coinciden con la validación cruzada, así que el modelo no está sobreajustado. La ejecución completa tarda unos dos minutos en mi entorno, en lugar de 30.</p>
+        <p>Las dos columnas de R² cuentan historias distintas, y ambas son ciertas. En escala logarítmica, 0.82 significa que el modelo acierta el orden de magnitud: distingue un anuncio de 20 visitas de uno de 2,000. En visitas brutas, 0.40 significa que no capta el tamaño de los pocos anuncios virales, que tiende a subestimar.</p>
+        <blockquote>Un gráfico de promedios puede coincidir perfectamente con la realidad mientras cada predicción individual está mal. Evalúa al nivel en el que se toma la decisión.</blockquote>
+
+        <h2>Qué explica las visitas</h2>
+        <p>La importancia por permutación, cuánto crece el error de prueba al desordenar una variable, pone la <strong>antigüedad del anuncio</strong> muy por delante de todo lo demás, seguida de la edad del auto, el precio, la ciudad y el tipo de vendedor. El equipamiento, el color y el día de la semana de publicación casi no aportan. El análisis exploratorio apunta en la misma dirección:</p>
+        <ul>
+          <li><strong>Los vendedores particulares reciben unas tres veces más visitas que los concesionarios</strong> en autos usados (mediana 226 contra 67). Los autos nuevos de concesionarios reciben una mediana de solo 8.</li>
+          <li><strong>Los autos más viejos, baratos y con más kilómetros atraen más visitas.</strong> Correlación de Spearman con las visitas: edad del auto +0.55, kilómetros +0.47, antigüedad del anuncio +0.35, precio −0.35.</li>
+          <li><strong>La región importa mucho.</strong> Calgary (mediana 115) y la ciudad de Toronto (112) reciben muchas más visitas por anuncio que Vancouver (11) o North Shore (8).</li>
+        </ul>
+        <p>Son asociaciones en una sola foto, no causas. El sedán usado de un particular probablemente atrae a un público distinto que la camioneta nueva de un concesionario, y el modelo no puede separar ambas cosas.</p>
+
+        <h2>Lo que aprendí</h2>
+        <ul>
+          <li><strong>Nunca elijas una predicción usando la etiqueta.</strong> Si el valor real participa en seleccionar el resultado, la métrica mide la selección, no el modelo.</li>
+          <li><strong>Modela al nivel de la decisión.</strong> La pregunta era sobre un anuncio. Agregar a totales por ciudad y mes descartó los datos y, con ellos, la pregunta.</li>
+          <li><strong>Entiende cómo se recolectaron los datos.</strong> Una sola fecha de extracción explica tanto la "estacionalidad" como por qué la antigüedad del anuncio pesa tanto.</li>
+          <li><strong>Reporta los atípicos antes de borrarlos.</strong> Cuando seis detectores difieren por un factor de 400, ninguno te está diciendo la verdad sobre tus datos.</li>
+          <li><strong>Empieza con una línea base.</strong> "Predecir siempre la mediana" le da sentido a todos los demás números.</li>
+          <li><strong>Prueba la plomería.</strong> El nuevo repositorio tiene pruebas con pytest sobre datos sintéticos y las ejecuta junto con ruff en GitHub Actions en cada push. Una prueba habría detectado el error del "no que significa sí".</li>
+        </ul>
+
+        <h2>Dónde encajan los asistentes de IA</h2>
+        <p>Igual que al <a class="link" href="/es/articulos/modelo-de-marketing-bancario-umbral-antes-que-modelo/">revisar un clasificador de marketing bancario</a>, usé un asistente de programación con IA para leer el código antiguo, rastrear dónde se transformaban los datos y escribir el nuevo pipeline y sus pruebas. Detectó rápido que la selección del modelo usaba la etiqueta y escribió rápido el código repetitivo de validación cruzada. Decidir qué significaba realmente el objetivo, qué enfoque usaría el negocio y qué resultados valía la pena reportar siguió siendo mi trabajo.</p>
+
+        <h2>Próximos pasos</h2>
+        <ul>
+          <li><strong>Corregir el sesgo de supervivencia.</strong> Los anuncios que se vendieron rápido, a menudo los más atractivos, faltan en una sola foto. Varias extracciones permitirían un mejor objetivo, como las visitas en los primeros siete días.</li>
+          <li><strong>Agregar las señales que faltan.</strong> Las fotos, el texto de la descripción y si el anuncio está promocionado no están en los datos, y probablemente explican buena parte de lo que el modelo no capta en los anuncios virales.</li>
+          <li><strong>Ajustar.</strong> Una búsqueda aleatoria de hiperparámetros para gradient boosting y target encoding para columnas con muchas categorías, como modelo y versión.</li>
+        </ul>
+
+        <h2>El proyecto y el código</h2>
+        <dl class="facts-box">
+          <div><dt>Datos</dt><dd><a class="link" href="https://www.kaggle.com/datasets/hossaingh/kijiji-car-sales-ads" target="_blank" rel="noopener">Kijiji car sales ads</a> en Kaggle, extraídos el 27 de agosto de 2022, CC BY-NC-SA 4.0</dd></div>
+          <div><dt>Equipo (2023)</dt><dd>Grupo 6: Erwin Mongui, Camilo Florez, Yasar Mansuri, Syed Zumair</dd></div>
+          <div><dt>Modelo (2026)</dt><dd>HistGradientBoostingRegressor sobre log(1 + visitas), elegido con validación cruzada de 5 folds</dd></div>
+          <div><dt>Resultado de prueba</dt><dd>MAE de 158 visitas contra 266 de la línea base de la mediana; error mediano de 32 visitas; R² de 0.82 en escala logarítmica</dd></div>
+          <div><dt>Tecnologías</dt><dd>Python, pandas, scikit-learn, matplotlib, pytest, ruff, GitHub Actions</dd></div>
+          <div><dt>Código</dt><dd><a class="link" href="https://github.com/gelnomo/training-ml-python-kijiji" target="_blank" rel="noopener">training-ml-python-kijiji en GitHub</a>: el pipeline reconstruido, los gráficos, las pruebas y el informe completo (en inglés)</dd></div>
+        </dl>
+        <div class="author"><svg aria-hidden="true" viewBox="0 0 189 190"><path fill="#0071e3" d="__MARK__"/></svg><p><b>Erwin Mongui</b>Director de Tecnología en Cedar Planters e ingeniero certificado en Inteligencia Artificial (Lambton College, 2024), en Toronto.</p></div>
+      </div>
+      <aside class="aside"><div class="related"><h4>Relacionado</h4><a href="/es/articulos/modelo-de-marketing-bancario-umbral-antes-que-modelo/">El umbral importó más que el modelo</a><a href="/es/articulos/seleccion-de-viajeros-rt-pcr-basada-en-datos/">Selección de viajeros para RT-PCR basada en datos</a><a href="/es/articulos/de-analista-de-datos-a-ingeniero-de-datos/">De analista de datos a ingeniero de datos</a></div></aside>
+    </div>
+  </section>

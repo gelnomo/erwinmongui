@@ -1,0 +1,329 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>51,000 anuncios, 190 filas: un modelo de visitas para Kijiji | Erwin Mongui</title>
+<meta name="description" content="Revisando nuestro modelo de visitas de anuncios de Kijiji de 2023: una fuga en la elección del modelo, 190 filas en vez de 51,000 y un 41% menos de error.">
+<meta name="author" content="Erwin Mongui">
+<meta name="robots" content="index, follow, max-snippet:-1, max-image-preview:large, max-video-preview:-1">
+<meta name="theme-color" content="#000000">
+<link rel="canonical" href="https://erwinmongui.com/es/articulos/prediccion-de-visitas-en-anuncios-de-kijiji/">
+<link rel="alternate" hreflang="en" href="https://erwinmongui.com/writing/kijiji-car-ads-visit-prediction-rebuild/">
+<link rel="alternate" hreflang="es" href="https://erwinmongui.com/es/articulos/prediccion-de-visitas-en-anuncios-de-kijiji/">
+<link rel="alternate" hreflang="x-default" href="https://erwinmongui.com/writing/kijiji-car-ads-visit-prediction-rebuild/">
+<link rel="alternate" type="application/rss+xml" title="Erwin Mongui: casos y artículos" href="https://erwinmongui.com/es/feed.xml">
+<link rel="me" href="https://www.linkedin.com/in/erwin-mongui/">
+<meta property="og:type" content="article">
+<meta property="og:site_name" content="Erwin Mongui">
+<meta property="og:locale" content="es_CO">
+<meta property="og:locale:alternate" content="en_CA">
+<meta property="og:url" content="https://erwinmongui.com/es/articulos/prediccion-de-visitas-en-anuncios-de-kijiji/">
+<meta property="og:title" content="51,000 anuncios, 190 filas: revisando un modelo de visitas para Kijiji">
+<meta property="og:description" content="Revisando nuestro modelo de visitas de anuncios de Kijiji de 2023: una fuga en la elección del modelo, 190 filas en vez de 51,000 y un 41% menos de error.">
+<meta property="og:image" content="https://erwinmongui.com/og-image.png">
+<meta property="og:image:width" content="1200">
+<meta property="og:image:height" content="630">
+<meta property="og:image:alt" content="Erwin Mongui logo with the words Engineering leader, Director of Technology, Toronto, Canada">
+<meta property="article:published_time" content="2026-10-04">
+<meta property="article:modified_time" content="2026-10-04">
+<meta property="article:author" content="https://www.linkedin.com/in/erwin-mongui/">
+<meta name="twitter:card" content="summary_large_image">
+<meta name="twitter:title" content="51,000 anuncios, 190 filas: revisando un modelo de visitas para Kijiji">
+<meta name="twitter:description" content="Revisando nuestro modelo de visitas de anuncios de Kijiji de 2023: una fuga en la elección del modelo, 190 filas en vez de 51,000 y un 41% menos de error.">
+<meta name="twitter:image" content="https://erwinmongui.com/og-image.png">
+<link rel="icon" href="/favicon.ico" sizes="16x16 32x32 48x48">
+<link rel="icon" type="image/svg+xml" href="/favicon.svg">
+<link rel="icon" type="image/png" sizes="48x48" href="/favicon-48x48.png">
+<link rel="icon" type="image/png" sizes="96x96" href="/favicon-96x96.png">
+<link rel="icon" type="image/png" sizes="192x192" href="/favicon-192x192.png">
+<link rel="apple-touch-icon" sizes="180x180" href="/apple-touch-icon.png">
+<link rel="manifest" href="/site.webmanifest">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Manrope:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="/assets/site.css">
+<link rel="stylesheet" href="/assets/chrome.css">
+<!-- Google preferred sources button (https://developers.google.com/search/docs/appearance/preferred-sources) -->
+<script async src="https://news.google.com/swg/js/v1/publisher.js"></script>
+<script type="application/ld+json">
+{
+ "@context": "https://schema.org",
+ "@graph": [
+  {
+   "@type": "Person",
+   "@id": "https://erwinmongui.com/#person",
+   "name": "Erwin Mongui",
+   "url": "https://erwinmongui.com/",
+   "jobTitle": "Director of Technology",
+   "worksFor": {
+    "@type": "Organization",
+    "name": "Cedar Planters"
+   },
+   "sameAs": [
+    "https://www.linkedin.com/in/erwin-mongui/",
+    "https://medium.com/@erwinmongui"
+   ]
+  },
+  {
+   "@type": "WebSite",
+   "@id": "https://erwinmongui.com/#website",
+   "url": "https://erwinmongui.com/",
+   "name": "Erwin Mongui",
+   "publisher": {
+    "@id": "https://erwinmongui.com/#person"
+   },
+   "inLanguage": [
+    "en",
+    "es"
+   ]
+  },
+  {
+   "@type": "BlogPosting",
+   "@id": "https://erwinmongui.com/es/articulos/prediccion-de-visitas-en-anuncios-de-kijiji/#article",
+   "headline": "51,000 anuncios, 190 filas: revisando un modelo de visitas para Kijiji",
+   "description": "Revisando nuestro modelo de visitas de anuncios de Kijiji de 2023: una fuga en la elección del modelo, 190 filas en vez de 51,000 y un 41% menos de error.",
+   "url": "https://erwinmongui.com/es/articulos/prediccion-de-visitas-en-anuncios-de-kijiji/",
+   "mainEntityOfPage": "https://erwinmongui.com/es/articulos/prediccion-de-visitas-en-anuncios-de-kijiji/",
+   "inLanguage": "es",
+   "image": "https://erwinmongui.com/og-image.png",
+   "datePublished": "2026-10-04",
+   "dateModified": "2026-10-04",
+   "author": [
+    {
+     "@id": "https://erwinmongui.com/#person"
+    }
+   ],
+   "publisher": {
+    "@id": "https://erwinmongui.com/#person"
+   },
+   "isPartOf": {
+    "@id": "https://erwinmongui.com/#website"
+   },
+   "keywords": [
+    "machine learning",
+    "regresión",
+    "fuga de datos",
+    "Kijiji",
+    "gradient boosting",
+    "validación cruzada",
+    "scikit-learn",
+    "valores atípicos",
+    "sesgo de supervivencia"
+   ],
+   "articleSection": "Ciencia de datos",
+   "isBasedOn": {
+    "@type": "SoftwareSourceCode",
+    "codeRepository": "https://github.com/gelnomo/training-ml-python-kijiji",
+    "programmingLanguage": "Python"
+   }
+  },
+  {
+   "@type": "BreadcrumbList",
+   "itemListElement": [
+    {
+     "@type": "ListItem",
+     "position": 1,
+     "name": "Inicio",
+     "item": "https://erwinmongui.com/es/"
+    },
+    {
+     "@type": "ListItem",
+     "position": 2,
+     "name": "Artículos",
+     "item": "https://erwinmongui.com/es/articulos/"
+    },
+    {
+     "@type": "ListItem",
+     "position": 3,
+     "name": "Predicción de visitas en Kijiji",
+     "item": "https://erwinmongui.com/es/articulos/prediccion-de-visitas-en-anuncios-de-kijiji/"
+    }
+   ]
+  }
+ ]
+}
+</script>
+<!-- Google Consent Mode v2 defaults: denied in the EEA, the UK and Switzerland until the visitor answers the consent message, granted elsewhere -->
+<script>
+  window.dataLayer = window.dataLayer || [];
+  function gtag(){dataLayer.push(arguments);}
+  gtag('consent', 'default', {ad_storage: 'denied', ad_user_data: 'denied', ad_personalization: 'denied', analytics_storage: 'denied', region: ['AT', 'BE', 'BG', 'HR', 'CY', 'CZ', 'DK', 'EE', 'FI', 'FR', 'DE', 'GR', 'HU', 'IE', 'IT', 'LV', 'LT', 'LU', 'MT', 'NL', 'PL', 'PT', 'RO', 'SK', 'SI', 'ES', 'SE', 'IS', 'LI', 'NO', 'GB', 'CH'], wait_for_update: 500});
+  gtag('consent', 'default', {ad_storage: 'granted', ad_user_data: 'granted', ad_personalization: 'granted', analytics_storage: 'granted'});
+  gtag('set', 'ads_data_redaction', true);
+</script>
+<!-- Google consent message (AdSense > Privacy & messaging) for pages without ads -->
+<script async src="https://fundingchoicesmessages.google.com/i/pub-1778464975767585?ers=1"></script>
+<script>(function() {function signalGooglefcPresent() {if (!window.frames['googlefcPresent']) {if (document.body) {const iframe = document.createElement('iframe'); iframe.style = 'width: 0; height: 0; border: none; z-index: -1000; left: -1000px; top: -1000px;'; iframe.style.display = 'none'; iframe.name = 'googlefcPresent'; document.body.appendChild(iframe);} else {setTimeout(signalGooglefcPresent, 0);}}}signalGooglefcPresent();})();</script>
+<!-- Google tag (gtag.js) -->
+<script async src="https://www.googletagmanager.com/gtag/js?id=G-LKD2WCNDV1"></script>
+<script>
+  gtag('js', new Date());
+  window.siteContext = {"content_group": "Article", "content_id": "post-kijiji-visits", "site_language": "es"};
+  gtag('config', 'G-LKD2WCNDV1', window.siteContext);
+</script>
+<!-- Clarity tracking code for https://erwinmongui.com/ -->
+<script>
+    (function(c,l,a,r,i,t,y){
+        c[a]=c[a]||function(){(c[a].q=c[a].q||[]).push(arguments)};
+        t=l.createElement(r);t.async=1;t.src="https://www.clarity.ms/tag/"+i;
+        y=l.getElementsByTagName(r)[0];y.parentNode.insertBefore(t,y);
+    })(window, document, "clarity", "script", "ygo6nehxdb");
+</script>
+<!-- Ahrefs Web Analytics -->
+<script src="https://analytics.ahrefs.com/analytics.js" data-key="rdCxWS4nTARbSdPhwLuAmg" async></script>
+<!-- Passes the consent choice to Clarity and shows the footer's privacy settings link -->
+<script defer src="/assets/consent.js"></script>
+<!-- Site event tracking (contact clicks, navigation, sections, scroll depth, reading) -->
+<script defer src="/analytics.js"></script>
+</head>
+<body class="chrome-sticky">
+<a class="skip" href="#main">Ir al contenido</a>
+<header class="nav" id="nav">
+  <div class="nav-inner">
+    <a class="brand" href="/es/"><svg aria-hidden="true" focusable="false" viewBox="0 0 189 190"><path fill="#81ffd9" d="M9.8 184.5C4.8 181.7 2.6 174.6 5.1 169.7C5.7 168.5 10.3 163.3 15.3 158.2L24.5 149.0L15.3 139.8C10.3 134.7 5.7 129.5 5.1 128.3C2.4 123.0 5.3 115.4 10.9 113.1C17.0 110.5 19.5 112.0 33.7 126.3C41.0 133.5 47.4 140.8 48.0 142.3C49.4 146.2 49.3 152.5 47.6 156.3C46.8 158.1 40.4 165.3 33.3 172.3C21.9 183.6 19.9 185.2 16.4 185.6C14.0 185.9 11.5 185.4 9.8 184.5ZM70.7 158.0C65.1 153.6 65.1 144.4 70.7 140.0C73.0 138.2 74.7 138.0 89.6 138.0C107.4 138.0 110.2 138.6 112.6 143.1C115.5 148.8 113.5 156.5 108.5 158.8C106.8 159.6 100.1 160.0 89.6 160.0C74.7 160.0 73.0 159.8 70.7 158.0ZM136.9 158.6C135.4 157.7 133.5 155.4 132.5 153.4C131.1 150.3 131.0 149.1 131.9 145.9C133.5 140.5 137.1 138.0 143.4 138.0C153.7 138.0 160.3 134.0 161.9 126.9C162.3 125.0 162.3 113.4 161.9 101.0C160.7 67.7 157.5 46.5 151.4 32.9L148.7 27.0L145.2 29.0C138.8 32.8 133.0 38.2 129.2 44.0L125.3 49.8L122.4 48.0C109.4 39.8 87.5 39.6 73.2 47.5L69.0 49.9L67.1 46.1C65.0 42.0 54.3 31.6 49.1 28.7L46.0 26.9L43.0 33.2C39.2 41.3 36.3 54.6 34.4 72.4C32.7 89.3 32.7 89.3 28.9 92.5C24.3 96.3 18.8 96.0 14.4 91.6C11.2 88.4 11.0 87.8 11.0 81.2C11.0 63.5 16.4 36.0 22.4 23.5C28.7 10.1 35.8 4.6 46.6 4.6C53.6 4.6 60.0 7.7 70.7 16.2L77.0 21.1L82.5 20.0C89.6 18.5 105.5 18.5 112.5 20.0L117.9 21.1L124.2 16.1C138.1 4.8 148.3 2.1 158.3 6.9C174.9 15.0 184.2 50.4 184.4 107.0C184.5 137.6 184.3 138.6 174.9 148.5C167.2 156.6 160.9 159.4 149.0 159.7C142.0 160.0 138.8 159.6 136.9 158.6ZM64.3 102.5C62.6 101.8 60.4 99.8 59.6 98.1C55.5 90.3 59.6 82.2 68.3 81.3C72.6 80.8 73.2 81.0 76.5 84.3C79.4 87.2 80.0 88.5 80.0 92.2C80.0 97.4 77.9 100.7 73.4 102.6C69.3 104.3 68.4 104.3 64.3 102.5ZM121.3 102.5C117.0 100.7 114.5 96.6 114.6 91.6C114.7 88.4 115.4 87.0 118.4 84.3C120.8 82.1 123.0 81.0 125.0 81.0C137.3 81.0 141.5 97.2 130.6 102.4C126.5 104.3 125.5 104.3 121.3 102.5Z"/></svg><span>Erwin Mongui</span></a>
+    <nav class="nav-links" id="nav-links" aria-label="Secciones">
+      <a href="/about/">Sobre mí</a>
+      <a href="/es/#experience">Experiencia</a>
+      <a href="/es/#impact">Impacto</a>
+      <a href="/es/#ai">IA</a>
+      <a href="/es/#skills">Habilidades</a>
+      <a href="/es/#casos">Casos</a>
+      <a href="/es/articulos/" aria-current="page">Artículos</a>
+      <a href="/es/#facts">Preguntas</a>
+    </nav>
+    <div class="nav-right">
+      <a class="nav-lang" href="/writing/kijiji-car-ads-visit-prediction-rebuild/" hreflang="en" lang="en">English</a>
+      <a class="nav-cta" href="/es/#contacto">Contacto</a>
+      <button class="menu-btn" id="menu-btn" aria-label="Abrir menú" aria-expanded="false" aria-controls="nav-links">
+        <svg class="bars" width="18" height="18" viewBox="0 0 18 18" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round"><path d="M2 5h14M2 9h14M2 13h14"/></svg>
+        <svg class="x" width="18" height="18" viewBox="0 0 18 18" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round"><path d="M4 4l10 10M14 4L4 14"/></svg>
+      </button>
+    </div>
+  </div>
+</header>
+<main id="main">
+<header class="doc-head stage-dark">
+    <nav class="crumbs" aria-label="Ruta de navegación"><a href="/es/">Inicio</a><span>/</span><a href="/es/articulos/">Artículos</a><span>/</span><span>Ciencia de datos</span></nav>
+    <p class="eyebrow">Ciencia de datos · Machine learning</p>
+    <h1>51,000 anuncios, 190 filas: revisando un modelo de visitas para Kijiji.</h1>
+    <p class="summary">En 2023, mi equipo construyó un modelo para predecir cuántas visitas recibe un anuncio de autos en Kijiji. Los gráficos se veían bien y el informe decía que las predicciones seguían a los valores reales. Tres años después volví a leer el código y encontré que el modelo se había entrenado con unas 190 filas en lugar de 51,000 anuncios, y que la forma de elegir sus predicciones miraba la respuesta. Esto es lo que salió mal, cómo lo reconstruí y lo que los datos dicen de verdad sobre las visitas.</p>
+    <div class="byline"><span>Por Erwin Mongui</span><span>4 de octubre de 2026</span><span>7 min de lectura</span><a class="link" href="/writing/kijiji-car-ads-visit-prediction-rebuild/" hreflang="en" lang="en">Read in English</a></div>
+  </header>
+  <section class="doc">
+    <div class="doc-grid">
+      <div class="prose">
+        <div class="inshort"><b>En resumen</b><p>El pipeline de 2023 agrupaba los anuncios en totales por ciudad y mes, eliminaba cada conteo de visitas que marcara cualquiera de seis detectores de atípicos y elegía, para cada fila, el modelo que más se acercaba al valor real. La reconstrucción predice las visitas de cada anuncio, mantiene todo el preprocesamiento dentro de la validación cruzada y evalúa un conjunto de prueba una sola vez. Gradient boosting reduce el error absoluto medio en cerca de un <strong>41%</strong> frente a una línea base de la mediana (158 contra 266 visitas). Lo que más explica las visitas no es el auto: es cuánto tiempo lleva publicado el anuncio. Código: <a class="link" href="https://github.com/gelnomo/training-ml-python-kijiji" target="_blank" rel="noopener">GitHub</a>.</p></div>
+
+        <h2>El problema</h2>
+        <p>Kijiji es uno de los sitios de clasificados en línea más grandes de Canadá, y los autos son una de sus categorías más activas. Las visitas son la parte alta del embudo de ventas: un anuncio que nadie abre no se vende. Un modelo que predice visitas a partir del contenido del anuncio puede decirle a un vendedor que su anuncio rinde menos que otros parecidos, ayudar a ordenar los listados y dar a los concesionarios una referencia para su inventario.</p>
+        <div class="kpi-row kpi-3">
+          <div style="border-top-color:var(--line-light)"><b style="color:var(--blue)">51,343</b><span style="color:var(--steel)">anuncios de autos extraídos de Kijiji, con 28 columnas cada uno</span></div>
+          <div style="border-top-color:var(--line-light)"><b style="color:var(--blue)">1 día</b><span style="color:var(--steel)">todos se recolectaron el 27 de agosto de 2022</span></div>
+          <div style="border-top-color:var(--line-light)"><b style="color:var(--blue)">75</b><span style="color:var(--steel)">visitas por anuncio en la mediana; el máximo es 54,064</span></div>
+        </div>
+        <p>Los datos son un dataset público de Kaggle (<a class="link" href="https://www.kaggle.com/datasets/hossaingh/kijiji-car-sales-ads" target="_blank" rel="noopener">kijiji-car-sales-ads</a>, CC BY-NC-SA 4.0) que cubre doce regiones de Kijiji en Columbia Británica, Alberta, Ontario y Quebec. Trabajamos en él como Grupo 6: Camilo Florez, Yasar Mansuri, Syed Zumair y yo.</p>
+
+        <h2>Lo que construimos en 2023</h2>
+        <p>Empezamos en un notebook de Jupyter y después pasamos el proyecto a un programa de línea de comandos en Python. Limpiaba los datos, generaba una docena de gráficos exploratorios, eliminaba atípicos y entrenaba tres regresores (regresión lineal, random forest y gradient boosting) por separado para cada ciudad, con una división 60/40. El informe comparaba el promedio de visitas reales con el promedio de visitas predichas por año y concluía que las predicciones tenían "un comportamiento similar a las reales". Random forest se "eligió" para cerca de la mitad de las filas, y una ejecución completa tardaba unos 30 minutos.</p>
+        <p>Viéndolo hoy, dos cosas del informe debieron preocuparnos. El README describía el proyecto como predicción del <em>precio</em>, aunque el objetivo eran las visitas. Y leía los gráficos como estacionalidad: julio y agosto eran "los grandes meses" y la mayoría de anuncios se publicó en agosto, algo "relacionado con el verano".</p>
+
+        <h2>Al volver: cinco problemas</h2>
+        <p>Al leer el código en 2026 encontré problemas que impedían confiar en los resultados de 2023:</p>
+        <ul>
+          <li><strong>El modelo miraba la respuesta.</strong> Para cada fila, el código calculaba el error de cada modelo contra las visitas reales y se quedaba con la predicción de menor error. Eso es escoger la respuesta más cercana a la verdad después de ver la verdad, así que la precisión reportada no era algo que el modelo pudiera lograr con un anuncio nuevo.</li>
+          <li><strong>51,000 anuncios se convirtieron en unas 190 filas.</strong> Justo antes de entrenar, los datos se agrupaban en el total de visitas por ciudad, mes y año. Las únicas variables que quedaban eran el mes y el año. Eso deja entre 2 y 22 filas por ciudad para entrenar, y luego se predecía sobre todas las filas, incluidas las de entrenamiento.</li>
+          <li><strong>Atípicos eliminados por la unión de seis detectores.</strong> Se borraba cualquier conteo de visitas marcado por Z score, Z score robusto, IQR, recorte por percentiles, DBSCAN <em>o</em> Isolation Forest. Las funciones de DBSCAN e Isolation Forest tenían errores de índices, y los anuncios muy populares que eliminaban eran reales, no errores.</li>
+          <li><strong>Valores escritos en las filas equivocadas.</strong> Los valores imputados se asignaban de vuelta con índices desalineados, y se imputaba el propio objetivo en lugar de descartar los anuncios sin conteo de visitas.</li>
+          <li><strong>Un "no" que significaba sí.</strong> La opción <code>--storage_model no</code> se guardaba como un miembro de enum, que Python evalúa como verdadero, así que los modelos se guardaban siempre.</li>
+        </ul>
+        <p>Ninguno de estos errores es raro. Elegir resultados usando la etiqueta, agregar hasta perder la unidad que se quiere predecir y borrar datos incómodos son errores que también he visto en código de producción. Un gráfico de promedio predicho contra promedio real esconde los tres, porque los promedios coinciden aunque las predicciones individuales no.</p>
+
+        <h2>Leer bien los datos</h2>
+        <p>Antes de modelar otra vez, tenía que entender qué es realmente la columna <code>visit</code>. Dos hechos lo cambiaron todo:</p>
+        <ul>
+          <li><strong>Es una foto, no una serie de tiempo.</strong> El archivo solo contiene los anuncios que seguían en línea el día de la extracción. Los anuncios más antiguos tuvieron más tiempo para venderse y desaparecer, así que cuanto más atrás el mes de publicación, menos anuncios quedan. Agosto "domina" por la fecha en que se recolectaron los datos, no por la demanda de verano.</li>
+          <li><strong>Las visitas son acumuladas.</strong> La columna cuenta todas las visitas desde que se publicó el anuncio, así que un anuncio con dos meses en línea ha tenido muchas más oportunidades de ser visto que uno publicado ayer. La antigüedad del anuncio tiene que ser una variable.</li>
+        </ul>
+        <p>Las visitas además están muy sesgadas: mediana 75, media 294, percentil 99 de unas 3,350. Unos pocos anuncios virales dominarían cualquier modelo entrenado con los conteos brutos, así que los modelos nuevos aprenden <code>log(1 + visitas)</code> y luego convierten de vuelta.</p>
+
+        <h2>La reconstrucción</h2>
+        <p>El nuevo pipeline predice las visitas de cada anuncio. Limpia lo que está claramente mal (precios de relleno por debajo de 100 dólares, odómetros de más de 1,000,000 km, años de modelo anteriores a 1940, anuncios sin conteo de visitas) y conserva 50,540 anuncios. La imputación, el escalado y el one-hot encoding ocurren dentro de un <code>Pipeline</code> de scikit-learn, así que solo aprenden de los folds de entrenamiento. Los detectores de atípicos siguen ahí, ahora vectorizados y correctos, pero solo para reportar: no se ponen de acuerdo, marcan entre el 0.04% y el 16% de los anuncios, lo cual es una buena razón para no borrar filas basándose en ninguno.</p>
+        <p>La división es 80/20, estratificada por deciles de visitas. Cuatro candidatos se comparan con validación cruzada de 5 folds sobre el conjunto de entrenamiento, y el ganador se evalúa una sola vez sobre el conjunto de prueba:</p>
+        <div class="table-wrap">
+          <table>
+            <thead><tr><th>Modelo (CV de 5 folds)</th><th>MAE (visitas)</th><th>R²</th><th>R² (escala log)</th></tr></thead>
+            <tbody>
+              <tr><td><strong>Gradient boosting</strong></td><td><strong>164 ± 6</strong></td><td><strong>0.40</strong></td><td><strong>0.82</strong></td></tr>
+              <tr><td>Random forest</td><td>177 ± 7</td><td>0.30</td><td>0.80</td></tr>
+              <tr><td>Regresión ridge</td><td>194 ± 7</td><td>0.24</td><td>0.75</td></tr>
+              <tr><td><em>Línea base: siempre la mediana</em></td><td>273 ± 7</td><td>−0.07</td><td>−0.01</td></tr>
+            </tbody>
+          </table>
+        </div>
+        <p>En los 10,108 anuncios de prueba, que nunca se vieron durante el entrenamiento ni la selección, gradient boosting tiene un error absoluto medio de 158 visitas contra 266 de la línea base, y un error mediano de 32 visitas contra 70. Los resultados de prueba coinciden con la validación cruzada, así que el modelo no está sobreajustado. La ejecución completa tarda unos dos minutos en mi entorno, en lugar de 30.</p>
+        <p>Las dos columnas de R² cuentan historias distintas, y ambas son ciertas. En escala logarítmica, 0.82 significa que el modelo acierta el orden de magnitud: distingue un anuncio de 20 visitas de uno de 2,000. En visitas brutas, 0.40 significa que no capta el tamaño de los pocos anuncios virales, que tiende a subestimar.</p>
+        <blockquote>Un gráfico de promedios puede coincidir perfectamente con la realidad mientras cada predicción individual está mal. Evalúa al nivel en el que se toma la decisión.</blockquote>
+
+        <h2>Qué explica las visitas</h2>
+        <p>La importancia por permutación, cuánto crece el error de prueba al desordenar una variable, pone la <strong>antigüedad del anuncio</strong> muy por delante de todo lo demás, seguida de la edad del auto, el precio, la ciudad y el tipo de vendedor. El equipamiento, el color y el día de la semana de publicación casi no aportan. El análisis exploratorio apunta en la misma dirección:</p>
+        <ul>
+          <li><strong>Los vendedores particulares reciben unas tres veces más visitas que los concesionarios</strong> en autos usados (mediana 226 contra 67). Los autos nuevos de concesionarios reciben una mediana de solo 8.</li>
+          <li><strong>Los autos más viejos, baratos y con más kilómetros atraen más visitas.</strong> Correlación de Spearman con las visitas: edad del auto +0.55, kilómetros +0.47, antigüedad del anuncio +0.35, precio −0.35.</li>
+          <li><strong>La región importa mucho.</strong> Calgary (mediana 115) y la ciudad de Toronto (112) reciben muchas más visitas por anuncio que Vancouver (11) o North Shore (8).</li>
+        </ul>
+        <p>Son asociaciones en una sola foto, no causas. El sedán usado de un particular probablemente atrae a un público distinto que la camioneta nueva de un concesionario, y el modelo no puede separar ambas cosas.</p>
+
+        <h2>Lo que aprendí</h2>
+        <ul>
+          <li><strong>Nunca elijas una predicción usando la etiqueta.</strong> Si el valor real participa en seleccionar el resultado, la métrica mide la selección, no el modelo.</li>
+          <li><strong>Modela al nivel de la decisión.</strong> La pregunta era sobre un anuncio. Agregar a totales por ciudad y mes descartó los datos y, con ellos, la pregunta.</li>
+          <li><strong>Entiende cómo se recolectaron los datos.</strong> Una sola fecha de extracción explica tanto la "estacionalidad" como por qué la antigüedad del anuncio pesa tanto.</li>
+          <li><strong>Reporta los atípicos antes de borrarlos.</strong> Cuando seis detectores difieren por un factor de 400, ninguno te está diciendo la verdad sobre tus datos.</li>
+          <li><strong>Empieza con una línea base.</strong> "Predecir siempre la mediana" le da sentido a todos los demás números.</li>
+          <li><strong>Prueba la plomería.</strong> El nuevo repositorio tiene pruebas con pytest sobre datos sintéticos y las ejecuta junto con ruff en GitHub Actions en cada push. Una prueba habría detectado el error del "no que significa sí".</li>
+        </ul>
+
+        <h2>Dónde encajan los asistentes de IA</h2>
+        <p>Igual que al <a class="link" href="/es/articulos/modelo-de-marketing-bancario-umbral-antes-que-modelo/">revisar un clasificador de marketing bancario</a>, usé un asistente de programación con IA para leer el código antiguo, rastrear dónde se transformaban los datos y escribir el nuevo pipeline y sus pruebas. Detectó rápido que la selección del modelo usaba la etiqueta y escribió rápido el código repetitivo de validación cruzada. Decidir qué significaba realmente el objetivo, qué enfoque usaría el negocio y qué resultados valía la pena reportar siguió siendo mi trabajo.</p>
+
+        <h2>Próximos pasos</h2>
+        <ul>
+          <li><strong>Corregir el sesgo de supervivencia.</strong> Los anuncios que se vendieron rápido, a menudo los más atractivos, faltan en una sola foto. Varias extracciones permitirían un mejor objetivo, como las visitas en los primeros siete días.</li>
+          <li><strong>Agregar las señales que faltan.</strong> Las fotos, el texto de la descripción y si el anuncio está promocionado no están en los datos, y probablemente explican buena parte de lo que el modelo no capta en los anuncios virales.</li>
+          <li><strong>Ajustar.</strong> Una búsqueda aleatoria de hiperparámetros para gradient boosting y target encoding para columnas con muchas categorías, como modelo y versión.</li>
+        </ul>
+
+        <h2>El proyecto y el código</h2>
+        <dl class="facts-box">
+          <div><dt>Datos</dt><dd><a class="link" href="https://www.kaggle.com/datasets/hossaingh/kijiji-car-sales-ads" target="_blank" rel="noopener">Kijiji car sales ads</a> en Kaggle, extraídos el 27 de agosto de 2022, CC BY-NC-SA 4.0</dd></div>
+          <div><dt>Equipo (2023)</dt><dd>Grupo 6: Erwin Mongui, Camilo Florez, Yasar Mansuri, Syed Zumair</dd></div>
+          <div><dt>Modelo (2026)</dt><dd>HistGradientBoostingRegressor sobre log(1 + visitas), elegido con validación cruzada de 5 folds</dd></div>
+          <div><dt>Resultado de prueba</dt><dd>MAE de 158 visitas contra 266 de la línea base de la mediana; error mediano de 32 visitas; R² de 0.82 en escala logarítmica</dd></div>
+          <div><dt>Tecnologías</dt><dd>Python, pandas, scikit-learn, matplotlib, pytest, ruff, GitHub Actions</dd></div>
+          <div><dt>Código</dt><dd><a class="link" href="https://github.com/gelnomo/training-ml-python-kijiji" target="_blank" rel="noopener">training-ml-python-kijiji en GitHub</a>: el pipeline reconstruido, los gráficos, las pruebas y el informe completo (en inglés)</dd></div>
+        </dl>
+        <div class="author"><svg aria-hidden="true" viewBox="0 0 189 190"><path fill="#0071e3" d="M9.8 184.5C4.8 181.7 2.6 174.6 5.1 169.7C5.7 168.5 10.3 163.3 15.3 158.2L24.5 149.0L15.3 139.8C10.3 134.7 5.7 129.5 5.1 128.3C2.4 123.0 5.3 115.4 10.9 113.1C17.0 110.5 19.5 112.0 33.7 126.3C41.0 133.5 47.4 140.8 48.0 142.3C49.4 146.2 49.3 152.5 47.6 156.3C46.8 158.1 40.4 165.3 33.3 172.3C21.9 183.6 19.9 185.2 16.4 185.6C14.0 185.9 11.5 185.4 9.8 184.5ZM70.7 158.0C65.1 153.6 65.1 144.4 70.7 140.0C73.0 138.2 74.7 138.0 89.6 138.0C107.4 138.0 110.2 138.6 112.6 143.1C115.5 148.8 113.5 156.5 108.5 158.8C106.8 159.6 100.1 160.0 89.6 160.0C74.7 160.0 73.0 159.8 70.7 158.0ZM136.9 158.6C135.4 157.7 133.5 155.4 132.5 153.4C131.1 150.3 131.0 149.1 131.9 145.9C133.5 140.5 137.1 138.0 143.4 138.0C153.7 138.0 160.3 134.0 161.9 126.9C162.3 125.0 162.3 113.4 161.9 101.0C160.7 67.7 157.5 46.5 151.4 32.9L148.7 27.0L145.2 29.0C138.8 32.8 133.0 38.2 129.2 44.0L125.3 49.8L122.4 48.0C109.4 39.8 87.5 39.6 73.2 47.5L69.0 49.9L67.1 46.1C65.0 42.0 54.3 31.6 49.1 28.7L46.0 26.9L43.0 33.2C39.2 41.3 36.3 54.6 34.4 72.4C32.7 89.3 32.7 89.3 28.9 92.5C24.3 96.3 18.8 96.0 14.4 91.6C11.2 88.4 11.0 87.8 11.0 81.2C11.0 63.5 16.4 36.0 22.4 23.5C28.7 10.1 35.8 4.6 46.6 4.6C53.6 4.6 60.0 7.7 70.7 16.2L77.0 21.1L82.5 20.0C89.6 18.5 105.5 18.5 112.5 20.0L117.9 21.1L124.2 16.1C138.1 4.8 148.3 2.1 158.3 6.9C174.9 15.0 184.2 50.4 184.4 107.0C184.5 137.6 184.3 138.6 174.9 148.5C167.2 156.6 160.9 159.4 149.0 159.7C142.0 160.0 138.8 159.6 136.9 158.6ZM64.3 102.5C62.6 101.8 60.4 99.8 59.6 98.1C55.5 90.3 59.6 82.2 68.3 81.3C72.6 80.8 73.2 81.0 76.5 84.3C79.4 87.2 80.0 88.5 80.0 92.2C80.0 97.4 77.9 100.7 73.4 102.6C69.3 104.3 68.4 104.3 64.3 102.5ZM121.3 102.5C117.0 100.7 114.5 96.6 114.6 91.6C114.7 88.4 115.4 87.0 118.4 84.3C120.8 82.1 123.0 81.0 125.0 81.0C137.3 81.0 141.5 97.2 130.6 102.4C126.5 104.3 125.5 104.3 121.3 102.5Z"/></svg><p><b>Erwin Mongui</b>Director de Tecnología en Cedar Planters e ingeniero certificado en Inteligencia Artificial (Lambton College, 2024), en Toronto.</p></div>
+      </div>
+      <aside class="aside"><div class="related"><h4>Relacionado</h4><a href="/es/articulos/modelo-de-marketing-bancario-umbral-antes-que-modelo/">El umbral importó más que el modelo</a><a href="/es/articulos/seleccion-de-viajeros-rt-pcr-basada-en-datos/">Selección de viajeros para RT-PCR basada en datos</a><a href="/es/articulos/de-analista-de-datos-a-ingeniero-de-datos/">De analista de datos a ingeniero de datos</a></div></aside>
+    </div>
+  </section>
+
+<section class="ps-strip" aria-label="Seguir en Google">
+  <div class="ps-inner">
+    <p>Recibe mis próximos casos y artículos en la Búsqueda de Google.</p>
+    <div class="preferred-source" google-add-preferred-source-btn data-theme="dark" data-lang="es"></div>
+    <noscript><a class="link" href="https://www.google.com/preferences/source?q=erwinmongui.com">Añade erwinmongui.com como fuente preferida en Google</a></noscript>
+  </div>
+</section>
+</main>
+<footer class="foot">
+  <div class="foot-inner">
+    <p class="foot-brand"><svg aria-hidden="true" focusable="false" viewBox="0 0 189 190"><path fill="#81ffd9" d="M9.8 184.5C4.8 181.7 2.6 174.6 5.1 169.7C5.7 168.5 10.3 163.3 15.3 158.2L24.5 149.0L15.3 139.8C10.3 134.7 5.7 129.5 5.1 128.3C2.4 123.0 5.3 115.4 10.9 113.1C17.0 110.5 19.5 112.0 33.7 126.3C41.0 133.5 47.4 140.8 48.0 142.3C49.4 146.2 49.3 152.5 47.6 156.3C46.8 158.1 40.4 165.3 33.3 172.3C21.9 183.6 19.9 185.2 16.4 185.6C14.0 185.9 11.5 185.4 9.8 184.5ZM70.7 158.0C65.1 153.6 65.1 144.4 70.7 140.0C73.0 138.2 74.7 138.0 89.6 138.0C107.4 138.0 110.2 138.6 112.6 143.1C115.5 148.8 113.5 156.5 108.5 158.8C106.8 159.6 100.1 160.0 89.6 160.0C74.7 160.0 73.0 159.8 70.7 158.0ZM136.9 158.6C135.4 157.7 133.5 155.4 132.5 153.4C131.1 150.3 131.0 149.1 131.9 145.9C133.5 140.5 137.1 138.0 143.4 138.0C153.7 138.0 160.3 134.0 161.9 126.9C162.3 125.0 162.3 113.4 161.9 101.0C160.7 67.7 157.5 46.5 151.4 32.9L148.7 27.0L145.2 29.0C138.8 32.8 133.0 38.2 129.2 44.0L125.3 49.8L122.4 48.0C109.4 39.8 87.5 39.6 73.2 47.5L69.0 49.9L67.1 46.1C65.0 42.0 54.3 31.6 49.1 28.7L46.0 26.9L43.0 33.2C39.2 41.3 36.3 54.6 34.4 72.4C32.7 89.3 32.7 89.3 28.9 92.5C24.3 96.3 18.8 96.0 14.4 91.6C11.2 88.4 11.0 87.8 11.0 81.2C11.0 63.5 16.4 36.0 22.4 23.5C28.7 10.1 35.8 4.6 46.6 4.6C53.6 4.6 60.0 7.7 70.7 16.2L77.0 21.1L82.5 20.0C89.6 18.5 105.5 18.5 112.5 20.0L117.9 21.1L124.2 16.1C138.1 4.8 148.3 2.1 158.3 6.9C174.9 15.0 184.2 50.4 184.4 107.0C184.5 137.6 184.3 138.6 174.9 148.5C167.2 156.6 160.9 159.4 149.0 159.7C142.0 160.0 138.8 159.6 136.9 158.6ZM64.3 102.5C62.6 101.8 60.4 99.8 59.6 98.1C55.5 90.3 59.6 82.2 68.3 81.3C72.6 80.8 73.2 81.0 76.5 84.3C79.4 87.2 80.0 88.5 80.0 92.2C80.0 97.4 77.9 100.7 73.4 102.6C69.3 104.3 68.4 104.3 64.3 102.5ZM121.3 102.5C117.0 100.7 114.5 96.6 114.6 91.6C114.7 88.4 115.4 87.0 118.4 84.3C120.8 82.1 123.0 81.0 125.0 81.0C137.3 81.0 141.5 97.2 130.6 102.4C126.5 104.3 125.5 104.3 121.3 102.5Z"/></svg><span>Erwin Mongui, Toronto</span></p>
+    <p class="foot-copy">&copy; 2026 Erwin Mongui. Todos los derechos reservados.</p>
+    <p><a href="/es/#casos">Casos</a> &middot; <a href="/es/articulos/">Artículos</a> &middot; <a href="/about/">Sobre mí</a> &middot; <a href="/writing/kijiji-car-ads-visit-prediction-rebuild/" lang="en" hreflang="en">English</a> &middot; <a href="https://www.google.com/preferences/source?q=erwinmongui.com" target="_blank" rel="noopener">Añadir como fuente preferida en Google</a> &middot; <a href="https://www.linkedin.com/in/erwin-mongui/" target="_blank" rel="noopener">LinkedIn</a> &middot; <a href="https://medium.com/@erwinmongui" target="_blank" rel="noopener me">Medium</a> &middot; <a href="/es/privacidad/">Privacidad</a><span class="foot-consent-wrap" hidden> &middot; <button type="button" class="foot-consent">Configuración de privacidad</button></span></p>
+  </div>
+</footer>
+<script defer src="/assets/chrome.js"></script>
+</body>
+</html>

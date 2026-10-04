@@ -2,6 +2,13 @@
 
 Notable changes to erwinmongui.com. Each version has a `## vX.Y.Z` heading; pushing a matching tag, or running the Release workflow from the Actions tab with that version, publishes the section as a GitHub release (see `.github/workflows/release.yml`).
 
+## v1.8.0 (2026-10-04)
+
+### Writing
+
+- New article, in English and Spanish: "51,000 ads, 190 rows: revisiting a Kijiji visit-prediction model" (`/writing/kijiji-car-ads-visit-prediction-rebuild/`, `/es/articulos/prediccion-de-visitas-en-anuncios-de-kijiji/`). It covers the 2023 Kijiji car-ad visit project, the problems found in its pipeline and its 2026 rebuild, with a link to the code in `gelnomo/training-ml-python-kijiji`.
+- The homepage's writing section shows the new article first; "From data analyst to data engineer, through one good question" moves to the full list under `/writing/`.
+
 ## v1.7.0 (2026-10-04)
 
 ### Writing
