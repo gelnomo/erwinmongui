@@ -1,0 +1,311 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Kadabra: a Shazam for movies, revisited | Erwin Mongui</title>
+<meta name="description" content="Revisiting Kadabra, our 2023 Telegram bot that named movies from a photo or a plot: faces, age, vector search, and the evaluation it never had.">
+<meta name="author" content="Erwin Mongui">
+<meta name="robots" content="index, follow, max-snippet:-1, max-image-preview:large, max-video-preview:-1">
+<meta name="theme-color" content="#000000">
+<link rel="canonical" href="https://erwinmongui.com/writing/kadabra-movie-recognition-bot-review/">
+<link rel="alternate" hreflang="en" href="https://erwinmongui.com/writing/kadabra-movie-recognition-bot-review/">
+<link rel="alternate" hreflang="es" href="https://erwinmongui.com/es/articulos/kadabra-bot-para-reconocer-peliculas/">
+<link rel="alternate" hreflang="x-default" href="https://erwinmongui.com/writing/kadabra-movie-recognition-bot-review/">
+<link rel="alternate" type="application/rss+xml" title="Erwin Mongui: case studies and writing" href="https://erwinmongui.com/feed.xml">
+<link rel="me" href="https://www.linkedin.com/in/erwin-mongui/">
+<meta property="og:type" content="article">
+<meta property="og:site_name" content="Erwin Mongui">
+<meta property="og:locale" content="en_CA">
+<meta property="og:locale:alternate" content="es_CO">
+<meta property="og:url" content="https://erwinmongui.com/writing/kadabra-movie-recognition-bot-review/">
+<meta property="og:title" content="Kadabra: a Shazam for movies, and no way to know if it worked">
+<meta property="og:description" content="Revisiting Kadabra, our 2023 Telegram bot that named movies from a photo or a plot: faces, age, vector search, and the evaluation it never had.">
+<meta property="og:image" content="https://erwinmongui.com/og-image.png">
+<meta property="og:image:width" content="1200">
+<meta property="og:image:height" content="630">
+<meta property="og:image:alt" content="Erwin Mongui logo with the words Engineering leader, Director of Technology, Toronto, Canada">
+<meta property="article:published_time" content="2026-10-04">
+<meta property="article:modified_time" content="2026-10-04">
+<meta property="article:author" content="https://www.linkedin.com/in/erwin-mongui/">
+<meta name="twitter:card" content="summary_large_image">
+<meta name="twitter:title" content="Kadabra: a Shazam for movies, and no way to know if it worked">
+<meta name="twitter:description" content="Revisiting Kadabra, our 2023 Telegram bot that named movies from a photo or a plot: faces, age, vector search, and the evaluation it never had.">
+<meta name="twitter:image" content="https://erwinmongui.com/og-image.png">
+<link rel="icon" href="/favicon.ico" sizes="16x16 32x32 48x48">
+<link rel="icon" type="image/svg+xml" href="/favicon.svg">
+<link rel="icon" type="image/png" sizes="48x48" href="/favicon-48x48.png">
+<link rel="icon" type="image/png" sizes="96x96" href="/favicon-96x96.png">
+<link rel="icon" type="image/png" sizes="192x192" href="/favicon-192x192.png">
+<link rel="apple-touch-icon" sizes="180x180" href="/apple-touch-icon.png">
+<link rel="manifest" href="/site.webmanifest">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Manrope:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="/assets/site.css">
+<link rel="stylesheet" href="/assets/chrome.css">
+<!-- Google preferred sources button (https://developers.google.com/search/docs/appearance/preferred-sources) -->
+<script async src="https://news.google.com/swg/js/v1/publisher.js"></script>
+<script type="application/ld+json">
+{
+ "@context": "https://schema.org",
+ "@graph": [
+  {
+   "@type": "Person",
+   "@id": "https://erwinmongui.com/#person",
+   "name": "Erwin Mongui",
+   "url": "https://erwinmongui.com/",
+   "jobTitle": "Director of Technology",
+   "worksFor": {
+    "@type": "Organization",
+    "name": "Cedar Planters"
+   },
+   "sameAs": [
+    "https://www.linkedin.com/in/erwin-mongui/",
+    "https://medium.com/@erwinmongui"
+   ]
+  },
+  {
+   "@type": "WebSite",
+   "@id": "https://erwinmongui.com/#website",
+   "url": "https://erwinmongui.com/",
+   "name": "Erwin Mongui",
+   "publisher": {
+    "@id": "https://erwinmongui.com/#person"
+   },
+   "inLanguage": [
+    "en",
+    "es"
+   ]
+  },
+  {
+   "@type": "BlogPosting",
+   "@id": "https://erwinmongui.com/writing/kadabra-movie-recognition-bot-review/#article",
+   "headline": "Kadabra: a Shazam for movies, and no way to know if it worked",
+   "description": "Revisiting Kadabra, our 2023 Telegram bot that named movies from a photo or a plot: faces, age, vector search, and the evaluation it never had.",
+   "url": "https://erwinmongui.com/writing/kadabra-movie-recognition-bot-review/",
+   "mainEntityOfPage": "https://erwinmongui.com/writing/kadabra-movie-recognition-bot-review/",
+   "inLanguage": "en",
+   "image": "https://erwinmongui.com/og-image.png",
+   "datePublished": "2026-10-04",
+   "dateModified": "2026-10-04",
+   "author": [
+    {
+     "@id": "https://erwinmongui.com/#person"
+    }
+   ],
+   "publisher": {
+    "@id": "https://erwinmongui.com/#person"
+   },
+   "isPartOf": {
+    "@id": "https://erwinmongui.com/#website"
+   },
+   "keywords": [
+    "machine learning",
+    "face recognition",
+    "vector search",
+    "Elasticsearch",
+    "sentence embeddings",
+    "Telegram bot",
+    "evaluation",
+    "Django",
+    "Celery"
+   ],
+   "articleSection": "Machine learning",
+   "isBasedOn": {
+    "@type": "SoftwareSourceCode",
+    "codeRepository": "https://github.com/gelnomo/training-ml-python-kadabra",
+    "programmingLanguage": "Python"
+   }
+  },
+  {
+   "@type": "BreadcrumbList",
+   "itemListElement": [
+    {
+     "@type": "ListItem",
+     "position": 1,
+     "name": "Home",
+     "item": "https://erwinmongui.com/"
+    },
+    {
+     "@type": "ListItem",
+     "position": 2,
+     "name": "Writing",
+     "item": "https://erwinmongui.com/writing/"
+    },
+    {
+     "@type": "ListItem",
+     "position": 3,
+     "name": "Kadabra movie bot",
+     "item": "https://erwinmongui.com/writing/kadabra-movie-recognition-bot-review/"
+    }
+   ]
+  }
+ ]
+}
+</script>
+<!-- Google Consent Mode v2 defaults: denied in the EEA, the UK and Switzerland until the visitor answers the consent message, granted elsewhere -->
+<script>
+  window.dataLayer = window.dataLayer || [];
+  function gtag(){dataLayer.push(arguments);}
+  gtag('consent', 'default', {ad_storage: 'denied', ad_user_data: 'denied', ad_personalization: 'denied', analytics_storage: 'denied', region: ['AT', 'BE', 'BG', 'HR', 'CY', 'CZ', 'DK', 'EE', 'FI', 'FR', 'DE', 'GR', 'HU', 'IE', 'IT', 'LV', 'LT', 'LU', 'MT', 'NL', 'PL', 'PT', 'RO', 'SK', 'SI', 'ES', 'SE', 'IS', 'LI', 'NO', 'GB', 'CH'], wait_for_update: 500});
+  gtag('consent', 'default', {ad_storage: 'granted', ad_user_data: 'granted', ad_personalization: 'granted', analytics_storage: 'granted'});
+  gtag('set', 'ads_data_redaction', true);
+</script>
+<!-- Google consent message (AdSense > Privacy & messaging) for pages without ads -->
+<script async src="https://fundingchoicesmessages.google.com/i/pub-1778464975767585?ers=1"></script>
+<script>(function() {function signalGooglefcPresent() {if (!window.frames['googlefcPresent']) {if (document.body) {const iframe = document.createElement('iframe'); iframe.style = 'width: 0; height: 0; border: none; z-index: -1000; left: -1000px; top: -1000px;'; iframe.style.display = 'none'; iframe.name = 'googlefcPresent'; document.body.appendChild(iframe);} else {setTimeout(signalGooglefcPresent, 0);}}}signalGooglefcPresent();})();</script>
+<!-- Google tag (gtag.js) -->
+<script async src="https://www.googletagmanager.com/gtag/js?id=G-LKD2WCNDV1"></script>
+<script>
+  gtag('js', new Date());
+  window.siteContext = {"content_group": "Article", "content_id": "post-kadabra", "site_language": "en"};
+  gtag('config', 'G-LKD2WCNDV1', window.siteContext);
+</script>
+<!-- Clarity tracking code for https://erwinmongui.com/ -->
+<script>
+    (function(c,l,a,r,i,t,y){
+        c[a]=c[a]||function(){(c[a].q=c[a].q||[]).push(arguments)};
+        t=l.createElement(r);t.async=1;t.src="https://www.clarity.ms/tag/"+i;
+        y=l.getElementsByTagName(r)[0];y.parentNode.insertBefore(t,y);
+    })(window, document, "clarity", "script", "ygo6nehxdb");
+</script>
+<!-- Ahrefs Web Analytics -->
+<script src="https://analytics.ahrefs.com/analytics.js" data-key="rdCxWS4nTARbSdPhwLuAmg" async></script>
+<!-- Passes the consent choice to Clarity and shows the footer's privacy settings link -->
+<script defer src="/assets/consent.js"></script>
+<!-- Site event tracking (contact clicks, navigation, sections, scroll depth, reading) -->
+<script defer src="/analytics.js"></script>
+</head>
+<body class="chrome-sticky">
+<a class="skip" href="#main">Skip to content</a>
+<header class="nav" id="nav">
+  <div class="nav-inner">
+    <a class="brand" href="/"><svg aria-hidden="true" focusable="false" viewBox="0 0 189 190"><path fill="#81ffd9" d="M9.8 184.5C4.8 181.7 2.6 174.6 5.1 169.7C5.7 168.5 10.3 163.3 15.3 158.2L24.5 149.0L15.3 139.8C10.3 134.7 5.7 129.5 5.1 128.3C2.4 123.0 5.3 115.4 10.9 113.1C17.0 110.5 19.5 112.0 33.7 126.3C41.0 133.5 47.4 140.8 48.0 142.3C49.4 146.2 49.3 152.5 47.6 156.3C46.8 158.1 40.4 165.3 33.3 172.3C21.9 183.6 19.9 185.2 16.4 185.6C14.0 185.9 11.5 185.4 9.8 184.5ZM70.7 158.0C65.1 153.6 65.1 144.4 70.7 140.0C73.0 138.2 74.7 138.0 89.6 138.0C107.4 138.0 110.2 138.6 112.6 143.1C115.5 148.8 113.5 156.5 108.5 158.8C106.8 159.6 100.1 160.0 89.6 160.0C74.7 160.0 73.0 159.8 70.7 158.0ZM136.9 158.6C135.4 157.7 133.5 155.4 132.5 153.4C131.1 150.3 131.0 149.1 131.9 145.9C133.5 140.5 137.1 138.0 143.4 138.0C153.7 138.0 160.3 134.0 161.9 126.9C162.3 125.0 162.3 113.4 161.9 101.0C160.7 67.7 157.5 46.5 151.4 32.9L148.7 27.0L145.2 29.0C138.8 32.8 133.0 38.2 129.2 44.0L125.3 49.8L122.4 48.0C109.4 39.8 87.5 39.6 73.2 47.5L69.0 49.9L67.1 46.1C65.0 42.0 54.3 31.6 49.1 28.7L46.0 26.9L43.0 33.2C39.2 41.3 36.3 54.6 34.4 72.4C32.7 89.3 32.7 89.3 28.9 92.5C24.3 96.3 18.8 96.0 14.4 91.6C11.2 88.4 11.0 87.8 11.0 81.2C11.0 63.5 16.4 36.0 22.4 23.5C28.7 10.1 35.8 4.6 46.6 4.6C53.6 4.6 60.0 7.7 70.7 16.2L77.0 21.1L82.5 20.0C89.6 18.5 105.5 18.5 112.5 20.0L117.9 21.1L124.2 16.1C138.1 4.8 148.3 2.1 158.3 6.9C174.9 15.0 184.2 50.4 184.4 107.0C184.5 137.6 184.3 138.6 174.9 148.5C167.2 156.6 160.9 159.4 149.0 159.7C142.0 160.0 138.8 159.6 136.9 158.6ZM64.3 102.5C62.6 101.8 60.4 99.8 59.6 98.1C55.5 90.3 59.6 82.2 68.3 81.3C72.6 80.8 73.2 81.0 76.5 84.3C79.4 87.2 80.0 88.5 80.0 92.2C80.0 97.4 77.9 100.7 73.4 102.6C69.3 104.3 68.4 104.3 64.3 102.5ZM121.3 102.5C117.0 100.7 114.5 96.6 114.6 91.6C114.7 88.4 115.4 87.0 118.4 84.3C120.8 82.1 123.0 81.0 125.0 81.0C137.3 81.0 141.5 97.2 130.6 102.4C126.5 104.3 125.5 104.3 121.3 102.5Z"/></svg><span>Erwin Mongui</span></a>
+    <nav class="nav-links" id="nav-links" aria-label="Sections">
+      <a href="/about/">About</a>
+      <a href="/#experience">Experience</a>
+      <a href="/#impact">Impact</a>
+      <a href="/#ai">AI</a>
+      <a href="/#skills">Skills</a>
+      <a href="/work/">Case studies</a>
+      <a href="/writing/" aria-current="page">Writing</a>
+      <a href="/#facts">Quick facts</a>
+    </nav>
+    <div class="nav-right">
+      <a class="nav-lang" href="/es/articulos/kadabra-bot-para-reconocer-peliculas/" hreflang="es" lang="es">Español</a>
+      <a class="nav-cta" href="/#contact">Contact</a>
+      <button class="menu-btn" id="menu-btn" aria-label="Open menu" aria-expanded="false" aria-controls="nav-links">
+        <svg class="bars" width="18" height="18" viewBox="0 0 18 18" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round"><path d="M2 5h14M2 9h14M2 13h14"/></svg>
+        <svg class="x" width="18" height="18" viewBox="0 0 18 18" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round"><path d="M4 4l10 10M14 4L4 14"/></svg>
+      </button>
+    </div>
+  </div>
+</header>
+<main id="main">
+<header class="doc-head stage-dark">
+    <nav class="crumbs" aria-label="Breadcrumb"><a href="/">Home</a><span>/</span><a href="/writing/">Writing</a><span>/</span><span>Machine learning</span></nav>
+    <p class="eyebrow">Machine learning · Vector search</p>
+    <h1>Kadabra: a Shazam for movies, and no way to know if it worked.</h1>
+    <p class="summary">In 2023, we built Kadabra, a Telegram bot that tries to name the movie you are watching from a photo of the screen or a few lines about the plot. It recognised actors' faces, guessed when the photo was taken from their apparent age, and searched movie synopses by meaning. Three years later I read the code again. The architecture still holds up. What it never had was a way to tell whether its answers were right.</p>
+    <div class="byline"><span>By Erwin Mongui</span><span>October 4, 2026</span><span>8 min read</span><a class="link" href="/es/articulos/kadabra-bot-para-reconocer-peliculas/" hreflang="es" lang="es">Leer en español</a></div>
+  </header>
+  <section class="doc">
+    <div class="doc-grid">
+      <div class="prose">
+        <div class="inshort"><b>In short</b><p>Kadabra combined three models behind one Telegram bot: face recognition to find the actors in a photo, an age estimator to guess the year of the scene, and a sentence encoder to search synopses by meaning, all stored and queried in Elasticsearch. Celery jobs collected movies, cast lists and actor photos in the background. Reading it again, the engineering is solid, but the bot shipped with no test set, no tests and hand-picked thresholds. The query text was also prepared differently from the indexed text, the scores of different searches were added together, and the "no match" message could never appear. This article is a code review, not a rebuild: I have no accuracy figures for the bot, because it never produced any. Code: <a class="link" href="https://github.com/gelnomo/training-ml-python-kadabra" target="_blank" rel="noopener">GitHub</a>.</p></div>
+
+        <h2>The idea</h2>
+        <p>Everybody has seen a scene on a screen at a friend's house, or a clip on social media, and wondered what movie it was. Shazam solved that for songs. Kadabra, which the bot introduced to users as FilmSleuth, was our attempt for movies: send it a <strong>photo</strong> of the screen, a <strong>text</strong> description of the plot, or both, and it answers with up to three candidates, their release years and an IMDb link. A <code>/list</code> command shows the movies it knows.</p>
+        <div class="kpi-row kpi-3">
+          <div style="border-top-color:var(--line-light)"><b style="color:var(--blue)">2 inputs</b><span style="color:var(--steel)">a photo of the screen, a plot description, or both</span></div>
+          <div style="border-top-color:var(--line-light)"><b style="color:var(--blue)">128 + 512</b><span style="color:var(--steel)">dimensions of the face and text vectors stored in Elasticsearch</span></div>
+          <div style="border-top-color:var(--line-light)"><b style="color:var(--blue)">0</b><span style="color:var(--steel)">tests, labelled examples or accuracy measurements in the repository</span></div>
+        </div>
+        <p>It was a collaborative project. Ivan Zepeda set up the repository in May 2023; the code I review here is the part I committed between June and July 2023.</p>
+
+        <h2>How it worked</h2>
+        <p>Kadabra is a Django 4.2 application with two halves: background jobs that build the search indexes, and a webhook that answers Telegram.</p>
+        <p><strong>Collecting the data.</strong> Movie records lived in PostgreSQL and were managed from the Django admin. A Celery beat schedule then ran jobs every five minutes. One job fetched each movie's metadata from the OMDb API, its full cast and synopsis from IMDb, and created an actor record for every cast member. Another fetched each actor's photo gallery from IMDb and kept only usable portraits: four OpenCV Haar cascades had to (almost) agree that the picture showed one face, and the <code>face_recognition</code> library had to find exactly one face too. Every job shared a small state machine (ready, running, completed, error, expired) with retry counts, and a nightly task, written but switched off in the schedule, could put back jobs stuck "running" for more than a day.</p>
+        <p><strong>Indexing faces.</strong> For each valid photo, <code>face_recognition</code> produced a 128-number encoding of the face. Then came the part I still like: DeepFace estimated how old the actor looked in the photo. Add that age to the actor's birthday, scraped from IMDb, and you get an estimate of the year the photo was taken. If a 30-year-old-looking Keanu Reeves is on the screen, the movie is probably from around 1994, not 2021. The encoding, the age and the estimated year went into an Elasticsearch index.</p>
+        <p><strong>Indexing synopses.</strong> Each movie's plot, title and director were turned into a 512-number vector with Google's Universal Sentence Encoder (large, version 5, from TensorFlow Hub) and stored in a second index, together with the IDs of its cast.</p>
+        <p><strong>Answering.</strong> When a photo arrives, the bot encodes every face in it and finds the closest stored face for each one, keeping matches above a cosine similarity of 0.93. When text arrives, it cleans it with NLTK, encodes it with the same sentence encoder and runs a nearest-neighbour search on the synopses. If both are present, one Elasticsearch request combines them: semantic similarity to the plot, plus a boost for movies that star a recognised actor or that came out within ten years of the photo's estimated year. The thresholds, the number of results and the year window are editable in the admin through django-constance, and the movie list is cached in Redis.</p>
+        <blockquote>Three models, two vector indexes, a job queue and a chat interface: the hard parts were all there. The cheap part, a list of photos with the right answers, never was.</blockquote>
+
+        <h2>Going back: what I found</h2>
+        <p>Reading the code in 2026, most problems were not in any one model. They were in the places where the models meet.</p>
+        <ul>
+          <li><strong>Nothing measured whether it worked.</strong> The repository has no labelled examples (screenshots or descriptions paired with the right movie), and both <code>tests.py</code> files are the empty Django templates. The 0.93 face threshold and the 0.30 result threshold were chosen by trying the bot and adjusting. Without a test set, every change to a threshold, a model or a query was a guess, and so was every demo.</li>
+          <li><strong>The question did not look like the documents.</strong> Synopses were indexed as written. The user's text was lower-cased, stripped of numbers and stop words, lemmatised and then passed through <code>set()</code>, which removes duplicate words and also loses their order. A sentence encoder trained on natural sentences then had to compare "man find ring dark lord destroy" style word bags with real paragraphs. The text you search with should be prepared exactly like the text you index.</li>
+          <li><strong>Scores from different searches were added.</strong> Elasticsearch adds the nearest-neighbour score to the score of the regular query. The regular query had one optional clause per recognised actor and one per year window, so a movie from the right decade matched even if none of the actors were in it. A single 0.30 threshold was then applied to the sum of two scores on different scales.</li>
+          <li><strong>The "no match" reply could never appear.</strong> The function that formats results always appends a "Best Result" line, so it never returns an empty answer. When nothing passed the threshold, the bot replied "Best Result: None" instead of its friendly "there is not enough information" message.</li>
+          <li><strong>Face search compared against every photo.</strong> Each face was matched with a <code>script_score</code> query over all documents, which computes cosine similarity against every stored face. That is fine for a few thousand photos and slow for millions. The face vectors were also never mapped for approximate nearest-neighbour search, although the synopsis vectors were. And <code>face_recognition</code> is designed for Euclidean distance, with 0.6 as its usual tolerance. Cosine similarity can work, but the threshold had to be found again, without data to find it.</li>
+          <li><strong>A 129-line workaround for one wrong line.</strong> The page downloader did <code>str(resp.read())</code>. In Python 3 that does not decode the page. It returns the text form of the bytes, <code>b'...'</code>, with every accented character written as an escape like <code>\xc3\xa9</code> and every newline as a literal <code>\n</code>. The code then needed 129 <code>replace</code> calls to turn the escapes back into letters, and an image attribute that had to be read as <code>"\nsrc"</code> instead of <code>"src"</code>. Decoding the bytes, <code>resp.read().decode("utf-8")</code>, would have made all of that unnecessary.</li>
+          <li><strong>Scraping that breaks on the next deploy.</strong> The IMDb parsers searched for generated CSS class names such as <code>sc-dec7a8b-2 haviXP</code>, which change whenever the site is rebuilt, and rotated random browser user agents. A list of 334 torrent release tags (317 unique, from "DVDRip" to "YIFY") cleaned up movie names, and the year detection only looked for years from 1900 to 2013. IMDb's conditions of use also restrict automated collection, so a licensed source, such as IMDb's own datasets or an API, is the right foundation for anything beyond a class project.</li>
+          <li><strong>Smaller operational issues.</strong> The large sentence encoder was loaded from <code>settings.py</code>, so every <code>manage.py</code> command and every Celery worker loaded it, even the ones that never encode text. A 5 MB age-detection model (<code>age_detect_cnn_model.h5</code>) is committed but never used: the code calls DeepFace instead. The delete signal for movie documents was copied from the actor one and refers to a field movies do not have. Errors were printed and swallowed, so the bot answered "There was an error" with nothing in the logs to explain why.</li>
+        </ul>
+        <p>None of these is unusual. I have seen each of them in production systems: train/serve skew in preprocessing, scores combined without care, an empty-result path nobody tested, and a decoding bug patched downstream instead of fixed at the source.</p>
+
+        <h2>What held up</h2>
+        <ul>
+          <li><strong>The pipeline design.</strong> Small, retryable jobs with explicit states, an expiry for repeated failures and a reset for stuck work is the same pattern I would use today for any slow, flaky collection process.</li>
+          <li><strong>One store for vectors and filters.</strong> Keeping embeddings, cast IDs and years in Elasticsearch let a single request mix semantic search with exact filters, instead of joining results from separate systems in Python.</li>
+          <li><strong>Settings outside the code.</strong> Thresholds, result counts and cache times could be changed from the admin without a deploy. That is exactly what you want while tuning, as long as you also have a way to measure the effect of each change.</li>
+          <li><strong>Using age as a signal.</strong> Estimating the year of a scene from an actor's apparent age is a cheap, original way to narrow a search across decades of films. It deserved an evaluation of its own.</li>
+        </ul>
+
+        <h2>What I would do differently</h2>
+        <p>I have not rebuilt Kadabra. If I did, this would be the order:</p>
+        <ul>
+          <li><strong>Start with the test set.</strong> A few hundred screenshots and plot descriptions, each labelled with the right movie, and one number to track: how often the right movie is in the top three. Every other decision below would be checked against it.</li>
+          <li><strong>Prepare queries and documents the same way.</strong> Send the user's text to the sentence encoder as written, as the synopses were, and let the model handle stop words and word forms.</li>
+          <li><strong>Combine rankings, not raw scores.</strong> Run the face, year and text searches separately and merge their ranked lists, for example with reciprocal rank fusion, so no score scale dominates. Make the year window a filter or a gentle boost, never a match on its own.</li>
+          <li><strong>Index faces for nearest-neighbour search.</strong> Map the face vectors for approximate kNN, like the synopses, and tune the threshold on the test set.</li>
+          <li><strong>Match the scene, not only the faces.</strong> Many frames have no clear face. An image-text embedding model could match the whole frame against stills and descriptions, and handle animation too.</li>
+          <li><strong>Use licensed data and test the plumbing.</strong> Replace scraping with a licensed dataset or API, decode text once at the edge, and add unit tests for the formatting and empty-result paths, which would have caught the "Best Result: None" reply.</li>
+        </ul>
+
+        <h2>What I learned</h2>
+        <ul>
+          <li><strong>The evaluation set is part of the product.</strong> Without one, a machine learning system is a demo, however good the architecture is.</li>
+          <li><strong>Most bugs live between components.</strong> Each model worked. The problems were in preprocessing that did not match, scores that did not mix, and a response path nobody exercised.</li>
+          <li><strong>Fix data problems at the source.</strong> One wrong decode line produced a 129-line workaround and a strange attribute name. When a cleanup function keeps growing, look upstream.</li>
+          <li><strong>Simple, original signals are worth measuring.</strong> The age-to-year idea was the most interesting part of the project and the one with the least evidence behind it.</li>
+        </ul>
+
+        <h2>Where AI assistants fit</h2>
+        <p>As with my revisits of a <a class="link" href="/writing/bank-marketing-model-threshold-over-model/">bank marketing classifier</a> and a <a class="link" href="/writing/kijiji-car-ads-visit-prediction-rebuild/">Kijiji visit-prediction model</a>, I used an AI coding assistant to read the 2023 code again and trace how a photo or a sentence moves from Telegram to Elasticsearch and back. It was quick to explain why 129 replace calls existed and to spot that the empty-result message was unreachable. Deciding which of these problems mattered, and what a real evaluation would look like, was still my job.</p>
+
+        <h2>The project and the code</h2>
+        <dl class="facts-box">
+          <div><dt>Project (2023)</dt><dd>Kadabra, a Telegram bot (introduced to users as FilmSleuth) that identifies a movie from a photo of the screen or a plot description</dd></div>
+          <div><dt>Team</dt><dd>Collaborative repository started by Ivan Zepeda; the bot, data pipeline and search code committed by Erwin Mongui</dd></div>
+          <div><dt>Models</dt><dd>face_recognition (128-dimension face encodings), DeepFace age estimation, Universal Sentence Encoder large v5 (512-dimension text vectors), OpenCV Haar cascades for photo filtering</dd></div>
+          <div><dt>Stack</dt><dd>Python, Django 4.2, Celery, Redis, PostgreSQL, Elasticsearch 8, TensorFlow, NLTK, python-telegram-bot</dd></div>
+          <div><dt>Evaluation</dt><dd>None in the repository: no labelled examples, no tests, thresholds set by hand</dd></div>
+          <div><dt>Code</dt><dd><a class="link" href="https://github.com/gelnomo/training-ml-python-kadabra" target="_blank" rel="noopener">training-ml-python-kadabra on GitHub</a></dd></div>
+        </dl>
+        <div class="author"><svg aria-hidden="true" viewBox="0 0 189 190"><path fill="#0071e3" d="M9.8 184.5C4.8 181.7 2.6 174.6 5.1 169.7C5.7 168.5 10.3 163.3 15.3 158.2L24.5 149.0L15.3 139.8C10.3 134.7 5.7 129.5 5.1 128.3C2.4 123.0 5.3 115.4 10.9 113.1C17.0 110.5 19.5 112.0 33.7 126.3C41.0 133.5 47.4 140.8 48.0 142.3C49.4 146.2 49.3 152.5 47.6 156.3C46.8 158.1 40.4 165.3 33.3 172.3C21.9 183.6 19.9 185.2 16.4 185.6C14.0 185.9 11.5 185.4 9.8 184.5ZM70.7 158.0C65.1 153.6 65.1 144.4 70.7 140.0C73.0 138.2 74.7 138.0 89.6 138.0C107.4 138.0 110.2 138.6 112.6 143.1C115.5 148.8 113.5 156.5 108.5 158.8C106.8 159.6 100.1 160.0 89.6 160.0C74.7 160.0 73.0 159.8 70.7 158.0ZM136.9 158.6C135.4 157.7 133.5 155.4 132.5 153.4C131.1 150.3 131.0 149.1 131.9 145.9C133.5 140.5 137.1 138.0 143.4 138.0C153.7 138.0 160.3 134.0 161.9 126.9C162.3 125.0 162.3 113.4 161.9 101.0C160.7 67.7 157.5 46.5 151.4 32.9L148.7 27.0L145.2 29.0C138.8 32.8 133.0 38.2 129.2 44.0L125.3 49.8L122.4 48.0C109.4 39.8 87.5 39.6 73.2 47.5L69.0 49.9L67.1 46.1C65.0 42.0 54.3 31.6 49.1 28.7L46.0 26.9L43.0 33.2C39.2 41.3 36.3 54.6 34.4 72.4C32.7 89.3 32.7 89.3 28.9 92.5C24.3 96.3 18.8 96.0 14.4 91.6C11.2 88.4 11.0 87.8 11.0 81.2C11.0 63.5 16.4 36.0 22.4 23.5C28.7 10.1 35.8 4.6 46.6 4.6C53.6 4.6 60.0 7.7 70.7 16.2L77.0 21.1L82.5 20.0C89.6 18.5 105.5 18.5 112.5 20.0L117.9 21.1L124.2 16.1C138.1 4.8 148.3 2.1 158.3 6.9C174.9 15.0 184.2 50.4 184.4 107.0C184.5 137.6 184.3 138.6 174.9 148.5C167.2 156.6 160.9 159.4 149.0 159.7C142.0 160.0 138.8 159.6 136.9 158.6ZM64.3 102.5C62.6 101.8 60.4 99.8 59.6 98.1C55.5 90.3 59.6 82.2 68.3 81.3C72.6 80.8 73.2 81.0 76.5 84.3C79.4 87.2 80.0 88.5 80.0 92.2C80.0 97.4 77.9 100.7 73.4 102.6C69.3 104.3 68.4 104.3 64.3 102.5ZM121.3 102.5C117.0 100.7 114.5 96.6 114.6 91.6C114.7 88.4 115.4 87.0 118.4 84.3C120.8 82.1 123.0 81.0 125.0 81.0C137.3 81.0 141.5 97.2 130.6 102.4C126.5 104.3 125.5 104.3 121.3 102.5Z"/></svg><p><b>Erwin Mongui</b>Director of Technology at Cedar Planters and Certified AI Engineer (Lambton College, 2024), based in Toronto. <a class="link" href="/about/">More about me</a></p></div>
+      </div>
+      <aside class="aside"><div class="related"><h4>Related</h4><a href="/writing/kijiji-car-ads-visit-prediction-rebuild/">51,000 ads, 190 rows: revisiting a Kijiji visit-prediction model</a><a href="/writing/bank-marketing-model-threshold-over-model/">The threshold mattered more than the model</a><a href="/writing/ai-applications-json/">JSON as the contract between your systems and AI</a></div></aside>
+    </div>
+  </section>
+
+<section class="ps-strip" aria-label="Follow in Google">
+  <div class="ps-inner">
+    <p>Get my next case studies and articles in Google Search.</p>
+    <div class="preferred-source" google-add-preferred-source-btn data-theme="dark" data-lang="en"></div>
+    <noscript><a class="link" href="https://www.google.com/preferences/source?q=erwinmongui.com">Add erwinmongui.com as a preferred source on Google</a></noscript>
+  </div>
+</section>
+</main>
+<footer class="foot">
+  <div class="foot-inner">
+    <p class="foot-brand"><svg aria-hidden="true" focusable="false" viewBox="0 0 189 190"><path fill="#81ffd9" d="M9.8 184.5C4.8 181.7 2.6 174.6 5.1 169.7C5.7 168.5 10.3 163.3 15.3 158.2L24.5 149.0L15.3 139.8C10.3 134.7 5.7 129.5 5.1 128.3C2.4 123.0 5.3 115.4 10.9 113.1C17.0 110.5 19.5 112.0 33.7 126.3C41.0 133.5 47.4 140.8 48.0 142.3C49.4 146.2 49.3 152.5 47.6 156.3C46.8 158.1 40.4 165.3 33.3 172.3C21.9 183.6 19.9 185.2 16.4 185.6C14.0 185.9 11.5 185.4 9.8 184.5ZM70.7 158.0C65.1 153.6 65.1 144.4 70.7 140.0C73.0 138.2 74.7 138.0 89.6 138.0C107.4 138.0 110.2 138.6 112.6 143.1C115.5 148.8 113.5 156.5 108.5 158.8C106.8 159.6 100.1 160.0 89.6 160.0C74.7 160.0 73.0 159.8 70.7 158.0ZM136.9 158.6C135.4 157.7 133.5 155.4 132.5 153.4C131.1 150.3 131.0 149.1 131.9 145.9C133.5 140.5 137.1 138.0 143.4 138.0C153.7 138.0 160.3 134.0 161.9 126.9C162.3 125.0 162.3 113.4 161.9 101.0C160.7 67.7 157.5 46.5 151.4 32.9L148.7 27.0L145.2 29.0C138.8 32.8 133.0 38.2 129.2 44.0L125.3 49.8L122.4 48.0C109.4 39.8 87.5 39.6 73.2 47.5L69.0 49.9L67.1 46.1C65.0 42.0 54.3 31.6 49.1 28.7L46.0 26.9L43.0 33.2C39.2 41.3 36.3 54.6 34.4 72.4C32.7 89.3 32.7 89.3 28.9 92.5C24.3 96.3 18.8 96.0 14.4 91.6C11.2 88.4 11.0 87.8 11.0 81.2C11.0 63.5 16.4 36.0 22.4 23.5C28.7 10.1 35.8 4.6 46.6 4.6C53.6 4.6 60.0 7.7 70.7 16.2L77.0 21.1L82.5 20.0C89.6 18.5 105.5 18.5 112.5 20.0L117.9 21.1L124.2 16.1C138.1 4.8 148.3 2.1 158.3 6.9C174.9 15.0 184.2 50.4 184.4 107.0C184.5 137.6 184.3 138.6 174.9 148.5C167.2 156.6 160.9 159.4 149.0 159.7C142.0 160.0 138.8 159.6 136.9 158.6ZM64.3 102.5C62.6 101.8 60.4 99.8 59.6 98.1C55.5 90.3 59.6 82.2 68.3 81.3C72.6 80.8 73.2 81.0 76.5 84.3C79.4 87.2 80.0 88.5 80.0 92.2C80.0 97.4 77.9 100.7 73.4 102.6C69.3 104.3 68.4 104.3 64.3 102.5ZM121.3 102.5C117.0 100.7 114.5 96.6 114.6 91.6C114.7 88.4 115.4 87.0 118.4 84.3C120.8 82.1 123.0 81.0 125.0 81.0C137.3 81.0 141.5 97.2 130.6 102.4C126.5 104.3 125.5 104.3 121.3 102.5Z"/></svg><span>Erwin Mongui, Toronto</span></p>
+    <p class="foot-copy">&copy; 2026 Erwin Mongui. All rights reserved.</p>
+    <p><a href="/work/">Case studies</a> &middot; <a href="/writing/">Writing</a> &middot; <a href="/about/">About</a> &middot; <a href="/es/articulos/kadabra-bot-para-reconocer-peliculas/" lang="es" hreflang="es">Español</a> &middot; <a href="https://www.google.com/preferences/source?q=erwinmongui.com" target="_blank" rel="noopener">Add as a preferred source on Google</a> &middot; <a href="https://www.linkedin.com/in/erwin-mongui/" target="_blank" rel="noopener">LinkedIn</a> &middot; <a href="https://medium.com/@erwinmongui" target="_blank" rel="noopener me">Medium</a> &middot; <a href="/privacy/">Privacy</a><span class="foot-consent-wrap" hidden> &middot; <button type="button" class="foot-consent">Privacy settings</button></span></p>
+  </div>
+</footer>
+<script defer src="/assets/chrome.js"></script>
+</body>
+</html>

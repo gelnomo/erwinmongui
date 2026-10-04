@@ -158,6 +158,7 @@
     "description": "Articles by Erwin Mongui on choosing tools, growing engineers, measuring team health, delivery bottlenecks and building with AI, from 18 years of shipping.",
     "headline": "Writing",
     "items": [
+      "post-kadabra",
       "post-kijiji-visits",
       "post-bank-marketing",
       "post-bottlenecks",
@@ -494,6 +495,45 @@
     "alternate": "es-post-bank-marketing"
   },
   {
+    "key": "post-kadabra",
+    "type": "post",
+    "lang": "en",
+    "url": "/writing/kadabra-movie-recognition-bot-review/",
+    "title": "Kadabra: a Shazam for movies, revisited | Erwin Mongui",
+    "description": "Revisiting Kadabra, our 2023 Telegram bot that named movies from a photo or a plot: faces, age, vector search, and the evaluation it never had.",
+    "headline": "Kadabra: a Shazam for movies, and no way to know if it worked",
+    "section": "Machine learning",
+    "keywords": [
+      "machine learning",
+      "face recognition",
+      "vector search",
+      "Elasticsearch",
+      "sentence embeddings",
+      "Telegram bot",
+      "evaluation",
+      "Django",
+      "Celery"
+    ],
+    "code": "https://github.com/gelnomo/training-ml-python-kadabra",
+    "breadcrumbs": [
+      [
+        "Home",
+        "/"
+      ],
+      [
+        "Writing",
+        "/writing/"
+      ],
+      [
+        "Kadabra movie bot",
+        "/writing/kadabra-movie-recognition-bot-review/"
+      ]
+    ],
+    "published": "2026-10-04",
+    "modified": "2026-10-04",
+    "alternate": "es-post-kadabra"
+  },
+  {
     "key": "post-kijiji-visits",
     "type": "post",
     "lang": "en",
@@ -704,6 +744,7 @@
     "description": "Artículos de Erwin Mongui sobre cómo elegir herramientas, formar ingenieros, medir la salud de los equipos, cuellos de botella y construir con IA.",
     "headline": "Artículos",
     "items": [
+      "es-post-kadabra",
       "es-post-kijiji-visits",
       "es-post-bank-marketing",
       "es-post-bottlenecks",
@@ -1027,6 +1068,45 @@
       [
         "Clasificador de marketing bancario",
         "/es/articulos/modelo-de-marketing-bancario-umbral-antes-que-modelo/"
+      ]
+    ],
+    "published": "2026-10-04",
+    "modified": "2026-10-04"
+  },
+  {
+    "key": "es-post-kadabra",
+    "type": "post",
+    "lang": "es",
+    "url": "/es/articulos/kadabra-bot-para-reconocer-peliculas/",
+    "title": "Kadabra: un Shazam para películas, revisado | Erwin Mongui",
+    "description": "Revisando Kadabra, nuestro bot de Telegram de 2023 que reconocía películas por foto o trama: caras, edad, búsqueda vectorial y la evaluación que faltó.",
+    "headline": "Kadabra: un Shazam para películas, sin forma de saber si funcionaba",
+    "section": "Machine learning",
+    "keywords": [
+      "machine learning",
+      "reconocimiento facial",
+      "búsqueda vectorial",
+      "Elasticsearch",
+      "embeddings de oraciones",
+      "bot de Telegram",
+      "evaluación",
+      "Django",
+      "Celery"
+    ],
+    "code": "https://github.com/gelnomo/training-ml-python-kadabra",
+    "alternate": "post-kadabra",
+    "breadcrumbs": [
+      [
+        "Inicio",
+        "/es/"
+      ],
+      [
+        "Artículos",
+        "/es/articulos/"
+      ],
+      [
+        "Bot de películas Kadabra",
+        "/es/articulos/kadabra-bot-para-reconocer-peliculas/"
       ]
     ],
     "published": "2026-10-04",

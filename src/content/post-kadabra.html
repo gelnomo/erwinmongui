@@ -1,0 +1,87 @@
+<header class="doc-head stage-dark">
+    <nav class="crumbs" aria-label="Breadcrumb"><a href="/">Home</a><span>/</span><a href="/writing/">Writing</a><span>/</span><span>Machine learning</span></nav>
+    <p class="eyebrow">Machine learning · Vector search</p>
+    <h1>Kadabra: a Shazam for movies, and no way to know if it worked.</h1>
+    <p class="summary">In 2023, we built Kadabra, a Telegram bot that tries to name the movie you are watching from a photo of the screen or a few lines about the plot. It recognised actors' faces, guessed when the photo was taken from their apparent age, and searched movie synopses by meaning. Three years later I read the code again. The architecture still holds up. What it never had was a way to tell whether its answers were right.</p>
+    <div class="byline"><span>By Erwin Mongui</span><span>October 4, 2026</span><span>8 min read</span><a class="link" href="/es/articulos/kadabra-bot-para-reconocer-peliculas/" hreflang="es" lang="es">Leer en español</a></div>
+  </header>
+  <section class="doc">
+    <div class="doc-grid">
+      <div class="prose">
+        <div class="inshort"><b>In short</b><p>Kadabra combined three models behind one Telegram bot: face recognition to find the actors in a photo, an age estimator to guess the year of the scene, and a sentence encoder to search synopses by meaning, all stored and queried in Elasticsearch. Celery jobs collected movies, cast lists and actor photos in the background. Reading it again, the engineering is solid, but the bot shipped with no test set, no tests and hand-picked thresholds. The query text was also prepared differently from the indexed text, the scores of different searches were added together, and the "no match" message could never appear. This article is a code review, not a rebuild: I have no accuracy figures for the bot, because it never produced any. Code: <a class="link" href="https://github.com/gelnomo/training-ml-python-kadabra" target="_blank" rel="noopener">GitHub</a>.</p></div>
+
+        <h2>The idea</h2>
+        <p>Everybody has seen a scene on a screen at a friend's house, or a clip on social media, and wondered what movie it was. Shazam solved that for songs. Kadabra, which the bot introduced to users as FilmSleuth, was our attempt for movies: send it a <strong>photo</strong> of the screen, a <strong>text</strong> description of the plot, or both, and it answers with up to three candidates, their release years and an IMDb link. A <code>/list</code> command shows the movies it knows.</p>
+        <div class="kpi-row kpi-3">
+          <div style="border-top-color:var(--line-light)"><b style="color:var(--blue)">2 inputs</b><span style="color:var(--steel)">a photo of the screen, a plot description, or both</span></div>
+          <div style="border-top-color:var(--line-light)"><b style="color:var(--blue)">128 + 512</b><span style="color:var(--steel)">dimensions of the face and text vectors stored in Elasticsearch</span></div>
+          <div style="border-top-color:var(--line-light)"><b style="color:var(--blue)">0</b><span style="color:var(--steel)">tests, labelled examples or accuracy measurements in the repository</span></div>
+        </div>
+        <p>It was a collaborative project. Ivan Zepeda set up the repository in May 2023; the code I review here is the part I committed between June and July 2023.</p>
+
+        <h2>How it worked</h2>
+        <p>Kadabra is a Django 4.2 application with two halves: background jobs that build the search indexes, and a webhook that answers Telegram.</p>
+        <p><strong>Collecting the data.</strong> Movie records lived in PostgreSQL and were managed from the Django admin. A Celery beat schedule then ran jobs every five minutes. One job fetched each movie's metadata from the OMDb API, its full cast and synopsis from IMDb, and created an actor record for every cast member. Another fetched each actor's photo gallery from IMDb and kept only usable portraits: four OpenCV Haar cascades had to (almost) agree that the picture showed one face, and the <code>face_recognition</code> library had to find exactly one face too. Every job shared a small state machine (ready, running, completed, error, expired) with retry counts, and a nightly task, written but switched off in the schedule, could put back jobs stuck "running" for more than a day.</p>
+        <p><strong>Indexing faces.</strong> For each valid photo, <code>face_recognition</code> produced a 128-number encoding of the face. Then came the part I still like: DeepFace estimated how old the actor looked in the photo. Add that age to the actor's birthday, scraped from IMDb, and you get an estimate of the year the photo was taken. If a 30-year-old-looking Keanu Reeves is on the screen, the movie is probably from around 1994, not 2021. The encoding, the age and the estimated year went into an Elasticsearch index.</p>
+        <p><strong>Indexing synopses.</strong> Each movie's plot, title and director were turned into a 512-number vector with Google's Universal Sentence Encoder (large, version 5, from TensorFlow Hub) and stored in a second index, together with the IDs of its cast.</p>
+        <p><strong>Answering.</strong> When a photo arrives, the bot encodes every face in it and finds the closest stored face for each one, keeping matches above a cosine similarity of 0.93. When text arrives, it cleans it with NLTK, encodes it with the same sentence encoder and runs a nearest-neighbour search on the synopses. If both are present, one Elasticsearch request combines them: semantic similarity to the plot, plus a boost for movies that star a recognised actor or that came out within ten years of the photo's estimated year. The thresholds, the number of results and the year window are editable in the admin through django-constance, and the movie list is cached in Redis.</p>
+        <blockquote>Three models, two vector indexes, a job queue and a chat interface: the hard parts were all there. The cheap part, a list of photos with the right answers, never was.</blockquote>
+
+        <h2>Going back: what I found</h2>
+        <p>Reading the code in 2026, most problems were not in any one model. They were in the places where the models meet.</p>
+        <ul>
+          <li><strong>Nothing measured whether it worked.</strong> The repository has no labelled examples (screenshots or descriptions paired with the right movie), and both <code>tests.py</code> files are the empty Django templates. The 0.93 face threshold and the 0.30 result threshold were chosen by trying the bot and adjusting. Without a test set, every change to a threshold, a model or a query was a guess, and so was every demo.</li>
+          <li><strong>The question did not look like the documents.</strong> Synopses were indexed as written. The user's text was lower-cased, stripped of numbers and stop words, lemmatised and then passed through <code>set()</code>, which removes duplicate words and also loses their order. A sentence encoder trained on natural sentences then had to compare "man find ring dark lord destroy" style word bags with real paragraphs. The text you search with should be prepared exactly like the text you index.</li>
+          <li><strong>Scores from different searches were added.</strong> Elasticsearch adds the nearest-neighbour score to the score of the regular query. The regular query had one optional clause per recognised actor and one per year window, so a movie from the right decade matched even if none of the actors were in it. A single 0.30 threshold was then applied to the sum of two scores on different scales.</li>
+          <li><strong>The "no match" reply could never appear.</strong> The function that formats results always appends a "Best Result" line, so it never returns an empty answer. When nothing passed the threshold, the bot replied "Best Result: None" instead of its friendly "there is not enough information" message.</li>
+          <li><strong>Face search compared against every photo.</strong> Each face was matched with a <code>script_score</code> query over all documents, which computes cosine similarity against every stored face. That is fine for a few thousand photos and slow for millions. The face vectors were also never mapped for approximate nearest-neighbour search, although the synopsis vectors were. And <code>face_recognition</code> is designed for Euclidean distance, with 0.6 as its usual tolerance. Cosine similarity can work, but the threshold had to be found again, without data to find it.</li>
+          <li><strong>A 129-line workaround for one wrong line.</strong> The page downloader did <code>str(resp.read())</code>. In Python 3 that does not decode the page. It returns the text form of the bytes, <code>b'...'</code>, with every accented character written as an escape like <code>\xc3\xa9</code> and every newline as a literal <code>\n</code>. The code then needed 129 <code>replace</code> calls to turn the escapes back into letters, and an image attribute that had to be read as <code>"\nsrc"</code> instead of <code>"src"</code>. Decoding the bytes, <code>resp.read().decode("utf-8")</code>, would have made all of that unnecessary.</li>
+          <li><strong>Scraping that breaks on the next deploy.</strong> The IMDb parsers searched for generated CSS class names such as <code>sc-dec7a8b-2 haviXP</code>, which change whenever the site is rebuilt, and rotated random browser user agents. A list of 334 torrent release tags (317 unique, from "DVDRip" to "YIFY") cleaned up movie names, and the year detection only looked for years from 1900 to 2013. IMDb's conditions of use also restrict automated collection, so a licensed source, such as IMDb's own datasets or an API, is the right foundation for anything beyond a class project.</li>
+          <li><strong>Smaller operational issues.</strong> The large sentence encoder was loaded from <code>settings.py</code>, so every <code>manage.py</code> command and every Celery worker loaded it, even the ones that never encode text. A 5 MB age-detection model (<code>age_detect_cnn_model.h5</code>) is committed but never used: the code calls DeepFace instead. The delete signal for movie documents was copied from the actor one and refers to a field movies do not have. Errors were printed and swallowed, so the bot answered "There was an error" with nothing in the logs to explain why.</li>
+        </ul>
+        <p>None of these is unusual. I have seen each of them in production systems: train/serve skew in preprocessing, scores combined without care, an empty-result path nobody tested, and a decoding bug patched downstream instead of fixed at the source.</p>
+
+        <h2>What held up</h2>
+        <ul>
+          <li><strong>The pipeline design.</strong> Small, retryable jobs with explicit states, an expiry for repeated failures and a reset for stuck work is the same pattern I would use today for any slow, flaky collection process.</li>
+          <li><strong>One store for vectors and filters.</strong> Keeping embeddings, cast IDs and years in Elasticsearch let a single request mix semantic search with exact filters, instead of joining results from separate systems in Python.</li>
+          <li><strong>Settings outside the code.</strong> Thresholds, result counts and cache times could be changed from the admin without a deploy. That is exactly what you want while tuning, as long as you also have a way to measure the effect of each change.</li>
+          <li><strong>Using age as a signal.</strong> Estimating the year of a scene from an actor's apparent age is a cheap, original way to narrow a search across decades of films. It deserved an evaluation of its own.</li>
+        </ul>
+
+        <h2>What I would do differently</h2>
+        <p>I have not rebuilt Kadabra. If I did, this would be the order:</p>
+        <ul>
+          <li><strong>Start with the test set.</strong> A few hundred screenshots and plot descriptions, each labelled with the right movie, and one number to track: how often the right movie is in the top three. Every other decision below would be checked against it.</li>
+          <li><strong>Prepare queries and documents the same way.</strong> Send the user's text to the sentence encoder as written, as the synopses were, and let the model handle stop words and word forms.</li>
+          <li><strong>Combine rankings, not raw scores.</strong> Run the face, year and text searches separately and merge their ranked lists, for example with reciprocal rank fusion, so no score scale dominates. Make the year window a filter or a gentle boost, never a match on its own.</li>
+          <li><strong>Index faces for nearest-neighbour search.</strong> Map the face vectors for approximate kNN, like the synopses, and tune the threshold on the test set.</li>
+          <li><strong>Match the scene, not only the faces.</strong> Many frames have no clear face. An image-text embedding model could match the whole frame against stills and descriptions, and handle animation too.</li>
+          <li><strong>Use licensed data and test the plumbing.</strong> Replace scraping with a licensed dataset or API, decode text once at the edge, and add unit tests for the formatting and empty-result paths, which would have caught the "Best Result: None" reply.</li>
+        </ul>
+
+        <h2>What I learned</h2>
+        <ul>
+          <li><strong>The evaluation set is part of the product.</strong> Without one, a machine learning system is a demo, however good the architecture is.</li>
+          <li><strong>Most bugs live between components.</strong> Each model worked. The problems were in preprocessing that did not match, scores that did not mix, and a response path nobody exercised.</li>
+          <li><strong>Fix data problems at the source.</strong> One wrong decode line produced a 129-line workaround and a strange attribute name. When a cleanup function keeps growing, look upstream.</li>
+          <li><strong>Simple, original signals are worth measuring.</strong> The age-to-year idea was the most interesting part of the project and the one with the least evidence behind it.</li>
+        </ul>
+
+        <h2>Where AI assistants fit</h2>
+        <p>As with my revisits of a <a class="link" href="/writing/bank-marketing-model-threshold-over-model/">bank marketing classifier</a> and a <a class="link" href="/writing/kijiji-car-ads-visit-prediction-rebuild/">Kijiji visit-prediction model</a>, I used an AI coding assistant to read the 2023 code again and trace how a photo or a sentence moves from Telegram to Elasticsearch and back. It was quick to explain why 129 replace calls existed and to spot that the empty-result message was unreachable. Deciding which of these problems mattered, and what a real evaluation would look like, was still my job.</p>
+
+        <h2>The project and the code</h2>
+        <dl class="facts-box">
+          <div><dt>Project (2023)</dt><dd>Kadabra, a Telegram bot (introduced to users as FilmSleuth) that identifies a movie from a photo of the screen or a plot description</dd></div>
+          <div><dt>Team</dt><dd>Collaborative repository started by Ivan Zepeda; the bot, data pipeline and search code committed by Erwin Mongui</dd></div>
+          <div><dt>Models</dt><dd>face_recognition (128-dimension face encodings), DeepFace age estimation, Universal Sentence Encoder large v5 (512-dimension text vectors), OpenCV Haar cascades for photo filtering</dd></div>
+          <div><dt>Stack</dt><dd>Python, Django 4.2, Celery, Redis, PostgreSQL, Elasticsearch 8, TensorFlow, NLTK, python-telegram-bot</dd></div>
+          <div><dt>Evaluation</dt><dd>None in the repository: no labelled examples, no tests, thresholds set by hand</dd></div>
+          <div><dt>Code</dt><dd><a class="link" href="https://github.com/gelnomo/training-ml-python-kadabra" target="_blank" rel="noopener">training-ml-python-kadabra on GitHub</a></dd></div>
+        </dl>
+        <div class="author"><svg aria-hidden="true" viewBox="0 0 189 190"><path fill="#0071e3" d="__MARK__"/></svg><p><b>Erwin Mongui</b>Director of Technology at Cedar Planters and Certified AI Engineer (Lambton College, 2024), based in Toronto. <a class="link" href="/about/">More about me</a></p></div>
+      </div>
+      <aside class="aside"><div class="related"><h4>Related</h4><a href="/writing/kijiji-car-ads-visit-prediction-rebuild/">51,000 ads, 190 rows: revisiting a Kijiji visit-prediction model</a><a href="/writing/bank-marketing-model-threshold-over-model/">The threshold mattered more than the model</a><a href="/writing/ai-applications-json/">JSON as the contract between your systems and AI</a></div></aside>
+    </div>
+  </section>
