@@ -2,6 +2,13 @@
 
 Notable changes to erwinmongui.com. Each version has a `## vX.Y.Z` heading; pushing a matching tag, or running the Release workflow from the Actions tab with that version, publishes the section as a GitHub release (see `.github/workflows/release.yml`).
 
+## v1.9.0 (2026-10-04)
+
+### Writing
+
+- New article, in English and Spanish: "Kadabra: a Shazam for movies, and no way to know if it worked" (`/writing/kadabra-movie-recognition-bot-review/`, `/es/articulos/kadabra-bot-para-reconocer-peliculas/`). It reviews the 2023 Kadabra Telegram bot, which identified movies from a photo or a plot description with face recognition, age estimation and vector search in Elasticsearch, with a link to the code in `gelnomo/training-ml-python-kadabra`.
+- The homepage's writing section shows the new article first; "How I measure engineering team health" moves to the full list under `/writing/`.
+
 ## v1.8.0 (2026-10-04)
 
 ### Writing

@@ -16,6 +16,14 @@
     <description>Revisando nuestro modelo de marketing bancario de Kaggle de 2023: siete errores, un pipeline nuevo y por qué ajustar el umbral de F1 ganó.</description>
   </item>
   <item>
+    <title>Kadabra: un Shazam para películas, sin forma de saber si funcionaba</title>
+    <link>https://erwinmongui.com/es/articulos/kadabra-bot-para-reconocer-peliculas/</link>
+    <guid isPermaLink="true">https://erwinmongui.com/es/articulos/kadabra-bot-para-reconocer-peliculas/</guid>
+    <pubDate>Sun, 04 Oct 2026 12:00:00 +0000</pubDate>
+    <category>Machine learning</category>
+    <description>Revisando Kadabra, nuestro bot de Telegram de 2023 que reconocía películas por foto o trama: caras, edad, búsqueda vectorial y la evaluación que faltó.</description>
+  </item>
+  <item>
     <title>51,000 anuncios, 190 filas: revisando un modelo de visitas para Kijiji</title>
     <link>https://erwinmongui.com/es/articulos/prediccion-de-visitas-en-anuncios-de-kijiji/</link>
     <guid isPermaLink="true">https://erwinmongui.com/es/articulos/prediccion-de-visitas-en-anuncios-de-kijiji/</guid>
