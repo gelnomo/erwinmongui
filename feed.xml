@@ -6,7 +6,15 @@
   <atom:link href="https://erwinmongui.com/feed.xml" rel="self" type="application/rss+xml"/>
   <description>Case studies and articles by Erwin Mongui on platform architecture, data, AI and engineering leadership.</description>
   <language>en</language>
-  <lastBuildDate>Sat, 26 Sep 2026 12:00:00 +0000</lastBuildDate>
+  <lastBuildDate>Sun, 04 Oct 2026 12:00:00 +0000</lastBuildDate>
+  <item>
+    <title>The threshold mattered more than the model: revisiting a bank marketing classifier</title>
+    <link>https://erwinmongui.com/writing/bank-marketing-model-threshold-over-model/</link>
+    <guid isPermaLink="true">https://erwinmongui.com/writing/bank-marketing-model-threshold-over-model/</guid>
+    <pubDate>Sun, 04 Oct 2026 12:00:00 +0000</pubDate>
+    <category>Data science</category>
+    <description>Revisiting our 2023 Kaggle bank marketing model: seven bugs, a rebuilt pipeline, and why tuning the F1 threshold beat every model change.</description>
+  </item>
   <item>
     <title>A lead distribution engine that connects to any CRM</title>
     <link>https://erwinmongui.com/work/fincaraiz-lead-distribution/</link>

@@ -1,0 +1,363 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>El umbral importó más que el modelo: marketing bancario | Erwin Mongui</title>
+<meta name="description" content="Revisando nuestro modelo de marketing bancario de Kaggle de 2023: siete errores, un pipeline nuevo y por qué ajustar el umbral de F1 ganó.">
+<meta name="author" content="Erwin Mongui">
+<meta name="robots" content="index, follow, max-snippet:-1, max-image-preview:large, max-video-preview:-1">
+<meta name="theme-color" content="#000000">
+<link rel="canonical" href="https://erwinmongui.com/es/articulos/modelo-de-marketing-bancario-umbral-antes-que-modelo/">
+<link rel="alternate" hreflang="en" href="https://erwinmongui.com/writing/bank-marketing-model-threshold-over-model/">
+<link rel="alternate" hreflang="es" href="https://erwinmongui.com/es/articulos/modelo-de-marketing-bancario-umbral-antes-que-modelo/">
+<link rel="alternate" hreflang="x-default" href="https://erwinmongui.com/writing/bank-marketing-model-threshold-over-model/">
+<link rel="alternate" type="application/rss+xml" title="Erwin Mongui: casos y artículos" href="https://erwinmongui.com/es/feed.xml">
+<link rel="me" href="https://www.linkedin.com/in/erwin-mongui/">
+<meta property="og:type" content="article">
+<meta property="og:site_name" content="Erwin Mongui">
+<meta property="og:locale" content="es_CO">
+<meta property="og:locale:alternate" content="en_CA">
+<meta property="og:url" content="https://erwinmongui.com/es/articulos/modelo-de-marketing-bancario-umbral-antes-que-modelo/">
+<meta property="og:title" content="El umbral importó más que el modelo: revisando un clasificador de marketing bancario">
+<meta property="og:description" content="Revisando nuestro modelo de marketing bancario de Kaggle de 2023: siete errores, un pipeline nuevo y por qué ajustar el umbral de F1 ganó.">
+<meta property="og:image" content="https://erwinmongui.com/og-image.png">
+<meta property="og:image:width" content="1200">
+<meta property="og:image:height" content="630">
+<meta property="og:image:alt" content="Erwin Mongui logo with the words Engineering leader, Director of Technology, Toronto, Canada">
+<meta property="article:published_time" content="2026-10-04">
+<meta property="article:modified_time" content="2026-10-04">
+<meta property="article:author" content="https://www.linkedin.com/in/erwin-mongui/">
+<meta name="twitter:card" content="summary_large_image">
+<meta name="twitter:title" content="El umbral importó más que el modelo: revisando un clasificador de marketing bancario">
+<meta name="twitter:description" content="Revisando nuestro modelo de marketing bancario de Kaggle de 2023: siete errores, un pipeline nuevo y por qué ajustar el umbral de F1 ganó.">
+<meta name="twitter:image" content="https://erwinmongui.com/og-image.png">
+<link rel="icon" href="/favicon.ico" sizes="16x16 32x32 48x48">
+<link rel="icon" type="image/svg+xml" href="/favicon.svg">
+<link rel="icon" type="image/png" sizes="48x48" href="/favicon-48x48.png">
+<link rel="icon" type="image/png" sizes="96x96" href="/favicon-96x96.png">
+<link rel="icon" type="image/png" sizes="192x192" href="/favicon-192x192.png">
+<link rel="apple-touch-icon" sizes="180x180" href="/apple-touch-icon.png">
+<link rel="manifest" href="/site.webmanifest">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Manrope:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="/assets/site.css">
+<link rel="stylesheet" href="/assets/chrome.css">
+<!-- Google preferred sources button (https://developers.google.com/search/docs/appearance/preferred-sources) -->
+<script async src="https://news.google.com/swg/js/v1/publisher.js"></script>
+<script type="application/ld+json">
+{
+ "@context": "https://schema.org",
+ "@graph": [
+  {
+   "@type": "Person",
+   "@id": "https://erwinmongui.com/#person",
+   "name": "Erwin Mongui",
+   "url": "https://erwinmongui.com/",
+   "jobTitle": "Director of Technology",
+   "worksFor": {
+    "@type": "Organization",
+    "name": "Cedar Planters"
+   },
+   "sameAs": [
+    "https://www.linkedin.com/in/erwin-mongui/",
+    "https://medium.com/@erwinmongui"
+   ]
+  },
+  {
+   "@type": "WebSite",
+   "@id": "https://erwinmongui.com/#website",
+   "url": "https://erwinmongui.com/",
+   "name": "Erwin Mongui",
+   "publisher": {
+    "@id": "https://erwinmongui.com/#person"
+   },
+   "inLanguage": [
+    "en",
+    "es"
+   ]
+  },
+  {
+   "@type": "BlogPosting",
+   "@id": "https://erwinmongui.com/es/articulos/modelo-de-marketing-bancario-umbral-antes-que-modelo/#article",
+   "headline": "El umbral importó más que el modelo: revisando un clasificador de marketing bancario",
+   "description": "Revisando nuestro modelo de marketing bancario de Kaggle de 2023: siete errores, un pipeline nuevo y por qué ajustar el umbral de F1 ganó.",
+   "url": "https://erwinmongui.com/es/articulos/modelo-de-marketing-bancario-umbral-antes-que-modelo/",
+   "mainEntityOfPage": "https://erwinmongui.com/es/articulos/modelo-de-marketing-bancario-umbral-antes-que-modelo/",
+   "inLanguage": "es",
+   "image": "https://erwinmongui.com/og-image.png",
+   "datePublished": "2026-10-04",
+   "dateModified": "2026-10-04",
+   "author": [
+    {
+     "@id": "https://erwinmongui.com/#person"
+    }
+   ],
+   "publisher": {
+    "@id": "https://erwinmongui.com/#person"
+   },
+   "isPartOf": {
+    "@id": "https://erwinmongui.com/#website"
+   },
+   "keywords": [
+    "machine learning",
+    "F1",
+    "ajuste del umbral",
+    "marketing bancario",
+    "Kaggle",
+    "LightGBM",
+    "CatBoost",
+    "validación cruzada",
+    "lift"
+   ],
+   "articleSection": "Ciencia de datos",
+   "isBasedOn": {
+    "@type": "SoftwareSourceCode",
+    "codeRepository": "https://github.com/gelnomo/training-ml-python-marketing",
+    "programmingLanguage": "Python"
+   }
+  },
+  {
+   "@type": "BreadcrumbList",
+   "itemListElement": [
+    {
+     "@type": "ListItem",
+     "position": 1,
+     "name": "Inicio",
+     "item": "https://erwinmongui.com/es/"
+    },
+    {
+     "@type": "ListItem",
+     "position": 2,
+     "name": "Artículos",
+     "item": "https://erwinmongui.com/es/articulos/"
+    },
+    {
+     "@type": "ListItem",
+     "position": 3,
+     "name": "Clasificador de marketing bancario",
+     "item": "https://erwinmongui.com/es/articulos/modelo-de-marketing-bancario-umbral-antes-que-modelo/"
+    }
+   ]
+  }
+ ]
+}
+</script>
+<!-- Google Consent Mode v2 defaults: denied in the EEA, the UK and Switzerland until the visitor answers the consent message, granted elsewhere -->
+<script>
+  window.dataLayer = window.dataLayer || [];
+  function gtag(){dataLayer.push(arguments);}
+  gtag('consent', 'default', {ad_storage: 'denied', ad_user_data: 'denied', ad_personalization: 'denied', analytics_storage: 'denied', region: ['AT', 'BE', 'BG', 'HR', 'CY', 'CZ', 'DK', 'EE', 'FI', 'FR', 'DE', 'GR', 'HU', 'IE', 'IT', 'LV', 'LT', 'LU', 'MT', 'NL', 'PL', 'PT', 'RO', 'SK', 'SI', 'ES', 'SE', 'IS', 'LI', 'NO', 'GB', 'CH'], wait_for_update: 500});
+  gtag('consent', 'default', {ad_storage: 'granted', ad_user_data: 'granted', ad_personalization: 'granted', analytics_storage: 'granted'});
+  gtag('set', 'ads_data_redaction', true);
+</script>
+<!-- Google consent message (AdSense > Privacy & messaging) for pages without ads -->
+<script async src="https://fundingchoicesmessages.google.com/i/pub-1778464975767585?ers=1"></script>
+<script>(function() {function signalGooglefcPresent() {if (!window.frames['googlefcPresent']) {if (document.body) {const iframe = document.createElement('iframe'); iframe.style = 'width: 0; height: 0; border: none; z-index: -1000; left: -1000px; top: -1000px;'; iframe.style.display = 'none'; iframe.name = 'googlefcPresent'; document.body.appendChild(iframe);} else {setTimeout(signalGooglefcPresent, 0);}}}signalGooglefcPresent();})();</script>
+<!-- Google tag (gtag.js) -->
+<script async src="https://www.googletagmanager.com/gtag/js?id=G-LKD2WCNDV1"></script>
+<script>
+  gtag('js', new Date());
+  window.siteContext = {"content_group": "Article", "content_id": "post-bank-marketing", "site_language": "es"};
+  gtag('config', 'G-LKD2WCNDV1', window.siteContext);
+</script>
+<!-- Clarity tracking code for https://erwinmongui.com/ -->
+<script>
+    (function(c,l,a,r,i,t,y){
+        c[a]=c[a]||function(){(c[a].q=c[a].q||[]).push(arguments)};
+        t=l.createElement(r);t.async=1;t.src="https://www.clarity.ms/tag/"+i;
+        y=l.getElementsByTagName(r)[0];y.parentNode.insertBefore(t,y);
+    })(window, document, "clarity", "script", "ygo6nehxdb");
+</script>
+<!-- Ahrefs Web Analytics -->
+<script src="https://analytics.ahrefs.com/analytics.js" data-key="rdCxWS4nTARbSdPhwLuAmg" async></script>
+<!-- Passes the consent choice to Clarity and shows the footer's privacy settings link -->
+<script defer src="/assets/consent.js"></script>
+<!-- Site event tracking (contact clicks, navigation, sections, scroll depth, reading) -->
+<script defer src="/analytics.js"></script>
+</head>
+<body class="chrome-sticky">
+<a class="skip" href="#main">Ir al contenido</a>
+<header class="nav" id="nav">
+  <div class="nav-inner">
+    <a class="brand" href="/es/"><svg aria-hidden="true" focusable="false" viewBox="0 0 189 190"><path fill="#81ffd9" d="M9.8 184.5C4.8 181.7 2.6 174.6 5.1 169.7C5.7 168.5 10.3 163.3 15.3 158.2L24.5 149.0L15.3 139.8C10.3 134.7 5.7 129.5 5.1 128.3C2.4 123.0 5.3 115.4 10.9 113.1C17.0 110.5 19.5 112.0 33.7 126.3C41.0 133.5 47.4 140.8 48.0 142.3C49.4 146.2 49.3 152.5 47.6 156.3C46.8 158.1 40.4 165.3 33.3 172.3C21.9 183.6 19.9 185.2 16.4 185.6C14.0 185.9 11.5 185.4 9.8 184.5ZM70.7 158.0C65.1 153.6 65.1 144.4 70.7 140.0C73.0 138.2 74.7 138.0 89.6 138.0C107.4 138.0 110.2 138.6 112.6 143.1C115.5 148.8 113.5 156.5 108.5 158.8C106.8 159.6 100.1 160.0 89.6 160.0C74.7 160.0 73.0 159.8 70.7 158.0ZM136.9 158.6C135.4 157.7 133.5 155.4 132.5 153.4C131.1 150.3 131.0 149.1 131.9 145.9C133.5 140.5 137.1 138.0 143.4 138.0C153.7 138.0 160.3 134.0 161.9 126.9C162.3 125.0 162.3 113.4 161.9 101.0C160.7 67.7 157.5 46.5 151.4 32.9L148.7 27.0L145.2 29.0C138.8 32.8 133.0 38.2 129.2 44.0L125.3 49.8L122.4 48.0C109.4 39.8 87.5 39.6 73.2 47.5L69.0 49.9L67.1 46.1C65.0 42.0 54.3 31.6 49.1 28.7L46.0 26.9L43.0 33.2C39.2 41.3 36.3 54.6 34.4 72.4C32.7 89.3 32.7 89.3 28.9 92.5C24.3 96.3 18.8 96.0 14.4 91.6C11.2 88.4 11.0 87.8 11.0 81.2C11.0 63.5 16.4 36.0 22.4 23.5C28.7 10.1 35.8 4.6 46.6 4.6C53.6 4.6 60.0 7.7 70.7 16.2L77.0 21.1L82.5 20.0C89.6 18.5 105.5 18.5 112.5 20.0L117.9 21.1L124.2 16.1C138.1 4.8 148.3 2.1 158.3 6.9C174.9 15.0 184.2 50.4 184.4 107.0C184.5 137.6 184.3 138.6 174.9 148.5C167.2 156.6 160.9 159.4 149.0 159.7C142.0 160.0 138.8 159.6 136.9 158.6ZM64.3 102.5C62.6 101.8 60.4 99.8 59.6 98.1C55.5 90.3 59.6 82.2 68.3 81.3C72.6 80.8 73.2 81.0 76.5 84.3C79.4 87.2 80.0 88.5 80.0 92.2C80.0 97.4 77.9 100.7 73.4 102.6C69.3 104.3 68.4 104.3 64.3 102.5ZM121.3 102.5C117.0 100.7 114.5 96.6 114.6 91.6C114.7 88.4 115.4 87.0 118.4 84.3C120.8 82.1 123.0 81.0 125.0 81.0C137.3 81.0 141.5 97.2 130.6 102.4C126.5 104.3 125.5 104.3 121.3 102.5Z"/></svg><span>Erwin Mongui</span></a>
+    <nav class="nav-links" id="nav-links" aria-label="Secciones">
+      <a href="/about/">Sobre mí</a>
+      <a href="/es/#experience">Experiencia</a>
+      <a href="/es/#impact">Impacto</a>
+      <a href="/es/#ai">IA</a>
+      <a href="/es/#skills">Habilidades</a>
+      <a href="/es/#casos">Casos</a>
+      <a href="/es/articulos/" aria-current="page">Artículos</a>
+      <a href="/es/#facts">Preguntas</a>
+    </nav>
+    <div class="nav-right">
+      <a class="nav-lang" href="/writing/bank-marketing-model-threshold-over-model/" hreflang="en" lang="en">English</a>
+      <a class="nav-cta" href="/es/#contacto">Contacto</a>
+      <button class="menu-btn" id="menu-btn" aria-label="Abrir menú" aria-expanded="false" aria-controls="nav-links">
+        <svg class="bars" width="18" height="18" viewBox="0 0 18 18" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round"><path d="M2 5h14M2 9h14M2 13h14"/></svg>
+        <svg class="x" width="18" height="18" viewBox="0 0 18 18" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round"><path d="M4 4l10 10M14 4L4 14"/></svg>
+      </button>
+    </div>
+  </div>
+</header>
+<main id="main">
+<header class="doc-head stage-dark">
+    <nav class="crumbs" aria-label="Ruta de navegación"><a href="/es/">Inicio</a><span>/</span><a href="/es/articulos/">Artículos</a><span>/</span><span>Ciencia de datos</span></nav>
+    <p class="eyebrow">Ciencia de datos · Machine learning</p>
+    <h1>El umbral importó más que el modelo: revisando un clasificador de marketing bancario.</h1>
+    <p class="summary">En 2023, mi equipo participó en una competencia de Kaggle para predecir qué clientes de un banco canadiense responderían a una campaña de depósitos. Nuestro mejor envío obtuvo 0.63851 de F1. Tres años después volví al código, encontré siete errores, reconstruí el pipeline y probé nuevos modelos y ensambles. La mayor mejora no vino de un mejor modelo. Vino de un número que nadie había ajustado.</p>
+    <div class="byline"><span>Por Erwin Mongui</span><span>4 de octubre de 2026</span><span>7 min de lectura</span><a class="link" href="/writing/bank-marketing-model-threshold-over-model/" hreflang="en" lang="en">Read in English</a></div>
+  </header>
+  <section class="doc">
+    <div class="doc-grid">
+      <div class="prose">
+        <div class="inshort"><b>En resumen</b><p>Nuestros modelos originales usaban el umbral de probabilidad por defecto, 0.5, pero la competencia se calificaba con F1. Bajar el umbral a cerca de 0.35 subió todos los modelos de cerca de 0.62 a cerca de 0.676 de F1 en validación cruzada. Corregir los errores, ajustar hacia árboles pequeños y regularizados y combinar modelos sumó una mejora menor. El mejor resultado local es ahora <strong>0.6770</strong> de F1, aún sin confirmar en Kaggle. El resultado más útil para el negocio es el ranking: el 10% de clientes mejor puntuados por el modelo respondió el 75% de las veces, contra el 50% al azar. Código: <a class="link" href="https://github.com/gelnomo/training-ml-python-marketing" target="_blank" rel="noopener">GitHub</a>.</p></div>
+
+        <h2>El problema</h2>
+        <p>El banco "A" quería ofrecer a sus clientes tasas de interés promocionales para atraer depósitos. Contactar a todos los clientes es caro, así que la tarea era encontrar a los que tenían más probabilidad de responder. Los datos venían de un banco internacional real, anonimizados para proteger la privacidad: saldo de la tarjeta de crédito, productos, las últimas nueve transacciones, cuentas externas, indicadores de actividad y las tasas ofrecidas a cada cliente.</p>
+        <div class="kpi-row kpi-3">
+          <div style="border-top-color:var(--line-light)"><b style="color:var(--blue)">63,999</b><span style="color:var(--steel)">clientes etiquetados de campañas anteriores</span></div>
+          <div style="border-top-color:var(--line-light)"><b style="color:var(--blue)">50%</b><span style="color:var(--steel)">de ellos respondió: los datos de entrenamiento están balanceados</span></div>
+          <div style="border-top-color:var(--line-light)"><b style="color:var(--blue)">F1</b><span style="color:var(--steel)">la métrica de la competencia, sobre la clase "responde"</span></div>
+        </div>
+        <p>La competencia fue AML-1413 (invierno de 2023), una competencia de Kaggle para la clase, del 13 de marzo al 17 de abril de 2023. Participamos como Group Theta: Dev Makwana, Aparna Manjalavil, Yasar Mansuri, Amarnadh Movva y yo.</p>
+
+        <h2>Lo que construimos en 2023</h2>
+        <p>Exploramos los datos, creamos variables agregadas (total de productos, suma de transacciones, tasa competitiva promedio), añadimos variables de clústeres K-Means elegidos con el método del codo y aplicamos one-hot encoding a las columnas discretas. Probamos seis métodos para eliminar valores atípicos; todos bajaron el puntaje, así que conservamos todas las filas. Después ajustamos seis familias de modelos con búsqueda en malla y aleatoria sobre una división 75/25.</p>
+        <div class="table-wrap">
+          <table>
+            <thead><tr><th>Modelo (2023)</th><th>F1 público en Kaggle</th></tr></thead>
+            <tbody>
+              <tr><td><strong>GradientBoostingClassifier, búsqueda en malla</strong></td><td><strong>0.63851</strong></td></tr>
+              <tr><td>CatBoostClassifier, búsqueda en malla</td><td>0.62837</td></tr>
+              <tr><td>RandomForestClassifier, búsqueda en malla</td><td>0.61824</td></tr>
+              <tr><td>LogisticRegression, búsqueda en malla</td><td>0.60135</td></tr>
+              <tr><td>DecisionTreeClassifier</td><td>0.52702</td></tr>
+            </tbody>
+          </table>
+        </div>
+        <p>Ganó el boosting, pero todos los modelos serios quedaron entre 0.60 y 0.64, aproximadamente. En ese momento concluimos que las variables importaban más que el algoritmo.</p>
+
+        <h2>De vuelta al código: siete errores</h2>
+        <p>Al leer el notebook de nuevo en 2026, encontré problemas que cambiaron cuánto confiaba en nuestros propios resultados:</p>
+        <ul>
+          <li><strong>Clústeres que significaban cosas distintas.</strong> K-Means y el escalador se ajustaron por separado en los datos de entrenamiento y de prueba, así que el clúster 3 de prueba no era el mismo grupo que el clúster 3 de entrenamiento.</li>
+          <li><strong>Unas 600 columnas dispersas.</strong> <code>ActivityIndicator</code>, un conteo con 611 valores distintos, se codificó con one-hot. Los valores de prueba que no aparecían en entrenamiento quedaban en cero sin aviso.</li>
+          <li><strong>La métrica equivocada para ajustar.</strong> Los modelos se ajustaron para ROC AUC o accuracy y usaban un umbral de 0.5, mientras la competencia calificaba con F1.</li>
+          <li><strong>Una sola división con ruido.</strong> Cada puntaje venía de una sola división 75/25, y el modelo final solo vio el 75% de los datos.</li>
+          <li><strong>Gráficas que mostraban posiciones.</strong> La función de importancia de variables graficaba las posiciones de <code>argsort()</code>, no las importancias.</li>
+          <li><strong>Predicciones prestadas.</strong> Las métricas de una regresión logística se calcularon con las predicciones del gradient boosting.</li>
+          <li><strong>Una variable muerta.</strong> <code>PreviousCampaignResult</code> siempre vale 0 en los datos de prueba.</li>
+        </ul>
+        <p>Ninguno de estos errores es raro en un proyecto de estudiantes con fecha límite. Varios, como ajustar una transformación por separado en entrenamiento y prueba, son igual de comunes en código de producción. Dejé el notebook original sin cambios, porque sus puntajes de Kaggle salieron de ese código exacto, y reconstruí el pipeline como un script aparte y reproducible.</p>
+
+        <h2>La reconstrucción</h2>
+        <p>La nueva versión ajusta todo lo que aprende de los datos, incluidos los clústeres K-Means, dentro de cada partición de la validación cruzada. Usa validación cruzada estratificada de 5 particiones, prueba ocho modelos (desde regresión logística hasta LightGBM, XGBoost y CatBoost), ajusta los modelos de boosting con Optuna y los combina de cuatro formas: promedio simple, promedio de rangos, mezcla ponderada y stacking. Lo más importante: elige el umbral que maximiza F1 sobre las predicciones fuera de partición.</p>
+        <p>Antes de añadir complejidad, medí cuánto ayudaba realmente cada idea. El AUC variaba cerca de ±0.003 entre particiones, así que cualquier diferencia menor era ruido:</p>
+        <div class="table-wrap">
+          <table>
+            <thead><tr><th>Experimento (LightGBM, 5 particiones)</th><th>ROC AUC</th><th>Veredicto</th></tr></thead>
+            <tbody>
+              <tr><td>Solo columnas originales</td><td>0.6725</td><td>Línea base</td></tr>
+              <tr><td>+ variables creadas</td><td>0.6728</td><td>Sin mejora real</td></tr>
+              <tr><td>+ clústeres K-Means</td><td>0.6722</td><td>Sin mejora, más lento</td></tr>
+              <tr><td>Árboles pequeños, regularización fuerte</td><td>0.6747</td><td>Ayuda</td></tr>
+              <tr><td>Ajustado con Optuna (40 pruebas)</td><td>0.6752</td><td>Ayuda</td></tr>
+            </tbody>
+          </table>
+        </div>
+        <p>La ingeniería de variables de la que estaba orgulloso en 2023 casi no aportó a los modelos de boosting: la señal ya estaba en las columnas originales. Los clústeres sí ayudaron a la regresión logística (+0.005 de AUC), pero no a los árboles. Y una validación adversarial, un modelo que intenta distinguir filas de entrenamiento y de prueba, obtuvo 0.498 de AUC: los dos conjuntos se parecen, así que los puntajes de validación cruzada deberían trasladarse a Kaggle.</p>
+
+        <h2>El hallazgo: ajustar primero el umbral</h2>
+        <p>Esto es lo que se me escapó en 2023. Los datos de entrenamiento están balanceados, así que predecir que <em>todos</em> los clientes responden da una precisión de cerca de 0.50 y un recall de 1.0, es decir, un F1 de cerca de <strong>0.667</strong>. Esa regla trivial supera nuestro mejor envío de 2023. Nuestros modelos no ordenaban mal a los clientes; el umbral de 0.5 los volvía demasiado cautelosos para una métrica que premia el recall.</p>
+<pre><code>F1 = 2 × precisión × recall / (precisión + recall)
+
+"todos responden":    precisión ≈ 0.50, recall = 1.0  →  F1 ≈ 0.667
+modelos de 2023:      umbral 0.5                      →  F1 ≈ 0.62
+mismos modelos:       umbral ≈ 0.35                   →  F1 ≈ 0.676</code></pre>
+        <div class="table-wrap">
+          <table>
+            <thead><tr><th>Modelo (2026, VC de 5 particiones)</th><th>ROC AUC</th><th>F1 con 0.5</th><th>F1 con el mejor umbral</th></tr></thead>
+            <tbody>
+              <tr><td><strong>Ensamble por stacking</strong></td><td>0.6757</td><td>0.6187</td><td><strong>0.6770</strong> (0.350)</td></tr>
+              <tr><td>Mezcla ponderada</td><td>0.6758</td><td>0.6188</td><td>0.6768 (0.350)</td></tr>
+              <tr><td>LightGBM, ajustado</td><td>0.6752</td><td>0.6195</td><td>0.6768 (0.355)</td></tr>
+              <tr><td>CatBoost, ajustado</td><td>0.6756</td><td>0.6185</td><td>0.6765 (0.350)</td></tr>
+              <tr><td>Regresión logística, ajustada</td><td>0.6637</td><td>0.6143</td><td>0.6712 (0.360)</td></tr>
+              <tr><td><em>Todos responden</em></td><td>0.5000</td><td>0.6665</td><td>–</td></tr>
+            </tbody>
+          </table>
+        </div>
+        <p>Frente al mejor modelo original en su propia división de prueba (0.6572 de F1), el nuevo mejor suma +0.020. La mayor parte viene del umbral. El límite honesto es igual de claro: el mejor modelo supera la regla "todos responden" por solo 0.01 de F1, aproximadamente. Con un AUC cercano a 0.675, la señal en estos datos es débil, y la estrategia que maximiza F1 es contactar a cerca del 80% de los clientes.</p>
+        <blockquote>Antes de comparar modelos, revisa cuánto obtiene una regla trivial con tu métrica. Si te supera, el problema no es el modelo.</blockquote>
+
+        <h2>Lo que el banco realmente podría usar</h2>
+        <p>F1 era la métrica de la competencia, no la del banco. Un equipo de marketing tiene presupuesto para cierto número de llamadas, y la pregunta útil es: si solo podemos contactar a algunos clientes, ¿a cuáles? Ordenar a los clientes por la probabilidad de la mezcla ponderada lo responde:</p>
+        <div class="table-wrap">
+          <table>
+            <thead><tr><th>Clientes contactados (los primeros)</th><th>Tasa de respuesta</th><th>Respondedores encontrados</th><th>Lift frente al azar</th></tr></thead>
+            <tbody>
+              <tr><td>10%</td><td>75.1%</td><td>15.0%</td><td>1.50×</td></tr>
+              <tr><td>20%</td><td>72.4%</td><td>29.0%</td><td>1.45×</td></tr>
+              <tr><td>30%</td><td>69.3%</td><td>41.6%</td><td>1.39×</td></tr>
+              <tr><td>50%</td><td>63.1%</td><td>63.1%</td><td>1.26×</td></tr>
+            </tbody>
+          </table>
+        </div>
+        <p>Si el banco solo puede llamar al 10% de sus clientes, los elegidos por el modelo responden el 75% de las veces en lugar del 50%. Con ese resultado un equipo de marketing puede planear un presupuesto, y dice mucho más que un F1 de 0.677.</p>
+
+        <h2>Lo que aprendí</h2>
+        <ul>
+          <li><strong>Optimiza para la métrica con la que te califican.</strong> El umbral es parte del modelo. Dejarlo en 0.5 con una métrica F1 nos costó más que cualquier elección de algoritmo.</li>
+          <li><strong>Empieza con una línea base trivial.</strong> "Todos responden" nos habría mostrado en cinco minutos que nuestros F1 eran más débiles de lo que parecían.</li>
+          <li><strong>Mide el ruido antes de celebrar una mejora.</strong> Con ±0.003 entre particiones, muchas de las "mejoras" que probé no eran reales.</li>
+          <li><strong>Ajusta con los datos de entrenamiento y aplica a los datos nuevos.</strong> Escaladores, codificadores y clústeres van dentro del ciclo de validación cruzada.</li>
+          <li><strong>Reporta lo que el negocio puede usar.</strong> Una tabla de lift responde "¿a quién llamamos primero?". Un F1 no.</li>
+          <li><strong>Conserva el original.</strong> Reconstruir junto al notebook antiguo, en lugar de editarlo, mantuvo honestos los puntajes de 2023 y justa la comparación.</li>
+        </ul>
+
+        <h2>Dónde encajan los asistentes de IA</h2>
+        <p>Usé un asistente de programación con IA para revisar el notebook de 2023 y escribir el nuevo pipeline. Fue rápido para leer un notebook largo, detectar patrones sospechosos como las predicciones prestadas y escribir el código repetitivo de la validación cruzada. Las decisiones sobre qué probar, qué contaba como ruido y qué valía la pena reportar fueron mías. Es la misma división del trabajo que describo en <a class="link" href="/es/articulos/de-analista-de-datos-a-ingeniero-de-datos/">De analista de datos a ingeniero de datos</a>.</p>
+
+        <h2>Próximos pasos</h2>
+        <ul>
+          <li>Enviar el nuevo ensamble a Kaggle, si se permiten envíos tardíos, para confirmar la mejora con los datos de prueba reales.</li>
+          <li>Usar las variables de clústeres solo en los modelos lineales, donde ayudaron.</li>
+          <li>Probar target encoding de los indicadores de actividad, ajustado dentro de cada partición.</li>
+        </ul>
+
+        <h2>El proyecto y el código</h2>
+        <dl class="facts-box">
+          <div><dt>Competencia</dt><dd><a class="link" href="https://www.kaggle.com/competitions/target-marketing-for-canadian-bank-2023w-aml1413" target="_blank" rel="noopener">Target Marketing for Canadian Bank</a>, competencia de Kaggle para la clase AML-1413, invierno de 2023, organizada por Ashish Gupta</dd></div>
+          <div><dt>Equipo</dt><dd>Group Theta: Erwin Mongui (autor principal), Dev Makwana, Aparna Manjalavil, Yasar Mansuri, Amarnadh Movva</dd></div>
+          <div><dt>Mejor puntaje en Kaggle (2023)</dt><dd>0.63851 de F1 público, GradientBoostingClassifier con búsqueda en malla</dd></div>
+          <div><dt>Mejor puntaje local (2026)</dt><dd>0.6770 de F1, ensamble por stacking, validación cruzada de 5 particiones (aún sin enviar a Kaggle)</dd></div>
+          <div><dt>Tecnologías</dt><dd>Python, pandas, scikit-learn, LightGBM, XGBoost, CatBoost, Optuna</dd></div>
+          <div><dt>Código</dt><dd><a class="link" href="https://github.com/gelnomo/training-ml-python-marketing" target="_blank" rel="noopener">training-ml-python-marketing en GitHub</a> (en inglés): el notebook original, el pipeline reconstruido y los parámetros ajustados</dd></div>
+        </dl>
+        <div class="author"><svg aria-hidden="true" viewBox="0 0 189 190"><path fill="#0071e3" d="M9.8 184.5C4.8 181.7 2.6 174.6 5.1 169.7C5.7 168.5 10.3 163.3 15.3 158.2L24.5 149.0L15.3 139.8C10.3 134.7 5.7 129.5 5.1 128.3C2.4 123.0 5.3 115.4 10.9 113.1C17.0 110.5 19.5 112.0 33.7 126.3C41.0 133.5 47.4 140.8 48.0 142.3C49.4 146.2 49.3 152.5 47.6 156.3C46.8 158.1 40.4 165.3 33.3 172.3C21.9 183.6 19.9 185.2 16.4 185.6C14.0 185.9 11.5 185.4 9.8 184.5ZM70.7 158.0C65.1 153.6 65.1 144.4 70.7 140.0C73.0 138.2 74.7 138.0 89.6 138.0C107.4 138.0 110.2 138.6 112.6 143.1C115.5 148.8 113.5 156.5 108.5 158.8C106.8 159.6 100.1 160.0 89.6 160.0C74.7 160.0 73.0 159.8 70.7 158.0ZM136.9 158.6C135.4 157.7 133.5 155.4 132.5 153.4C131.1 150.3 131.0 149.1 131.9 145.9C133.5 140.5 137.1 138.0 143.4 138.0C153.7 138.0 160.3 134.0 161.9 126.9C162.3 125.0 162.3 113.4 161.9 101.0C160.7 67.7 157.5 46.5 151.4 32.9L148.7 27.0L145.2 29.0C138.8 32.8 133.0 38.2 129.2 44.0L125.3 49.8L122.4 48.0C109.4 39.8 87.5 39.6 73.2 47.5L69.0 49.9L67.1 46.1C65.0 42.0 54.3 31.6 49.1 28.7L46.0 26.9L43.0 33.2C39.2 41.3 36.3 54.6 34.4 72.4C32.7 89.3 32.7 89.3 28.9 92.5C24.3 96.3 18.8 96.0 14.4 91.6C11.2 88.4 11.0 87.8 11.0 81.2C11.0 63.5 16.4 36.0 22.4 23.5C28.7 10.1 35.8 4.6 46.6 4.6C53.6 4.6 60.0 7.7 70.7 16.2L77.0 21.1L82.5 20.0C89.6 18.5 105.5 18.5 112.5 20.0L117.9 21.1L124.2 16.1C138.1 4.8 148.3 2.1 158.3 6.9C174.9 15.0 184.2 50.4 184.4 107.0C184.5 137.6 184.3 138.6 174.9 148.5C167.2 156.6 160.9 159.4 149.0 159.7C142.0 160.0 138.8 159.6 136.9 158.6ZM64.3 102.5C62.6 101.8 60.4 99.8 59.6 98.1C55.5 90.3 59.6 82.2 68.3 81.3C72.6 80.8 73.2 81.0 76.5 84.3C79.4 87.2 80.0 88.5 80.0 92.2C80.0 97.4 77.9 100.7 73.4 102.6C69.3 104.3 68.4 104.3 64.3 102.5ZM121.3 102.5C117.0 100.7 114.5 96.6 114.6 91.6C114.7 88.4 115.4 87.0 118.4 84.3C120.8 82.1 123.0 81.0 125.0 81.0C137.3 81.0 141.5 97.2 130.6 102.4C126.5 104.3 125.5 104.3 121.3 102.5Z"/></svg><p><b>Erwin Mongui</b>Director de Tecnología en Cedar Planters e ingeniero certificado en Inteligencia Artificial (Lambton College, 2024), en Toronto.</p></div>
+      </div>
+      <aside class="aside"><div class="related"><h4>Relacionado</h4><a href="/es/articulos/seleccion-de-viajeros-rt-pcr-basada-en-datos/">Selección de viajeros para RT-PCR basada en datos</a><a href="/es/articulos/de-analista-de-datos-a-ingeniero-de-datos/">De analista de datos a ingeniero de datos</a><a href="/es/articulos/carreras-en-ia-para-recien-graduados/">Lo que necesitan los recién graduados para una carrera en IA</a></div></aside>
+    </div>
+  </section>
+
+<section class="ps-strip" aria-label="Seguir en Google">
+  <div class="ps-inner">
+    <p>Recibe mis próximos casos y artículos en la Búsqueda de Google.</p>
+    <div class="preferred-source" google-add-preferred-source-btn data-theme="dark" data-lang="es"></div>
+    <noscript><a class="link" href="https://www.google.com/preferences/source?q=erwinmongui.com">Añade erwinmongui.com como fuente preferida en Google</a></noscript>
+  </div>
+</section>
+</main>
+<footer class="foot">
+  <div class="foot-inner">
+    <p class="foot-brand"><svg aria-hidden="true" focusable="false" viewBox="0 0 189 190"><path fill="#81ffd9" d="M9.8 184.5C4.8 181.7 2.6 174.6 5.1 169.7C5.7 168.5 10.3 163.3 15.3 158.2L24.5 149.0L15.3 139.8C10.3 134.7 5.7 129.5 5.1 128.3C2.4 123.0 5.3 115.4 10.9 113.1C17.0 110.5 19.5 112.0 33.7 126.3C41.0 133.5 47.4 140.8 48.0 142.3C49.4 146.2 49.3 152.5 47.6 156.3C46.8 158.1 40.4 165.3 33.3 172.3C21.9 183.6 19.9 185.2 16.4 185.6C14.0 185.9 11.5 185.4 9.8 184.5ZM70.7 158.0C65.1 153.6 65.1 144.4 70.7 140.0C73.0 138.2 74.7 138.0 89.6 138.0C107.4 138.0 110.2 138.6 112.6 143.1C115.5 148.8 113.5 156.5 108.5 158.8C106.8 159.6 100.1 160.0 89.6 160.0C74.7 160.0 73.0 159.8 70.7 158.0ZM136.9 158.6C135.4 157.7 133.5 155.4 132.5 153.4C131.1 150.3 131.0 149.1 131.9 145.9C133.5 140.5 137.1 138.0 143.4 138.0C153.7 138.0 160.3 134.0 161.9 126.9C162.3 125.0 162.3 113.4 161.9 101.0C160.7 67.7 157.5 46.5 151.4 32.9L148.7 27.0L145.2 29.0C138.8 32.8 133.0 38.2 129.2 44.0L125.3 49.8L122.4 48.0C109.4 39.8 87.5 39.6 73.2 47.5L69.0 49.9L67.1 46.1C65.0 42.0 54.3 31.6 49.1 28.7L46.0 26.9L43.0 33.2C39.2 41.3 36.3 54.6 34.4 72.4C32.7 89.3 32.7 89.3 28.9 92.5C24.3 96.3 18.8 96.0 14.4 91.6C11.2 88.4 11.0 87.8 11.0 81.2C11.0 63.5 16.4 36.0 22.4 23.5C28.7 10.1 35.8 4.6 46.6 4.6C53.6 4.6 60.0 7.7 70.7 16.2L77.0 21.1L82.5 20.0C89.6 18.5 105.5 18.5 112.5 20.0L117.9 21.1L124.2 16.1C138.1 4.8 148.3 2.1 158.3 6.9C174.9 15.0 184.2 50.4 184.4 107.0C184.5 137.6 184.3 138.6 174.9 148.5C167.2 156.6 160.9 159.4 149.0 159.7C142.0 160.0 138.8 159.6 136.9 158.6ZM64.3 102.5C62.6 101.8 60.4 99.8 59.6 98.1C55.5 90.3 59.6 82.2 68.3 81.3C72.6 80.8 73.2 81.0 76.5 84.3C79.4 87.2 80.0 88.5 80.0 92.2C80.0 97.4 77.9 100.7 73.4 102.6C69.3 104.3 68.4 104.3 64.3 102.5ZM121.3 102.5C117.0 100.7 114.5 96.6 114.6 91.6C114.7 88.4 115.4 87.0 118.4 84.3C120.8 82.1 123.0 81.0 125.0 81.0C137.3 81.0 141.5 97.2 130.6 102.4C126.5 104.3 125.5 104.3 121.3 102.5Z"/></svg><span>Erwin Mongui, Toronto</span></p>
+    <p class="foot-copy">&copy; 2026 Erwin Mongui. Todos los derechos reservados.</p>
+    <p><a href="/es/#casos">Casos</a> &middot; <a href="/es/articulos/">Artículos</a> &middot; <a href="/about/">Sobre mí</a> &middot; <a href="/writing/bank-marketing-model-threshold-over-model/" lang="en" hreflang="en">English</a> &middot; <a href="https://www.google.com/preferences/source?q=erwinmongui.com" target="_blank" rel="noopener">Añadir como fuente preferida en Google</a> &middot; <a href="https://www.linkedin.com/in/erwin-mongui/" target="_blank" rel="noopener">LinkedIn</a> &middot; <a href="https://medium.com/@erwinmongui" target="_blank" rel="noopener me">Medium</a> &middot; <a href="/es/privacidad/">Privacidad</a><span class="foot-consent-wrap" hidden> &middot; <button type="button" class="foot-consent">Configuración de privacidad</button></span></p>
+  </div>
+</footer>
+<script defer src="/assets/chrome.js"></script>
+</body>
+</html>

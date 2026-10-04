@@ -2,6 +2,13 @@
 
 Notable changes to erwinmongui.com. Each version has a `## vX.Y.Z` heading; pushing a matching tag, or running the Release workflow from the Actions tab with that version, publishes the section as a GitHub release (see `.github/workflows/release.yml`).
 
+## v1.7.0 (2026-10-04)
+
+### Writing
+
+- New article, in English and Spanish: "The threshold mattered more than the model: revisiting a bank marketing classifier" (`/writing/bank-marketing-model-threshold-over-model/`, `/es/articulos/modelo-de-marketing-bancario-umbral-antes-que-modelo/`). It covers the 2023 Kaggle Target Marketing for Canadian Bank project and its 2026 rebuild, with a link to the code in `gelnomo/training-ml-python-marketing`.
+- The homepage's writing section shows the new article first; "Pick the tool your team can support" moves to the full list under `/writing/`.
+
 ## v1.6.0 (2026-09-28)
 
 ### Analytics

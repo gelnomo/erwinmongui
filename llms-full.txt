@@ -503,6 +503,195 @@ From data analyst to data engineerFinding delivery bottlenecks
 
 ---
 
+URL: https://erwinmongui.com/writing/bank-marketing-model-threshold-over-model/
+Published 2026-10-04
+
+Data science · Machine learning
+
+# The threshold mattered more than the model: revisiting a bank marketing classifier.
+
+In 2023, my team competed in a Kaggle in-class competition to predict which customers of a Canadian bank would respond to a deposit campaign. Our best submission scored 0.63851 F1. Three years later I went back to the code, found seven bugs, rebuilt the pipeline and tested new models and ensembles. The biggest gain did not come from a better model. It came from one number nobody had tuned.
+
+In short
+
+Our original models used the default 0.5 probability threshold, but the competition was scored with F1. Lowering the threshold to about 0.35 raised every model from about 0.62 to about 0.676 F1 in cross-validation. Fixing bugs, tuning toward small regularised trees and combining models added a smaller gain. The best local score is now 0.6770 F1, not yet confirmed on Kaggle. The more useful result for the business is the ranking: the model's top 10% of customers responded 75% of the time, against 50% at random. Code: GitHub.
+
+## The problem
+
+Bank "A" wanted to offer existing clients promotional interest rates to attract deposit balances. Contacting every customer is expensive, so the task was to find the customers most likely to respond. The data came from a real international bank, de-identified to protect privacy: credit card balance, products owned, the last nine transactions, external accounts, activity indicators and the rates offered to each customer.
+
+- 63,999: labelled customers from previous campaigns
+
+- 50%: of them responded: the training set is balanced
+
+- F1: the competition metric, on the "responds" class
+
+The competition was AML-1413 (Winter 2023), a Kaggle in-class competition that ran from March 13 to April 17, 2023. We competed as Group Theta: Dev Makwana, Aparna Manjalavil, Yasar Mansuri, Amarnadh Movva and me.
+
+## What we built in 2023
+
+We explored the data, engineered aggregate features (total products, sum of transactions, average competitive rate), added K-Means cluster features chosen with the elbow method, and one-hot encoded the discrete columns. We tested six outlier-removal methods; every one of them lowered the score, so we kept all rows. Then we tuned six model families with grid and randomized search on a 75/25 split.
+
+Model (2023) | Kaggle public F1
+
+GradientBoostingClassifier, grid search | 0.63851
+
+CatBoostClassifier, grid search | 0.62837
+
+RandomForestClassifier, grid search | 0.61824
+
+LogisticRegression, grid search | 0.60135
+
+DecisionTreeClassifier | 0.52702
+
+Boosting won, but every serious model landed between about 0.60 and 0.64. At the time, our conclusion was that the features mattered more than the algorithm.
+
+## Going back: seven bugs
+
+Reading the notebook again in 2026, I found problems that changed how much I trusted our own results:
+
+- Clusters that meant different things. K-Means and the scaler were fitted separately on the training and test sets, so cluster 3 in the test set was not the same group as cluster 3 in training.
+
+- About 600 sparse columns. ActivityIndicator, a count with 611 distinct values, was one-hot encoded. Test values never seen in training were silently set to zero.
+
+- The wrong target for tuning. Models were tuned for ROC AUC or accuracy and used a 0.5 threshold, while the competition scored F1.
+
+- One noisy split. Every score came from a single 75/25 split, and the final model saw only 75% of the data.
+
+- Charts that plotted ranks. The feature-importance function plotted argsort() positions, not importances.
+
+- Borrowed predictions. One logistic regression's metrics were computed from the gradient boosting predictions.
+
+- A dead feature. PreviousCampaignResult is always 0 in the test set.
+
+None of these is unusual in a student project under deadline. Several of them, like fitting a transformation separately on train and test, are just as common in production code. I kept the original notebook unchanged, because its Kaggle scores came from that exact code, and rebuilt the pipeline as a separate, reproducible script.
+
+## The rebuild
+
+The new version fits everything that learns from data, including the K-Means clusters, inside each cross-validation fold. It uses stratified 5-fold cross-validation, tests eight models (from logistic regression to LightGBM, XGBoost and CatBoost), tunes the boosting models with Optuna, and combines them four ways: plain average, rank average, a weighted blend and stacking. Most important, it picks the threshold that maximises F1 on out-of-fold predictions.
+
+Before adding complexity, I measured how much each idea actually helped. The fold-to-fold variation in AUC was about ±0.003, so anything smaller was noise:
+
+Experiment (LightGBM, 5-fold) | ROC AUC | Verdict
+
+Raw columns only | 0.6725 | Baseline
+
++ engineered features | 0.6728 | No real gain
+
++ K-Means cluster features | 0.6722 | No gain, slower
+
+Small trees, strong regularisation | 0.6747 | Helps
+
+Optuna-tuned (40 trials) | 0.6752 | Helps
+
+The feature engineering I was proud of in 2023 added almost nothing for boosting models: the signal was already in the raw columns. The clusters did help logistic regression (+0.005 AUC), just not the trees. And an adversarial validation check, a model trying to tell training rows from test rows, scored 0.498 AUC, so the two sets look alike and cross-validation scores should carry over.
+
+## The finding: tune the threshold first
+
+Here is the part I missed in 2023. The training set is balanced, so predicting that every customer responds gives precision of about 0.50 and recall of 1.0, which is an F1 of about 0.667. That trivial rule beats our best 2023 submission. Our models were not bad at ranking customers; the 0.5 threshold made them too cautious for a metric that rewards recall.
+
+```
+F1 = 2 × precision × recall / (precision + recall)
+
+"everyone responds":  precision ≈ 0.50, recall = 1.0  →  F1 ≈ 0.667
+our 2023 models:      threshold 0.5                   →  F1 ≈ 0.62
+same models:          threshold ≈ 0.35                →  F1 ≈ 0.676
+```
+
+Model (2026, 5-fold CV) | ROC AUC | F1 at 0.5 | F1 at best threshold
+
+Stacking ensemble | 0.6757 | 0.6187 | 0.6770 (0.350)
+
+Weighted blend | 0.6758 | 0.6188 | 0.6768 (0.350)
+
+LightGBM, tuned | 0.6752 | 0.6195 | 0.6768 (0.355)
+
+CatBoost, tuned | 0.6756 | 0.6185 | 0.6765 (0.350)
+
+Logistic regression, tuned | 0.6637 | 0.6143 | 0.6712 (0.360)
+
+Everyone responds | 0.5000 | 0.6665 | –
+
+Compared with the original best model on its own hold-out split (0.6572 F1), the new best is +0.020. Most of that comes from the threshold. The honest limit is just as clear: the best model beats the "everyone responds" rule by only about 0.01 F1. With an AUC of about 0.675, the signal in this data is weak, and the F1-optimal strategy is to contact about 80% of customers.
+
+> Before comparing models, check what a trivial rule scores on your metric. If it beats you, the problem is not the model.
+
+## What the bank could actually use
+
+F1 was the competition's metric, not the bank's. A marketing team has a budget for a certain number of calls, and the useful question is: if we can only contact some customers, which ones? Ranking customers by the weighted blend's probability answers that:
+
+Customers contacted (top) | Response rate | Responders found | Lift vs random
+
+10% | 75.1% | 15.0% | 1.50×
+
+20% | 72.4% | 29.0% | 1.45×
+
+30% | 69.3% | 41.6% | 1.39×
+
+50% | 63.1% | 63.1% | 1.26×
+
+If the bank can call only 10% of its customers, the model's top picks respond 75% of the time instead of 50%. That is a result a marketing team can plan a budget around, and it says much more than an F1 score of 0.677.
+
+## What I learned
+
+- Optimise for the metric you are scored on. The threshold is part of the model. Leaving it at 0.5 under an F1 metric cost us more than any choice of algorithm.
+
+- Start with a trivial baseline. "Everyone responds" would have shown us in five minutes that our F1 scores were weaker than they looked.
+
+- Measure the noise before celebrating a gain. With ±0.003 between folds, many of the "improvements" I tried were not real.
+
+- Fit on training data, apply to new data. Scalers, encoders and clusters belong inside the cross-validation loop.
+
+- Report what the business can act on. A lift table answers "who should we call first?". An F1 score doesn't.
+
+- Keep the original. Rebuilding next to the old notebook, instead of editing it, kept the 2023 scores honest and the comparison fair.
+
+## Where AI assistants fit
+
+I used an AI coding assistant to help review the 2023 notebook and write the new pipeline. It was fast at reading a long notebook, spotting suspicious patterns like the borrowed predictions, and writing cross-validation boilerplate. The decisions about what to test, what counted as noise and what was worth reporting stayed with me. That is the same split of work I describe in From data analyst to data engineer.
+
+## Next steps
+
+- Submit the new ensemble to Kaggle, if late submissions are allowed, to confirm the gain on the real test set.
+
+- Use the cluster features only for the linear models, where they helped.
+
+- Try target encoding of the activity indicators, fitted inside each fold.
+
+## The project and the code
+
+Competition
+
+  Target Marketing for Canadian Bank, Kaggle in-class competition, AML-1413 Winter 2023, hosted by Ashish Gupta
+
+Team
+
+  Group Theta: Erwin Mongui (lead author), Dev Makwana, Aparna Manjalavil, Yasar Mansuri, Amarnadh Movva
+
+Best Kaggle score (2023)
+
+  0.63851 public F1, GradientBoostingClassifier with grid search
+
+Best local score (2026)
+
+  0.6770 F1, stacking ensemble, 5-fold cross-validation (not yet submitted to Kaggle)
+
+Stack
+
+  Python, pandas, scikit-learn, LightGBM, XGBoost, CatBoost, Optuna
+
+Code
+
+  training-ml-python-marketing on GitHub: the original notebook, the rebuilt pipeline and the tuned parameters
+
+Erwin MonguiDirector of Technology at Cedar Planters and Certified AI Engineer (Lambton College, 2024), based in Toronto. More about me
+
+#### Related
+
+Replacing random RT-PCR checks with data-driven traveller selectionFrom data analyst to data engineerWhat new graduates need for a career in AI
+
+---
+
 URL: https://erwinmongui.com/writing/lead-time-cycle-time-bottlenecks/
 Published 2026-09-25
 
