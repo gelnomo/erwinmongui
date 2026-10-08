@@ -265,6 +265,21 @@ LOAD_LATER_JS = """<script>
     }
     if (document.readyState === 'complete') add(); else window.addEventListener('load', add);
   };
+  /* Loads a script once the element matching selector comes within about a
+     screen of the viewport, so a widget near the bottom of the page costs
+     nothing until the visitor scrolls towards it. */
+  window.loadWhenNear = function (selector, src) {
+    function watch() {
+      var el = document.querySelector(selector);
+      if (!el) return;
+      if (!('IntersectionObserver' in window)) { loadLater(src); return; }
+      var io = new IntersectionObserver(function (entries) {
+        if (entries[0].isIntersecting) { io.disconnect(); loadLater(src); }
+      }, {rootMargin: '0px 0px 100% 0px'});
+      io.observe(el);
+    }
+    if (document.readyState === 'loading') document.addEventListener('DOMContentLoaded', watch); else watch();
+  };
 </script>"""
 
 ADSENSE_JS = """<!-- Google AdSense. It also shows the consent message set up in AdSense > Privacy & messaging -->
@@ -311,8 +326,8 @@ def tracking(context_js, ads=False):
 <script defer src="/analytics.js"></script>"""
 
 
-PUBLISHER_JS = """<!-- Google preferred sources button (https://developers.google.com/search/docs/appearance/preferred-sources) -->
-<script>loadLater('https://news.google.com/swg/js/v1/publisher.js');</script>"""
+PUBLISHER_JS = """<!-- Google preferred sources button (https://developers.google.com/search/docs/appearance/preferred-sources), loaded when the visitor scrolls near it -->
+<script>loadWhenNear('[google-add-preferred-source-btn]', 'https://news.google.com/swg/js/v1/publisher.js');</script>"""
 
 
 def feed_link(p):
