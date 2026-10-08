@@ -6,7 +6,7 @@
   <atom:link href="https://erwinmongui.com/feed.xml" rel="self" type="application/rss+xml"/>
   <description>Case studies and articles by Erwin Mongui on platform architecture, data, AI and engineering leadership.</description>
   <language>en</language>
-  <lastBuildDate>Sun, 04 Oct 2026 12:00:00 +0000</lastBuildDate>
+  <lastBuildDate>Thu, 08 Oct 2026 12:00:00 +0000</lastBuildDate>
   <item>
     <title>The threshold mattered more than the model: revisiting a bank marketing classifier</title>
     <link>https://erwinmongui.com/writing/bank-marketing-model-threshold-over-model/</link>
