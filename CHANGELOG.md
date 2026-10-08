@@ -2,6 +2,12 @@
 
 Notable changes to erwinmongui.com. Each version has a `## vX.Y.Z` heading; pushing a matching tag, or running the Release workflow from the Actions tab with that version, publishes the section as a GitHub release (see `.github/workflows/release.yml`).
 
+## v1.10.1 (2026-10-08)
+
+### Performance
+
+- Google's preferred sources button script (`publisher.js`) loads when the visitor scrolls within about a screen of the button (`loadWhenNear()` in the build), instead of right after the page loads. The page no longer creates Google's `serviceiframe` on first load, which removes the cookie issue that cost 4 points in Lighthouse's Best Practices.
+
 ## v1.10.0 (2026-10-08)
 
 ### Performance

@@ -154,6 +154,21 @@
     }
     if (document.readyState === 'complete') add(); else window.addEventListener('load', add);
   };
+  /* Loads a script once the element matching selector comes within about a
+     screen of the viewport, so a widget near the bottom of the page costs
+     nothing until the visitor scrolls towards it. */
+  window.loadWhenNear = function (selector, src) {
+    function watch() {
+      var el = document.querySelector(selector);
+      if (!el) return;
+      if (!('IntersectionObserver' in window)) { loadLater(src); return; }
+      var io = new IntersectionObserver(function (entries) {
+        if (entries[0].isIntersecting) { io.disconnect(); loadLater(src); }
+      }, {rootMargin: '0px 0px 100% 0px'});
+      io.observe(el);
+    }
+    if (document.readyState === 'loading') document.addEventListener('DOMContentLoaded', watch); else watch();
+  };
 </script>
 <!-- Google consent message (AdSense > Privacy & messaging) for pages without ads -->
 <script>loadLater('https://fundingchoicesmessages.google.com/i/pub-1778464975767585?ers=1');</script>
@@ -176,8 +191,8 @@
 <script defer src="/assets/consent.js"></script>
 <!-- Site event tracking (contact clicks, navigation, sections, scroll depth, reading) -->
 <script defer src="/analytics.js"></script>
-<!-- Google preferred sources button (https://developers.google.com/search/docs/appearance/preferred-sources) -->
-<script>loadLater('https://news.google.com/swg/js/v1/publisher.js');</script>
+<!-- Google preferred sources button (https://developers.google.com/search/docs/appearance/preferred-sources), loaded when the visitor scrolls near it -->
+<script>loadWhenNear('[google-add-preferred-source-btn]', 'https://news.google.com/swg/js/v1/publisher.js');</script>
 </head>
 <body class="chrome-sticky">
 <a class="skip" href="#main">Ir al contenido</a>

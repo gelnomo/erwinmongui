@@ -39,7 +39,7 @@ The site is served by GitHub Pages from the default branch of this repository. T
 
 ## Google preferred sources
 
-The contact section shows Google's "Add to Preferred Sources" button. Google's script (`news.google.com/swg/js/v1/publisher.js`, loaded from `<head>` once the page has finished loading) draws it inside the `google-add-preferred-source-btn` element. The button only appears on `erwinmongui.com`, so it stays empty on `localhost`. The footer also has a plain link, `https://www.google.com/preferences/source?q=erwinmongui.com`, that does the same thing without JavaScript. See [Google's guide](https://developers.google.com/search/docs/appearance/preferred-sources).
+The contact section shows Google's "Add to Preferred Sources" button. Google's script (`news.google.com/swg/js/v1/publisher.js`, loaded through `loadWhenNear()` once the visitor scrolls within about a screen of the button, so it costs nothing on first load and its cookie does not show up in Lighthouse) draws it inside the `google-add-preferred-source-btn` element. The button only appears on `erwinmongui.com`, so it stays empty on `localhost`. The footer also has a plain link, `https://www.google.com/preferences/source?q=erwinmongui.com`, that does the same thing without JavaScript. See [Google's guide](https://developers.google.com/search/docs/appearance/preferred-sources).
 
 ## Adding or changing a page
 
