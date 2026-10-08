@@ -40,7 +40,7 @@
   </url>
   <url>
     <loc>https://erwinmongui.com/writing/</loc>
-    <lastmod>2026-10-04</lastmod>
+    <lastmod>2026-10-08</lastmod>
     <xhtml:link rel="alternate" hreflang="en" href="https://erwinmongui.com/writing/"/>
     <xhtml:link rel="alternate" hreflang="es" href="https://erwinmongui.com/es/articulos/"/>
     <xhtml:link rel="alternate" hreflang="x-default" href="https://erwinmongui.com/writing/"/>
@@ -116,6 +116,20 @@
     <xhtml:link rel="alternate" hreflang="x-default" href="https://erwinmongui.com/writing/kijiji-car-ads-visit-prediction-rebuild/"/>
   </url>
   <url>
+    <loc>https://erwinmongui.com/writing/check-before-you-believe-site-speed/</loc>
+    <lastmod>2026-10-08</lastmod>
+    <xhtml:link rel="alternate" hreflang="en" href="https://erwinmongui.com/writing/check-before-you-believe-site-speed/"/>
+    <xhtml:link rel="alternate" hreflang="es" href="https://erwinmongui.com/es/articulos/verifica-antes-de-creer-velocidad-web/"/>
+    <xhtml:link rel="alternate" hreflang="x-default" href="https://erwinmongui.com/writing/check-before-you-believe-site-speed/"/>
+  </url>
+  <url>
+    <loc>https://erwinmongui.com/writing/seo-geo-aeo-best-practices-log/</loc>
+    <lastmod>2026-10-08</lastmod>
+    <xhtml:link rel="alternate" hreflang="en" href="https://erwinmongui.com/writing/seo-geo-aeo-best-practices-log/"/>
+    <xhtml:link rel="alternate" hreflang="es" href="https://erwinmongui.com/es/articulos/registro-buenas-practicas-seo-geo-aeo/"/>
+    <xhtml:link rel="alternate" hreflang="x-default" href="https://erwinmongui.com/writing/seo-geo-aeo-best-practices-log/"/>
+  </url>
+  <url>
     <loc>https://erwinmongui.com/about/</loc>
     <lastmod>2026-09-26</lastmod>
     <image:image>
@@ -153,7 +167,7 @@
   </url>
   <url>
     <loc>https://erwinmongui.com/es/articulos/</loc>
-    <lastmod>2026-10-04</lastmod>
+    <lastmod>2026-10-08</lastmod>
     <xhtml:link rel="alternate" hreflang="en" href="https://erwinmongui.com/writing/"/>
     <xhtml:link rel="alternate" hreflang="es" href="https://erwinmongui.com/es/articulos/"/>
     <xhtml:link rel="alternate" hreflang="x-default" href="https://erwinmongui.com/writing/"/>
@@ -227,6 +241,20 @@
     <xhtml:link rel="alternate" hreflang="en" href="https://erwinmongui.com/writing/kijiji-car-ads-visit-prediction-rebuild/"/>
     <xhtml:link rel="alternate" hreflang="es" href="https://erwinmongui.com/es/articulos/prediccion-de-visitas-en-anuncios-de-kijiji/"/>
     <xhtml:link rel="alternate" hreflang="x-default" href="https://erwinmongui.com/writing/kijiji-car-ads-visit-prediction-rebuild/"/>
+  </url>
+  <url>
+    <loc>https://erwinmongui.com/es/articulos/verifica-antes-de-creer-velocidad-web/</loc>
+    <lastmod>2026-10-08</lastmod>
+    <xhtml:link rel="alternate" hreflang="en" href="https://erwinmongui.com/writing/check-before-you-believe-site-speed/"/>
+    <xhtml:link rel="alternate" hreflang="es" href="https://erwinmongui.com/es/articulos/verifica-antes-de-creer-velocidad-web/"/>
+    <xhtml:link rel="alternate" hreflang="x-default" href="https://erwinmongui.com/writing/check-before-you-believe-site-speed/"/>
+  </url>
+  <url>
+    <loc>https://erwinmongui.com/es/articulos/registro-buenas-practicas-seo-geo-aeo/</loc>
+    <lastmod>2026-10-08</lastmod>
+    <xhtml:link rel="alternate" hreflang="en" href="https://erwinmongui.com/writing/seo-geo-aeo-best-practices-log/"/>
+    <xhtml:link rel="alternate" hreflang="es" href="https://erwinmongui.com/es/articulos/registro-buenas-practicas-seo-geo-aeo/"/>
+    <xhtml:link rel="alternate" hreflang="x-default" href="https://erwinmongui.com/writing/seo-geo-aeo-best-practices-log/"/>
   </url>
   <url>
     <loc>https://erwinmongui.com/privacy/</loc>
