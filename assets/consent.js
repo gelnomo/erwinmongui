@@ -33,11 +33,12 @@
     }
   }
 
-  /* The consent message loads asynchronously; wait up to 10 s for its API. */
+  /* The consent message loads after the page has finished loading; wait up to
+     30 s for its API, enough for a slow mobile connection. */
   function listen(tries) {
     if (typeof win.__tcfapi === 'function') {
       win.__tcfapi('addEventListener', 2, onConsent);
-    } else if (tries < 40) {
+    } else if (tries < 120) {
       setTimeout(function () { listen(tries + 1); }, 250);
     }
   }
