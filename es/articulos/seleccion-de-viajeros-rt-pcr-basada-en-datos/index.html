@@ -173,16 +173,30 @@
   gtag('set', 'ads_data_redaction', true);
 </script>
 <script>
-  window.loadLater = function (src, attrs) {
-    function add() {
+  window.loadLater = (function () {
+    var queue = [], started = false;
+    var events = ['scroll', 'pointerdown', 'keydown', 'touchstart', 'mousemove'];
+    function add(src, attrs) {
       var s = document.createElement('script');
       s.async = true;
       s.src = src;
       for (var k in attrs || {}) s.setAttribute(k, attrs[k]);
       document.head.appendChild(s);
     }
-    if (document.readyState === 'complete') add(); else window.addEventListener('load', add);
-  };
+    function start() {
+      if (started) return;
+      started = true;
+      events.forEach(function (e) { window.removeEventListener(e, start); });
+      queue.forEach(function (item) { add(item[0], item[1]); });
+      queue = null;
+    }
+    events.forEach(function (e) { window.addEventListener(e, start, {passive: true}); });
+    function arm() { setTimeout(start, 4000); }
+    if (document.readyState === 'complete') arm(); else window.addEventListener('load', arm);
+    return function (src, attrs) {
+      if (started) add(src, attrs); else queue.push([src, attrs]);
+    };
+  })();
   /* Loads a script once the element matching selector comes within about a
      screen of the viewport, so a widget near the bottom of the page costs
      nothing until the visitor scrolls towards it. */
@@ -203,8 +217,8 @@
 <script>loadLater('https://fundingchoicesmessages.google.com/i/pub-1778464975767585?ers=1');</script>
 <script>(function() {function signalGooglefcPresent() {if (!window.frames['googlefcPresent']) {if (document.body) {const iframe = document.createElement('iframe'); iframe.style = 'width: 0; height: 0; border: none; z-index: -1000; left: -1000px; top: -1000px;'; iframe.style.display = 'none'; iframe.name = 'googlefcPresent'; document.body.appendChild(iframe);} else {setTimeout(signalGooglefcPresent, 0);}}}signalGooglefcPresent();})();</script>
 <!-- Google tag (gtag.js) -->
-<script async src="https://www.googletagmanager.com/gtag/js?id=G-LKD2WCNDV1"></script>
 <script>
+  loadLater('https://www.googletagmanager.com/gtag/js?id=G-LKD2WCNDV1');
   gtag('js', new Date());
   window.siteContext = {"content_group": "Article", "content_id": "post-rtpcr", "site_language": "es"};
   gtag('config', 'G-LKD2WCNDV1', window.siteContext);
