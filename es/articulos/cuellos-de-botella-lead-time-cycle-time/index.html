@@ -26,7 +26,7 @@
 <meta property="og:image:height" content="630">
 <meta property="og:image:alt" content="Erwin Mongui logo with the words Engineering leader, Director of Technology, Toronto, Canada">
 <meta property="article:published_time" content="2026-09-25">
-<meta property="article:modified_time" content="2026-09-26">
+<meta property="article:modified_time" content="2026-10-08">
 <meta property="article:author" content="https://www.linkedin.com/in/erwin-mongui/">
 <meta name="twitter:card" content="summary_large_image">
 <meta name="twitter:title" content="Encontrar cuellos de botella en la entrega con lead time y cycle time">
@@ -84,7 +84,7 @@
    "inLanguage": "es",
    "image": "https://erwinmongui.com/og-image.png",
    "datePublished": "2026-09-25",
-   "dateModified": "2026-09-26",
+   "dateModified": "2026-10-08",
    "author": [
     {
      "@id": "https://erwinmongui.com/#person"
@@ -235,8 +235,8 @@
     <nav class="crumbs" aria-label="Ruta de navegación"><a href="/es/">Inicio</a><span>/</span><a href="/es/articulos/">Artículos</a><span>/</span><span>Entrega</span></nav>
     <p class="eyebrow">Entrega</p>
     <h1>Encontrar cuellos de botella en la entrega con lead time y cycle time.</h1>
-    <p class="summary">Cuando el trabajo se vuelve lento, la causa casi nunca está donde la gente señala primero. Uso el lead time, el cycle time y algunas métricas de flujo para encontrar exactamente dónde se atascan las historias, confirmo el patrón a lo largo de varios sprints y valido la causa raíz con los ingenieros antes de cambiar algo. Las herramientas de IA hacen el análisis más rápido, y también crean un nuevo cuello de botella que hay que vigilar.</p>
-    <div class="byline"><span>Por Erwin Mongui</span><span>25 de septiembre de 2026</span><span>6 min de lectura</span><a class="link" href="/writing/lead-time-cycle-time-bottlenecks/" hreflang="en" lang="en">Read in English</a></div>
+    <p class="summary">Cuando el trabajo se vuelve lento, la causa casi nunca está donde la gente señala primero. Uso el lead time, el cycle time y algunas métricas de flujo para encontrar exactamente dónde se atascan las historias, confirmo el patrón a lo largo de varios sprints y valido la causa raíz con los ingenieros antes de cambiar algo. Las herramientas de IA hacen el análisis más rápido, y también crean un nuevo cuello de botella que hay que vigilar. En mi propio equipo, se movió de aclarar requisitos a la revisión de código.</p>
+    <div class="byline"><span>Por Erwin Mongui</span><span>Publicado el 25 de septiembre de 2026</span><span>Actualizado el 8 de octubre de 2026</span><span>7 min de lectura</span><a class="link" href="/writing/lead-time-cycle-time-bottlenecks/" hreflang="en" lang="en">Read in English</a></div>
   </header>
   <section class="doc">
     <div class="doc-grid">
@@ -288,6 +288,20 @@
           <li><strong>Soluciones.</strong> Los asistentes de programación con IA ayudan a escribir las pruebas que faltan, y las herramientas de revisión con IA pueden hacer una primera pasada sobre los pull requests, para que los revisores humanos se concentren en el diseño y el riesgo.</li>
         </ul>
         <p>Pero cuando un equipo adopta asistentes de programación con IA, escribir código se vuelve más rápido, y llega más código a revisión y a pruebas al mismo tiempo. El cuello de botella se mueve hacia adelante. Si el cycle time no mejora después de adoptar IA, mira primero las etapas de revisión y pruebas. La solución suele ser pull requests más pequeños, expectativas de revisión claras y mejores pruebas automatizadas, no generar más código.</p>
+
+        <h2>Dónde se movió el cuello de botella en mi equipo</h2>
+        <p>En Cedar Planters tenemos un equipo pequeño y con mucha experiencia. Seguimos trabajando con Scrum, y ahora usamos IA en todo el proceso: Claude, Visual Studio Code y modelos de código abierto. Uno de los cambios más útiles fue en el propio Jira. Usamos IA para llevar a las tareas de Jira los detalles que estaban repartidos entre correos e hilos de Slack, así cada historia tiene todo su contexto y no solo un título de una línea.</p>
+        <div class="table-wrap">
+          <table>
+            <thead><tr><th>Cuándo</th><th>Dónde esperaba más el trabajo</th></tr></thead>
+            <tbody>
+              <tr><td>Antes de la IA</td><td>Aclarando requisitos, y en pruebas</td></tr>
+              <tr><td>Después de la IA</td><td>Revisando pull requests que se habían vuelto mucho más grandes</td></tr>
+            </tbody>
+          </table>
+        </div>
+        <p>Con tareas más completas hubo menos idas y vueltas antes de empezar, y los asistentes hicieron más rápido escribir código. Pero los pull requests crecieron, y los revisores tenían que revisarlo todo de una vez. Ese paso no lo saltamos: mantener a una persona en el proceso es lo que hace seguro publicar código escrito con IA. Así que el tiempo se movió del inicio del proceso a la revisión.</p>
+        <p>Lo notamos por las quejas en las reuniones diarias y en las retrospectivas, un recordatorio de que el equipo suele sentir un cuello de botella antes de que lo muestre un tablero. Seguimos trabajando en ello, ajustando nuestras prácticas ágiles y nuestras herramientas de IA, con el objetivo de unir todo en un solo flujo de trabajo. Si ves el mismo patrón, la fila de revisión en la tabla de arriba es por donde yo empezaría.</p>
 
         <h2>Por qué validar con las personas</h2>
         <p>Los números sin contexto llevan a la solución equivocada. Una etapa de revisión larga puede significar que los revisores están sobrecargados, o que los pull requests son demasiado grandes para revisar, y cada caso necesita un cambio distinto. Preguntar primero mantiene la solución enfocada y conserva la confianza del equipo.</p>

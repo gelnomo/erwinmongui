@@ -26,7 +26,7 @@
 <meta property="og:image:height" content="630">
 <meta property="og:image:alt" content="Erwin Mongui logo with the words Engineering leader, Director of Technology, Toronto, Canada">
 <meta property="article:published_time" content="2026-09-25">
-<meta property="article:modified_time" content="2026-09-25">
+<meta property="article:modified_time" content="2026-10-08">
 <meta property="article:author" content="https://www.linkedin.com/in/erwin-mongui/">
 <meta name="twitter:card" content="summary_large_image">
 <meta name="twitter:title" content="Finding delivery bottlenecks with lead time and cycle time">
@@ -84,7 +84,7 @@
    "inLanguage": "en",
    "image": "https://erwinmongui.com/og-image.png",
    "datePublished": "2026-09-25",
-   "dateModified": "2026-09-25",
+   "dateModified": "2026-10-08",
    "author": [
     {
      "@id": "https://erwinmongui.com/#person"
@@ -235,8 +235,8 @@
     <nav class="crumbs" aria-label="Breadcrumb"><a href="/">Home</a><span>/</span><a href="/writing/">Writing</a><span>/</span><span>Delivery</span></nav>
     <p class="eyebrow">Delivery</p>
     <h1>Finding delivery bottlenecks with lead time and cycle time.</h1>
-    <p class="summary">When work slows down, the cause is rarely where people first point. I use lead time, cycle time and a few flow metrics to find exactly where stories get stuck, check the pattern over several sprints, and confirm the root cause with the engineers before changing anything. AI tools make the analysis faster, and they also create a new bottleneck to watch.</p>
-    <div class="byline"><span>By Erwin Mongui</span><span>September 25, 2026</span><span>6 min read</span><a class="link" href="/es/articulos/cuellos-de-botella-lead-time-cycle-time/" hreflang="es" lang="es">Leer en español</a></div>
+    <p class="summary">When work slows down, the cause is rarely where people first point. I use lead time, cycle time and a few flow metrics to find exactly where stories get stuck, check the pattern over several sprints, and confirm the root cause with the engineers before changing anything. AI tools make the analysis faster, and they also create a new bottleneck to watch. On my own team, it moved from clarifying requirements to code review.</p>
+    <div class="byline"><span>By Erwin Mongui</span><span>First published September 25, 2026</span><span>Updated October 8, 2026</span><span>7 min read</span><a class="link" href="/es/articulos/cuellos-de-botella-lead-time-cycle-time/" hreflang="es" lang="es">Leer en español</a></div>
   </header>
   <section class="doc">
     <div class="doc-grid">
@@ -288,6 +288,20 @@
           <li><strong>Fixes.</strong> AI coding assistants help write the missing tests, and AI review tools can do a first pass on pull requests, so human reviewers focus on design and risk.</li>
         </ul>
         <p>But when a team adopts AI coding assistants, writing code gets faster, and more of it arrives at review and testing at once. The bottleneck moves downstream. If cycle time doesn't improve after adopting AI, look at the review and testing stages first. The fix is usually smaller pull requests, clear review expectations and better automated testing, not more code generation.</p>
+
+        <h2>Where the bottleneck moved on my team</h2>
+        <p>At Cedar Planters we have a small team with a lot of experience. We still work in Scrum, and we now use AI throughout the process: Claude, Visual Studio Code and open-source models. One of the most useful changes was in Jira itself. We use AI to pull the details scattered across emails and Slack threads into the Jira tasks, so each story carries its full context instead of a one-line title.</p>
+        <div class="table-wrap">
+          <table>
+            <thead><tr><th>When</th><th>Where work waited most</th></tr></thead>
+            <tbody>
+              <tr><td>Before AI</td><td>Clarifying requirements, and testing</td></tr>
+              <tr><td>After AI</td><td>Reviewing pull requests that had grown much bigger</td></tr>
+            </tbody>
+          </table>
+        </div>
+        <p>Richer tasks meant less back-and-forth before work could start, and the assistants made writing code faster. But the pull requests grew, and reviewers had to check everything at once. We don't skip that step: keeping a human in the loop is what makes AI-written code safe to ship. So the time moved from the start of the process to the review.</p>
+        <p>We noticed it through complaints in stand-ups and retrospectives, which is a reminder that the team often feels a bottleneck before a dashboard shows it. We are still working on it, adjusting our agile practices and our AI tools, with the goal of bringing everything together into one workflow. If you see the same pattern, the review row in the table above is where I would start.</p>
 
         <h2>Why validate with people</h2>
         <p>Numbers without context lead to the wrong fix. A long review stage might mean reviewers are overloaded, or that pull requests are too big to review, and each needs a different change. Asking first keeps the fix targeted and keeps the team's trust.</p>

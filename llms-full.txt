@@ -979,13 +979,13 @@ Replacing random RT-PCR checks with data-driven traveller selectionFrom data ana
 ---
 
 URL: https://erwinmongui.com/writing/lead-time-cycle-time-bottlenecks/
-Published 2026-09-25
+Published 2026-09-25, updated 2026-10-08
 
 Delivery
 
 # Finding delivery bottlenecks with lead time and cycle time.
 
-When work slows down, the cause is rarely where people first point. I use lead time, cycle time and a few flow metrics to find exactly where stories get stuck, check the pattern over several sprints, and confirm the root cause with the engineers before changing anything. AI tools make the analysis faster, and they also create a new bottleneck to watch.
+When work slows down, the cause is rarely where people first point. I use lead time, cycle time and a few flow metrics to find exactly where stories get stuck, check the pattern over several sprints, and confirm the root cause with the engineers before changing anything. AI tools make the analysis faster, and they also create a new bottleneck to watch. On my own team, it moved from clarifying requirements to code review.
 
 In short
 
@@ -1042,6 +1042,20 @@ AI tools help at both ends of this process:
 - Fixes. AI coding assistants help write the missing tests, and AI review tools can do a first pass on pull requests, so human reviewers focus on design and risk.
 
 But when a team adopts AI coding assistants, writing code gets faster, and more of it arrives at review and testing at once. The bottleneck moves downstream. If cycle time doesn't improve after adopting AI, look at the review and testing stages first. The fix is usually smaller pull requests, clear review expectations and better automated testing, not more code generation.
+
+## Where the bottleneck moved on my team
+
+At Cedar Planters we have a small team with a lot of experience. We still work in Scrum, and we now use AI throughout the process: Claude, Visual Studio Code and open-source models. One of the most useful changes was in Jira itself. We use AI to pull the details scattered across emails and Slack threads into the Jira tasks, so each story carries its full context instead of a one-line title.
+
+When | Where work waited most
+
+Before AI | Clarifying requirements, and testing
+
+After AI | Reviewing pull requests that had grown much bigger
+
+Richer tasks meant less back-and-forth before work could start, and the assistants made writing code faster. But the pull requests grew, and reviewers had to check everything at once. We don't skip that step: keeping a human in the loop is what makes AI-written code safe to ship. So the time moved from the start of the process to the review.
+
+We noticed it through complaints in stand-ups and retrospectives, which is a reminder that the team often feels a bottleneck before a dashboard shows it. We are still working on it, adjusting our agile practices and our AI tools, with the goal of bringing everything together into one workflow. If you see the same pattern, the review row in the table above is where I would start.
 
 ## Why validate with people
 
