@@ -3,6 +3,11 @@
   pages, Spanish pages and the 404 page). The markup is written by
   src/build.py, so change it there and the styles here.
 */
+/* Manrope (SIL Open Font License 1.1), served from this site instead of Google
+   Fonts so the text renders without two extra connections. One variable file
+   covers every weight; latin-ext only downloads for characters outside latin. */
+@font-face{font-family:"Manrope";font-style:normal;font-weight:200 800;font-display:swap;src:url(/assets/fonts/manrope-latin.woff2) format("woff2");unicode-range:U+0000-00FF,U+0131,U+0152-0153,U+02BB-02BC,U+02C6,U+02DA,U+02DC,U+0304,U+0308,U+0329,U+2000-206F,U+20AC,U+2122,U+2191,U+2193,U+2212,U+2215,U+FEFF,U+FFFD}
+@font-face{font-family:"Manrope";font-style:normal;font-weight:200 800;font-display:swap;src:url(/assets/fonts/manrope-latin-ext.woff2) format("woff2");unicode-range:U+0100-02BA,U+02BD-02C5,U+02C7-02CC,U+02CE-02D7,U+02DD-02FF,U+0304,U+0308,U+0329,U+1D00-1DBF,U+1E00-1E9F,U+1EF2-1EFF,U+2020,U+20A0-20AB,U+20AD-20C4,U+2113,U+2C60-2C7F,U+A720-A7FF}
 .nav{
   position:fixed;top:0;left:0;right:0;height:48px;z-index:50;
   background:rgba(22,22,23,.8);
@@ -49,7 +54,7 @@
 .foot{background:#000;color:#a1a1a6;border-top:1px solid rgba(255,255,255,.08);padding:26px 22px 40px;font-size:13px;font-family:"Manrope",-apple-system,BlinkMacSystemFont,"Segoe UI",Helvetica,Arial,sans-serif;line-height:1.5}
 .foot p{margin:0}
 .foot-inner{max-width:1200px;margin:0 auto;display:flex;justify-content:space-between;gap:16px;flex-wrap:wrap}
-.foot-copy{color:#6e6e73}
+.foot-copy{color:#86868b}
 .foot-brand{display:flex;align-items:center;gap:8px}
 .foot-brand svg{width:18px;height:18px}
 .foot a{text-decoration:none;color:#a1a1a6}

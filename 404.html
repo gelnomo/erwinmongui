@@ -13,9 +13,7 @@
 <link rel="icon" type="image/png" sizes="96x96" href="/favicon-96x96.png">
 <link rel="icon" type="image/png" sizes="192x192" href="/favicon-192x192.png">
 <link rel="apple-touch-icon" sizes="180x180" href="/apple-touch-icon.png">
-<link rel="preconnect" href="https://fonts.googleapis.com">
-<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-<link href="https://fonts.googleapis.com/css2?family=Manrope:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+<link rel="preload" href="/assets/fonts/manrope-latin.woff2" as="font" type="font/woff2" crossorigin>
 <link rel="stylesheet" href="/assets/site.css">
 <link rel="stylesheet" href="/assets/chrome.css">
 <!-- Google Consent Mode v2 defaults: denied in the EEA, the UK and Switzerland until the visitor answers the consent message, granted elsewhere -->
@@ -26,8 +24,20 @@
   gtag('consent', 'default', {ad_storage: 'granted', ad_user_data: 'granted', ad_personalization: 'granted', analytics_storage: 'granted'});
   gtag('set', 'ads_data_redaction', true);
 </script>
+<script>
+  window.loadLater = function (src, attrs) {
+    function add() {
+      var s = document.createElement('script');
+      s.async = true;
+      s.src = src;
+      for (var k in attrs || {}) s.setAttribute(k, attrs[k]);
+      document.head.appendChild(s);
+    }
+    if (document.readyState === 'complete') add(); else window.addEventListener('load', add);
+  };
+</script>
 <!-- Google consent message (AdSense > Privacy & messaging) for pages without ads -->
-<script async src="https://fundingchoicesmessages.google.com/i/pub-1778464975767585?ers=1"></script>
+<script>loadLater('https://fundingchoicesmessages.google.com/i/pub-1778464975767585?ers=1');</script>
 <script>(function() {function signalGooglefcPresent() {if (!window.frames['googlefcPresent']) {if (document.body) {const iframe = document.createElement('iframe'); iframe.style = 'width: 0; height: 0; border: none; z-index: -1000; left: -1000px; top: -1000px;'; iframe.style.display = 'none'; iframe.name = 'googlefcPresent'; document.body.appendChild(iframe);} else {setTimeout(signalGooglefcPresent, 0);}}}signalGooglefcPresent();})();</script>
 <!-- Google tag (gtag.js) -->
 <script async src="https://www.googletagmanager.com/gtag/js?id=G-LKD2WCNDV1"></script>
@@ -38,14 +48,11 @@
 </script>
 <!-- Clarity tracking code for https://erwinmongui.com/ -->
 <script>
-    (function(c,l,a,r,i,t,y){
-        c[a]=c[a]||function(){(c[a].q=c[a].q||[]).push(arguments)};
-        t=l.createElement(r);t.async=1;t.src="https://www.clarity.ms/tag/"+i;
-        y=l.getElementsByTagName(r)[0];y.parentNode.insertBefore(t,y);
-    })(window, document, "clarity", "script", "ygo6nehxdb");
+  window.clarity = window.clarity || function(){(window.clarity.q = window.clarity.q || []).push(arguments)};
+  loadLater('https://www.clarity.ms/tag/ygo6nehxdb');
 </script>
 <!-- Ahrefs Web Analytics -->
-<script src="https://analytics.ahrefs.com/analytics.js" data-key="rdCxWS4nTARbSdPhwLuAmg" async></script>
+<script>loadLater('https://analytics.ahrefs.com/analytics.js', {'data-key': 'rdCxWS4nTARbSdPhwLuAmg'});</script>
 <!-- Passes the consent choice to Clarity and shows the footer's privacy settings link -->
 <script defer src="/assets/consent.js"></script>
 <!-- Site event tracking (contact clicks, navigation, sections, scroll depth, reading) -->

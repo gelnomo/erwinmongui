@@ -18,6 +18,7 @@ The site is served by GitHub Pages from the default branch of this repository. T
 | `src/build.py` | Generates the inner pages, `sitemap.xml`, `feed.xml`, `llms.txt` and `llms-full.txt` |
 | `src/llms-intro.md` | The fixed introduction at the top of `llms.txt` and `llms-full.txt` |
 | `assets/site.css` | Shared styles for the inner pages |
+| `assets/fonts/` | The Manrope font (SIL Open Font License 1.1), served from the site instead of Google Fonts. Its `@font-face` rules are in `assets/chrome.css`, and every page preloads `manrope-latin.woff2` |
 | `assets/chrome.css`, `assets/chrome.js` | The header and footer every page shares (styles, and the mobile menu for inner pages). Their markup comes from `site_header()` and `site_footer()` in `src/build.py` |
 | `work/`, `writing/`, `about/`, `es/` | Generated inner pages, including the Spanish case studies (`es/casos/`) and articles (`es/articulos/`). Do not edit by hand |
 | `src/home_es.py` | English → Spanish pairs for the homepage. The build turns `index.html` into `es/index.html` with them, keeping the same design and scroll effects |
@@ -25,7 +26,7 @@ The site is served by GitHub Pages from the default branch of this repository. T
 | `feed.xml`, `es/feed.xml` | RSS feeds of case studies and articles, in English and Spanish (generated) |
 | `llms-full.txt` | Full text of every case study and article for AI assistants (generated) |
 | `analytics.js` | Custom GA4 events. Documented in [ANALYTICS.md](ANALYTICS.md) |
-| `assets/consent.js` | Passes the visitor's answer to Google's consent message on to Microsoft Clarity, and shows the footer's Privacy settings link where the message applies. The consent defaults, AdSense, Google Analytics, Clarity and Ahrefs Web Analytics tags come from `tracking()` in `src/build.py`, which also writes them into `index.html` between the `tracking` markers |
+| `assets/consent.js` | Passes the visitor's answer to Google's consent message on to Microsoft Clarity, and shows the footer's Privacy settings link where the message applies. The consent defaults, AdSense, Google Analytics, Clarity and Ahrefs Web Analytics tags come from `tracking()` in `src/build.py`, which also writes them into `index.html` between the `tracking` markers. Only Google Analytics loads right away: AdSense, the consent message, Clarity, Ahrefs and Google's preferred sources button load through `loadLater()` once the page has finished loading, so they do not slow down the first paint |
 | `privacy/`, `es/privacidad/` | Privacy and cookies page, in English and Spanish (generated from `src/content/privacy.html` and `es-privacy.html`) |
 | `.github/workflows/build.yml` | Runs `src/build.py` on every pull request and commits the regenerated pages to the pull request's branch, so edits made on GitHub need no local build |
 | `ads.txt` | Authorised seller entry for Google AdSense |
@@ -38,7 +39,7 @@ The site is served by GitHub Pages from the default branch of this repository. T
 
 ## Google preferred sources
 
-The contact section shows Google's "Add to Preferred Sources" button. Google's script (`news.google.com/swg/js/v1/publisher.js`, loaded in `<head>`) draws it inside the `google-add-preferred-source-btn` element. The button only appears on `erwinmongui.com`, so it stays empty on `localhost`. The footer also has a plain link, `https://www.google.com/preferences/source?q=erwinmongui.com`, that does the same thing without JavaScript. See [Google's guide](https://developers.google.com/search/docs/appearance/preferred-sources).
+The contact section shows Google's "Add to Preferred Sources" button. Google's script (`news.google.com/swg/js/v1/publisher.js`, loaded from `<head>` once the page has finished loading) draws it inside the `google-add-preferred-source-btn` element. The button only appears on `erwinmongui.com`, so it stays empty on `localhost`. The footer also has a plain link, `https://www.google.com/preferences/source?q=erwinmongui.com`, that does the same thing without JavaScript. See [Google's guide](https://developers.google.com/search/docs/appearance/preferred-sources).
 
 ## Adding or changing a page
 

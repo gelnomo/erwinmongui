@@ -230,16 +230,14 @@ def head(p, by_key):
 <link rel="icon" type="image/png" sizes="192x192" href="/favicon-192x192.png">
 <link rel="apple-touch-icon" sizes="180x180" href="/apple-touch-icon.png">
 <link rel="manifest" href="/site.webmanifest">
-<link rel="preconnect" href="https://fonts.googleapis.com">
-<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-<link href="https://fonts.googleapis.com/css2?family=Manrope:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+{FONT_PRELOAD}
 <link rel="stylesheet" href="/assets/site.css">
 <link rel="stylesheet" href="/assets/chrome.css">
-{PUBLISHER_JS if p["type"] in ("case", "post") else ""}
 <script type="application/ld+json">
 {jsonld(p, by_key)}
 </script>
-{tracking(site_context(p))}"""
+{tracking(site_context(p))}
+{PUBLISHER_JS if p["type"] in ("case", "post") else ""}"""
 
 
 # Visitors in these regions start with every Google storage type denied until they
@@ -248,12 +246,33 @@ CONSENT_REGIONS = ["AT", "BE", "BG", "HR", "CY", "CZ", "DK", "EE", "FI", "FR", "
                    "LV", "LT", "LU", "MT", "NL", "PL", "PT", "RO", "SK", "SI", "ES", "SE", "IS", "LI", "NO",
                    "GB", "CH"]
 
+# The Manrope font is served from /assets/fonts (its @font-face rules are in
+# assets/chrome.css). Preloading it starts the download with the HTML instead of
+# after the stylesheet.
+FONT_PRELOAD = '<link rel="preload" href="/assets/fonts/manrope-latin.woff2" as="font" type="font/woff2" crossorigin>'
+
+# Third-party tags that are not needed to show the page (ads, the consent message,
+# Clarity, Ahrefs, Google's preferred sources button) load once the page has
+# finished loading, so they do not compete with its text, font and styles.
+LOAD_LATER_JS = """<script>
+  window.loadLater = function (src, attrs) {
+    function add() {
+      var s = document.createElement('script');
+      s.async = true;
+      s.src = src;
+      for (var k in attrs || {}) s.setAttribute(k, attrs[k]);
+      document.head.appendChild(s);
+    }
+    if (document.readyState === 'complete') add(); else window.addEventListener('load', add);
+  };
+</script>"""
+
 ADSENSE_JS = """<!-- Google AdSense. It also shows the consent message set up in AdSense > Privacy & messaging -->
-<script async src="https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js?client=ca-pub-1778464975767585" crossorigin="anonymous"></script>"""
+<script>loadLater('https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js?client=ca-pub-1778464975767585', {crossorigin: 'anonymous'});</script>"""
 
 # Google's certified consent message (CMP) for pages without the AdSense tag.
 CMP_JS = """<!-- Google consent message (AdSense > Privacy & messaging) for pages without ads -->
-<script async src="https://fundingchoicesmessages.google.com/i/pub-1778464975767585?ers=1"></script>
+<script>loadLater('https://fundingchoicesmessages.google.com/i/pub-1778464975767585?ers=1');</script>
 <script>(function() {function signalGooglefcPresent() {if (!window.frames['googlefcPresent']) {if (document.body) {const iframe = document.createElement('iframe'); iframe.style = 'width: 0; height: 0; border: none; z-index: -1000; left: -1000px; top: -1000px;'; iframe.style.display = 'none'; iframe.name = 'googlefcPresent'; document.body.appendChild(iframe);} else {setTimeout(signalGooglefcPresent, 0);}}}signalGooglefcPresent();})();</script>"""
 
 
@@ -270,6 +289,7 @@ def tracking(context_js, ads=False):
   gtag('consent', 'default', {{ad_storage: 'granted', ad_user_data: 'granted', ad_personalization: 'granted', analytics_storage: 'granted'}});
   gtag('set', 'ads_data_redaction', true);
 </script>
+{LOAD_LATER_JS}
 {ADSENSE_JS if ads else CMP_JS}
 <!-- Google tag (gtag.js) -->
 <script async src="https://www.googletagmanager.com/gtag/js?id=G-LKD2WCNDV1"></script>
@@ -280,14 +300,11 @@ def tracking(context_js, ads=False):
 </script>
 <!-- Clarity tracking code for https://erwinmongui.com/ -->
 <script>
-    (function(c,l,a,r,i,t,y){{
-        c[a]=c[a]||function(){{(c[a].q=c[a].q||[]).push(arguments)}};
-        t=l.createElement(r);t.async=1;t.src="https://www.clarity.ms/tag/"+i;
-        y=l.getElementsByTagName(r)[0];y.parentNode.insertBefore(t,y);
-    }})(window, document, "clarity", "script", "ygo6nehxdb");
+  window.clarity = window.clarity || function(){{(window.clarity.q = window.clarity.q || []).push(arguments)}};
+  loadLater('https://www.clarity.ms/tag/ygo6nehxdb');
 </script>
 <!-- Ahrefs Web Analytics -->
-<script src="https://analytics.ahrefs.com/analytics.js" data-key="rdCxWS4nTARbSdPhwLuAmg" async></script>
+<script>loadLater('https://analytics.ahrefs.com/analytics.js', {{'data-key': 'rdCxWS4nTARbSdPhwLuAmg'}});</script>
 <!-- Passes the consent choice to Clarity and shows the footer's privacy settings link -->
 <script defer src="/assets/consent.js"></script>
 <!-- Site event tracking (contact clicks, navigation, sections, scroll depth, reading) -->
@@ -295,7 +312,7 @@ def tracking(context_js, ads=False):
 
 
 PUBLISHER_JS = """<!-- Google preferred sources button (https://developers.google.com/search/docs/appearance/preferred-sources) -->
-<script async src="https://news.google.com/swg/js/v1/publisher.js"></script>"""
+<script>loadLater('https://news.google.com/swg/js/v1/publisher.js');</script>"""
 
 
 def feed_link(p):
@@ -499,9 +516,7 @@ def render_404(pages, by_key):
 <link rel="icon" type="image/png" sizes="96x96" href="/favicon-96x96.png">
 <link rel="icon" type="image/png" sizes="192x192" href="/favicon-192x192.png">
 <link rel="apple-touch-icon" sizes="180x180" href="/apple-touch-icon.png">
-<link rel="preconnect" href="https://fonts.googleapis.com">
-<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-<link href="https://fonts.googleapis.com/css2?family=Manrope:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+{FONT_PRELOAD}
 <link rel="stylesheet" href="/assets/site.css">
 <link rel="stylesheet" href="/assets/chrome.css">
 {tracking(NOT_FOUND_CONTEXT)}

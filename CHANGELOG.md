@@ -2,6 +2,20 @@
 
 Notable changes to erwinmongui.com. Each version has a `## vX.Y.Z` heading; pushing a matching tag, or running the Release workflow from the Actions tab with that version, publishes the section as a GitHub release (see `.github/workflows/release.yml`).
 
+## v1.10.0 (2026-10-08)
+
+### Performance
+
+- Manrope is served from `/assets/fonts/` and preloaded, instead of loading from Google Fonts. The page no longer waits for two extra connections and a render-blocking stylesheet before showing text.
+- AdSense, Google's consent message, Clarity, Ahrefs and the preferred sources button load once the page has finished loading (`loadLater()` in `tracking()`), so they no longer compete with the page's own text, font and styles. Google Analytics still loads right away. `assets/consent.js` now waits up to 30 s for the consent message instead of 10 s.
+- The homepage's hero text slides in without starting invisible, so it counts as painted as soon as it appears.
+- The homepage's scroll effects measure the layout before changing styles and run their first pass after the first paint, which removes the forced reflows on load.
+- The scroll cue animates only `transform`, so the browser can run it off the main thread.
+
+### Accessibility
+
+- Text contrast now meets WCAG AA: the About statement's words that have not lit up yet, the homepage's article tags and "All writing" link, and the footer's copyright line.
+
 ## v1.9.0 (2026-10-04)
 
 ### Writing
