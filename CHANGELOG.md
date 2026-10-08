@@ -2,6 +2,12 @@
 
 Notable changes to erwinmongui.com. Each version has a `## vX.Y.Z` heading; pushing a matching tag, or running the Release workflow from the Actions tab with that version, publishes the section as a GitHub release (see `.github/workflows/release.yml`).
 
+## v1.12.0 (2026-10-08)
+
+### Writing
+
+- "Finding delivery bottlenecks with lead time and cycle time" has a new section, in English and Spanish: "Where the bottleneck moved on my team" (`/writing/lead-time-cycle-time-bottlenecks/`, `/es/articulos/cuellos-de-botella-lead-time-cycle-time/`). It describes how, at Cedar Planters, AI tools moved the wait from clarifying requirements and testing to reviewing bigger pull requests, and how the team noticed it in stand-ups and retrospectives. Both versions now show "Updated October 8, 2026".
+
 ## v1.11.0 (2026-10-08)
 
 ### Performance
