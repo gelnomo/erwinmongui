@@ -2,6 +2,14 @@
 
 Notable changes to erwinmongui.com. Each version has a `## vX.Y.Z` heading; pushing a matching tag, or running the Release workflow from the Actions tab with that version, publishes the section as a GitHub release (see `.github/workflows/release.yml`).
 
+## v1.13.0 (2026-10-08)
+
+### Writing
+
+- New article, in English and Spanish: "Check before you believe: what a perfect speed score leaves out" (`/writing/check-before-you-believe-site-speed/`, `/es/articulos/verifica-antes-de-creer-velocidad-web/`). It compares a public headless Shopify demo store with two large real Shopify stores, one headless and one on a theme, over 24 GTmetrix runs under identical conditions (Quebec City, Chrome, iPhone 15/16, LTE), reporting averages and standard deviations. It explains why demos are fast, why one test is not a measurement, five checks before believing a speed claim, and the speed changes made on this site with what each one costs. The stores are not named.
+- New article, in English and Spanish: "Best practices expire: keeping SEO, GEO and AEO current with AI" (`/writing/seo-geo-aeo-best-practices-log/`, `/es/articulos/registro-buenas-practicas-seo-geo-aeo/`). A dated log of changes, a monthly AI-assisted review with a reusable prompt, and a test before every change.
+- The homepage's writing section shows the two new articles first.
+
 ## v1.12.0 (2026-10-08)
 
 ### Writing

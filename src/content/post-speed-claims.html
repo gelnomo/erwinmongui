@@ -1,0 +1,108 @@
+<header class="doc-head stage-dark">
+    <nav class="crumbs" aria-label="Breadcrumb"><a href="/">Home</a><span>/</span><a href="/writing/">Writing</a><span>/</span><span>Performance</span></nav>
+    <p class="eyebrow">Performance · Testing</p>
+    <h1>Check before you believe: what a perfect speed score leaves out.</h1>
+    <p class="summary">Near-perfect speed scores are easy to find on LinkedIn: a demo storefront, a screenshot of PageSpeed in the high 90s, and a promise that switching architecture will make your store fly. Some of those claims are true. Many leave out the part that matters. So instead of believing or dismissing them, I tested the idea: a public headless demo store against two large real stores, 24 runs under identical conditions. Here is what I found, how to test properly, and the speed tricks that work, with what they cost.</p>
+    <div class="byline"><span>By Erwin Mongui</span><span>October 8, 2026</span><span>8 min read</span><a class="link" href="/es/articulos/verifica-antes-de-creer-velocidad-web/" hreflang="es" lang="es">Leer en español</a></div>
+  </header>
+  <section class="doc">
+    <div class="doc-grid">
+      <div class="prose">
+        <div class="inshort"><b>In short</b><p>A demo with mockup products and no tracking will almost always beat a real store, because a real store's weight comes from its pixels, apps, video and scripts. In my tests, a real headless store was no faster than a real theme-based one. And one test is not a measurement: the same page under the same conditions moved by up to 26 points between runs. Repeat every test, report the average and the standard deviation, count what the page loads, and give one person on your team ownership of performance.</p></div>
+
+        <h2>Why demos are fast</h2>
+        <p>Headless storefronts, a fast JavaScript frontend on top of a commerce platform like Shopify, are a real and supported architecture. Demos of them are often genuinely well built. But a demo usually has mockup products, and no analytics, ad pixels, reviews, chat or testing tools. It is not a running business. So the useful question is not "is it fast?" but "fast compared with what?"</p>
+
+        <h2>How I tested: same conditions, six runs each</h2>
+        <p>I used GTmetrix, which lets you fix the test conditions so every run is comparable:</p>
+        <ul>
+          <li><strong>Location:</strong> Quebec City, Canada</li>
+          <li><strong>Browser:</strong> Chrome, simulating an iPhone 15/16</li>
+          <li><strong>Connection:</strong> LTE (15/10 Mbps, 100 ms latency)</li>
+          <li><strong>Runs:</strong> 6 per homepage, on October 8, 2026, interleaved so no site got a "quiet" time slot</li>
+        </ul>
+        <p>I tested three homepages: a public headless Shopify demo store, and two large, well-known brands on Shopify, one with a headless Next.js storefront and one on a Shopify theme. I'm not naming the stores, because the point is the comparison, not the brands, and any store's numbers change from week to week. A third real store timed out twice because it never stopped loading, so I left it out.</p>
+        <p>This is a small test: homepages only, one location, one day. Treat it as an example of how to check a claim, not as a ranking.</p>
+
+        <h2>What I found</h2>
+        <p>Average of 6 runs, ± standard deviation, with the range for the score. Lower is better for every metric except the score.</p>
+        <div class="table-wrap">
+          <table>
+            <thead><tr><th>Homepage (mobile, LTE)</th><th>Headless demo</th><th>Store A (real, headless)</th><th>Store B (real, Shopify theme)</th></tr></thead>
+            <tbody>
+              <tr><td>GTmetrix performance score</td><td>82 ± 6 (72–87)</td><td>39 ± 4 (34–44)</td><td>43 ± 4 (37–47)</td></tr>
+              <tr><td>Largest Contentful Paint</td><td>1.9 ± 0.3 s</td><td>3.6 ± 1.0 s</td><td>3.0 ± 0.7 s</td></tr>
+              <tr><td>Total Blocking Time</td><td>26 ± 42 ms</td><td>5,159 ± 1,987 ms</td><td>2,136 ± 819 ms</td></tr>
+              <tr><td>Cumulative Layout Shift</td><td>0</td><td>0.03</td><td>0.03</td></tr>
+              <tr><td>Fully loaded</td><td>3.1 s</td><td>29.4 s</td><td>26.9 s</td></tr>
+              <tr><td>Requests</td><td>41</td><td>258</td><td>440</td></tr>
+              <tr><td>Page weight</td><td>0.3 MB</td><td>17.7 MB</td><td>7.0 MB</td></tr>
+            </tbody>
+          </table>
+        </div>
+        <p>Two things stand out.</p>
+        <p><strong>1. A demo is not a store.</strong> The demo loads 41 requests and 0.3 MB. The two real stores load 258 and 440 requests, and 7 to 18 MB: analytics, ad pixels, reviews, chat, personalisation, and on Store A's homepage a 7.8 MB video. Most of that doesn't come from the theme, and it doesn't disappear when you change the frontend.</p>
+        <p><strong>2. Headless alone didn't make the real store faster, in my tests.</strong> Store A, on the same architecture as the demo, averaged 39. Store B, on a theme, averaged 43. The difference is smaller than their run-to-run variation. With two stores I can't say what is true everywhere, but here, what decided speed was what each page loaded, not how its frontend was built.</p>
+        <p>Going headless also adds work a demo doesn't show: a frontend to host and maintain, analytics and tracking to rebuild and verify, and apps that plug into the theme to reconnect or replace. None of this makes headless wrong. For some brands it is the right call. It means a demo score is not evidence for your store.</p>
+
+        <h2>One test is not a measurement</h2>
+        <p>Look at the ranges. Under identical conditions:</p>
+        <ul>
+          <li>The demo scored anywhere from 72 to 87.</li>
+          <li>Store A's Largest Contentful Paint went from 2.6 to 5.0 seconds.</li>
+          <li>I ran this website through the same setup six times as well. It scored from 71 to 97, and its Total Blocking Time went from 58 ms to 675 ms between two runs a few minutes apart.</li>
+        </ul>
+        <p>If you test once, you can "prove" almost anything. One run of my site (71) scored worse than one run of the demo (87). Run each six times and you can see that their scores overlap, so neither has shown it is faster on score.</p>
+        <p>Not every number varies the same way. Request counts and page weight barely moved (under 5% variation). Most timings moved by 10% to 35%. Total Blocking Time moved the most, because it depends on what the CPU happens to be doing when scripts arrive. That tells you where to be careful.</p>
+        <p>How to test properly:</p>
+        <ol>
+          <li><strong>Fix the conditions.</strong> Same tool, same location, same device, same connection. GTmetrix lets you set all four. PageSpeed Insights doesn't let you choose, so repeat it more.</li>
+          <li><strong>Run each page at least five times</strong>, interleaving the pages you compare.</li>
+          <li><strong>Report the average and the standard deviation</strong>, not the best run. The average tells you where a page usually lands. The standard deviation tells you how much to trust a single result.</li>
+          <li><strong>Only call it a difference if it is bigger than the noise.</strong> If two pages' ranges overlap, you haven't shown that one is faster.</li>
+          <li><strong>Check real-user data too.</strong> PageSpeed shows what Chrome users actually experienced when a site has enough traffic. Lab tests tell you why. Field data tells you whether it matters.</li>
+        </ol>
+
+        <h2>Five checks before believing any speed claim</h2>
+        <ol>
+          <li><strong>Test the real page, not the screenshot</strong>, and repeat it, as above.</li>
+          <li><strong>Count what it loads.</strong> In Chrome DevTools, open the Network tab and reload. Look at requests, total size and how many domains appear.</li>
+          <li><strong>Look for the tags.</strong> Search the page source for what a real business needs: analytics, ad pixels, reviews, chat, A/B testing. If they're missing, the score measures a page customers will never get.</li>
+          <li><strong>Compare like with like.</strong> A demo against a store with hundreds of requests is not a test of the architecture.</li>
+          <li><strong>Ask what was left out.</strong> A headline score with no conditions, no repeat runs and no real-user data is a starting point, not evidence.</li>
+        </ol>
+
+        <h2>Speed tricks that work, and what they cost</h2>
+        <p>I applied these on this website. Some remove work. One mostly delays it, and that difference matters.</p>
+        <div class="table-wrap">
+          <table>
+            <thead><tr><th>Change</th><th>What it gains</th><th>What it costs</th></tr></thead>
+            <tbody>
+              <tr><td>Self-hosted, preloaded font instead of Google Fonts</td><td>Text appears without waiting for two extra connections</td><td>You update the font files yourself</td></tr>
+              <tr><td>Analytics, ads, consent and heatmap tags load on the first scroll, tap, key press or mouse move, or after 4 seconds</td><td>Nothing from a third party competes with the first paint</td><td>Visitors who leave within about 4 seconds without interacting are not counted in analytics, and see no ads</td></tr>
+              <tr><td>A third-party button loads only when the visitor scrolls near it</td><td>No extra script or cookie on first load</td><td>The button appears a moment later</td></tr>
+              <tr><td>Hero text slides in without starting invisible</td><td>It counts as painted as soon as it appears</td><td>A slightly less dramatic animation</td></tr>
+              <tr><td>Scroll effects measure the layout before changing styles, and animations only use <code>transform</code></td><td>No forced reflows, smoother scrolling</td><td>More careful code to maintain</td></tr>
+              <tr><td>Remove scripts nobody uses</td><td>Less to download and run, for every visitor</td><td>Someone has to ask what each script is for</td></tr>
+            </tbody>
+          </table>
+        </div>
+        <p>The second row deserves honesty. My tags still load, just later. GTmetrix waits long enough to see them, which is why its "fully loaded" time for my site was about 10 seconds while the main content appeared in about 1. It is also the most likely reason my Total Blocking Time jumped in some runs: the tags arrived while the test was still measuring. A test that doesn't wait, or a visitor who leaves in under 4 seconds, never loads them at all.</p>
+        <p>For a personal site, that is an acceptable trade. For a store, it usually isn't. If an ad pixel doesn't fire, the ad platform can't attribute the sale and the campaign looks worse than it is. A/B testing tools usually need to run before the page appears, or visitors see the original version flash before the variant. Delaying them to win a score makes a store look faster and makes every decision based on its data less accurate. Sometimes slower and accurate is the better business decision.</p>
+
+        <h2>No magic pill: give someone the job</h2>
+        <p>The pattern I see is companies waiting for the one change that fixes speed at once: a new platform, a new theme, a plugin. In my tests, two real stores on different architectures landed in about the same place, because both carry the same kind of weight. What works is slower and more reliable: someone who owns the problem, measures properly, changes one thing and measures again.</p>
+        <p>If you have a tech team, make one person the expert in performance, and give them AI to multiply their testing:</p>
+        <ul>
+          <li><strong>Run more tests, faster.</strong> An AI assistant can start repeated runs, collect the results and compute averages and standard deviations. The 24 runs in this article were run and summarised that way.</li>
+          <li><strong>Read the reports for you.</strong> Each report lists the scripts, images and requests that cost the most. An assistant can compare them across runs and pages.</li>
+          <li><strong>Check claims before the team acts on them.</strong> An hour of proper testing beats a month spent on the wrong migration.</li>
+          <li><strong>Keep the judgment human.</strong> AI is fast at measuring and can be confidently wrong. Deciding which trade-off is right for the business stays with the person.</li>
+        </ul>
+        <p>The rules change too: the metrics, how search engines rank pages, and how AI assistants pick which sources to cite. I wrote about how to keep track of those changes with AI in <a class="link" href="/writing/seo-geo-aeo-best-practices-log/">Best practices expire</a>.</p>
+        <p>A specialist who tests a lot will beat a magic pill every time, because they will know what the score is measuring, and how much it moves on its own.</p>
+        <div class="author"><svg aria-hidden="true" viewBox="0 0 189 190"><path fill="#0071e3" d="__MARK__"/></svg><p><b>Erwin Mongui</b>Director of Technology at Cedar Planters and Certified AI Engineer, based in Toronto. <a class="link" href="/about/">More about me</a></p></div>
+      </div>
+      <aside class="aside"><div class="related"><h4>Related</h4><a href="/writing/seo-geo-aeo-best-practices-log/">Best practices expire: keeping SEO, GEO and AEO current with AI</a><a href="/writing/lead-time-cycle-time-bottlenecks/">Finding delivery bottlenecks with lead time and cycle time</a><a href="/writing/choose-tools-your-team-can-support/">Pick the tool your team can support</a></div></aside>
+    </div>
+  </section>

@@ -1,0 +1,73 @@
+<header class="doc-head stage-dark">
+    <nav class="crumbs" aria-label="Ruta de navegación"><a href="/es/">Inicio</a><span>/</span><a href="/es/articulos/">Artículos</a><span>/</span><span>SEO</span></nav>
+    <p class="eyebrow">SEO · IA</p>
+    <h1>Las buenas prácticas caducan: mantener al día el SEO, GEO y AEO con IA.</h1>
+    <p class="summary">Lo que funcionó para los buscadores el año pasado puede no funcionar este año, y todavía se está descubriendo qué hace que un asistente de IA cite tu contenido. La respuesta no es perseguir cada publicación nueva. Es darle a una persona de tu equipo un sistema sencillo: un registro de lo que cambió, una revisión mensual con ayuda de IA y una prueba antes de cada cambio.</p>
+    <div class="byline"><span>Por Erwin Mongui</span><span>8 de octubre de 2026</span><span>4 min de lectura</span><a class="link" href="/writing/seo-geo-aeo-best-practices-log/" hreflang="en" lang="en">Read in English</a></div>
+  </header>
+  <section class="doc">
+    <div class="doc-grid">
+      <div class="prose">
+        <div class="inshort"><b>En resumen</b><p>Lleva un registro con fecha de los cambios en buscadores, motores de respuesta con IA y rendimiento web. Una vez al mes, usa un prompt detallado y reutilizable para preguntarle a un asistente de IA qué cambió, con fuentes oficiales. Trata su respuesta como una lista de cosas por verificar, no por hacer, y prueba cada cambio antes y después.</p></div>
+
+        <h2>Por qué cambia tan rápido</h2>
+        <p>Toda práctica de SEO y rendimiento tiene fecha de caducidad. Las propias métricas cambian: en 2024, Google reemplazó First Input Delay por Interaction to Next Paint como Core Web Vital, y Lighthouse cambia el peso de sus métricas entre versiones. Y la forma en que se encuentra el contenido cambia más rápido que las métricas:</p>
+        <ul>
+          <li><strong>SEO</strong>, optimización para buscadores: posicionarse en los resultados de búsqueda clásicos.</li>
+          <li><strong>GEO</strong>, optimización para motores generativos: que los asistentes de IA que escriben respuestas a partir de muchas fuentes entiendan y citen tu contenido.</li>
+          <li><strong>AEO</strong>, optimización para motores de respuesta: ser la respuesta directa en fragmentos destacados, asistentes de voz y resúmenes de IA.</li>
+        </ul>
+        <p>Se solapan y avanzan a velocidades distintas. En este sitio ya hago cosas que hace unos años no existían o no importaban: un archivo <code>llms.txt</code> que da a los asistentes de IA un resumen limpio de cada artículo, datos estructurados que dicen a los buscadores qué es cada página (un artículo, su autor, su ruta de navegación) e IndexNow, que avisa a Bing y otros buscadores en cuanto una página cambia. Algunas de estas cosas importarán más el año que viene. Otras pueden dejar de importar. No puedo saber cuáles sin verificarlo.</p>
+
+        <h2>Un sistema sencillo</h2>
+        <p>Por eso la persona responsable del rendimiento y el SEO necesita un sistema, no memoria. Uno sencillo funciona:</p>
+        <ol>
+          <li><strong>Un registro.</strong> Una fila por cada cambio en las buenas prácticas: la fecha, la fuente, qué cambió, si afecta a tu sitio, qué hiciste y qué pasó con los números después.</li>
+          <li><strong>Una revisión programada con IA.</strong> Una vez al mes, pide a un asistente de IA que revise qué cambió desde la última entrada, usando primero fuentes oficiales, y que proponga filas nuevas.</li>
+          <li><strong>Una prueba antes de cada cambio.</strong> Nada del registro cambia el sitio hasta haberlo medido, igual que <a class="link" href="/es/articulos/verifica-antes-de-creer-velocidad-web/">pruebo las afirmaciones sobre velocidad</a>: mismas condiciones, pruebas repetidas, antes y después.</li>
+        </ol>
+        <div class="table-wrap">
+          <table>
+            <thead><tr><th>Fecha</th><th>Fuente</th><th>Qué cambió</th><th>¿Nos afecta?</th><th>Acción</th><th>Resultado</th></tr></thead>
+            <tbody>
+              <tr><td>2024-03</td><td>Google Search Central</td><td>INP reemplazó a FID como Core Web Vital</td><td>Sí</td><td>Medir INP en las páginas clave, reducir scripts largos</td><td>Seguirlo en datos de usuarios reales</td></tr>
+              <tr><td>…</td><td>…</td><td>…</td><td>…</td><td>…</td><td>…</td></tr>
+            </tbody>
+          </table>
+        </div>
+
+        <h2>Escribe tu propio prompt</h2>
+        <p>La IA es tan buena como el prompt. Escribe el tuyo, con detalle, y reutilízalo cada mes para que los resultados se puedan comparar. Este es el que yo usaría para empezar:</p>
+<pre><code>Me estás ayudando a mantener al día las prácticas de SEO, GEO
+(optimización para motores generativos) y AEO (optimización para
+motores de respuesta) de mi sitio web.
+
+Mi sitio: [URL]. Plataforma: [Shopify / WordPress / estático / ...].
+Lo que ya hago: [lista: tipos de datos estructurados, llms.txt, sitemap,
+IndexNow, objetivos de Core Web Vitals, configuración de analítica, ...].
+Última revisión: [fecha]. Registro de cambios anteriores: [pega el registro].
+
+1. Enumera los cambios desde mi última revisión en buscadores, motores de
+   respuesta con IA y Core Web Vitals que puedan afectar a un sitio como
+   el mío. Para cada uno, da la fecha y un enlace a la fuente oficial
+   (Google Search Central, web.dev, Chrome, Bing Webmaster, la
+   documentación del propio proveedor de IA). Si no encuentras una fuente
+   oficial, dilo y márcalo como no confirmado.
+2. Separa los cambios confirmados de las opiniones, los rumores y el
+   marketing de proveedores.
+3. Para cada cambio confirmado, dime si aplica a mi sitio y qué tendría
+   que revisar en mis páginas para saberlo.
+4. Propón una prueba para cada cambio: qué medir, cuántas pruebas y qué
+   resultado demostraría que funcionó.
+5. No recomiendes quitar nada que mida ingresos o conversiones sin
+   explicar qué perdería.
+6. Devuelve filas nuevas para mi registro en este formato:
+   Fecha | Fuente | Qué cambió | ¿Nos afecta? | Acción propuesta | Cómo medirlo</code></pre>
+
+        <h2>Dos reglas</h2>
+        <p>Dos reglas mantienen esto honesto. Primero, la respuesta de la IA es una lista de cosas por verificar, no de cosas por hacer: comprueba cada fuente tú mismo, porque los asistentes pueden equivocarse con seguridad sobre qué cambió y cuándo. Segundo, el registro vale más que cualquier respuesta aislada. Al cabo de un año, muestra qué cambios movieron de verdad tus números, y esa historia es lo que permite a la persona experta mantener el sitio arriba mientras los demás persiguen la última publicación.</p>
+        <div class="author"><svg aria-hidden="true" viewBox="0 0 189 190"><path fill="#0071e3" d="__MARK__"/></svg><p><b>Erwin Mongui</b>Director de Tecnología en Cedar Planters e ingeniero certificado en Inteligencia Artificial, en Toronto.</p></div>
+      </div>
+      <aside class="aside"><div class="related"><h4>Relacionado</h4><a href="/es/articulos/verifica-antes-de-creer-velocidad-web/">Verifica antes de creer: lo que una puntuación de velocidad perfecta no muestra</a><a href="/es/articulos/cuellos-de-botella-lead-time-cycle-time/">Encontrar cuellos de botella en la entrega con lead time y cycle time</a><a href="/es/articulos/json-en-aplicaciones-de-ia/">JSON como contrato entre tus sistemas y la IA</a></div></aside>
+    </div>
+  </section>

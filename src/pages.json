@@ -158,6 +158,8 @@
     "description": "Articles by Erwin Mongui on choosing tools, growing engineers, measuring team health, delivery bottlenecks and building with AI, from 18 years of shipping.",
     "headline": "Writing",
     "items": [
+      "post-speed-claims",
+      "post-best-practices-log",
       "post-kadabra",
       "post-kijiji-visits",
       "post-bank-marketing",
@@ -180,7 +182,7 @@
       ]
     ],
     "published": "2026-09-21",
-    "modified": "2026-10-04",
+    "modified": "2026-10-08",
     "alternate": "es-writing"
   },
   {
@@ -573,6 +575,80 @@
     "alternate": "es-post-kijiji-visits"
   },
   {
+    "key": "post-speed-claims",
+    "type": "post",
+    "lang": "en",
+    "url": "/writing/check-before-you-believe-site-speed/",
+    "title": "Check before you believe a speed score | Erwin Mongui",
+    "description": "A headless demo against two real Shopify stores, 24 runs under identical conditions: why demos are fast, why one test misleads, and tricks that work.",
+    "headline": "Check before you believe: what a perfect speed score leaves out",
+    "section": "Performance",
+    "keywords": [
+      "page speed",
+      "Core Web Vitals",
+      "GTmetrix",
+      "Lighthouse",
+      "headless commerce",
+      "Shopify",
+      "standard deviation",
+      "web performance"
+    ],
+    "breadcrumbs": [
+      [
+        "Home",
+        "/"
+      ],
+      [
+        "Writing",
+        "/writing/"
+      ],
+      [
+        "Check before you believe",
+        "/writing/check-before-you-believe-site-speed/"
+      ]
+    ],
+    "published": "2026-10-08",
+    "modified": "2026-10-08",
+    "alternate": "es-post-speed-claims"
+  },
+  {
+    "key": "post-best-practices-log",
+    "type": "post",
+    "lang": "en",
+    "url": "/writing/seo-geo-aeo-best-practices-log/",
+    "title": "Keeping SEO, GEO and AEO current with AI | Erwin Mongui",
+    "description": "SEO, GEO and AEO practices expire. A simple system: a dated log, a monthly AI-assisted review with a reusable prompt, and a test before every change.",
+    "headline": "Best practices expire: keeping SEO, GEO and AEO current with AI",
+    "section": "SEO",
+    "keywords": [
+      "SEO",
+      "GEO",
+      "AEO",
+      "generative engine optimization",
+      "answer engine optimization",
+      "llms.txt",
+      "Core Web Vitals",
+      "AI prompt"
+    ],
+    "breadcrumbs": [
+      [
+        "Home",
+        "/"
+      ],
+      [
+        "Writing",
+        "/writing/"
+      ],
+      [
+        "Best practices expire",
+        "/writing/seo-geo-aeo-best-practices-log/"
+      ]
+    ],
+    "published": "2026-10-08",
+    "modified": "2026-10-08",
+    "alternate": "es-post-best-practices-log"
+  },
+  {
     "key": "about",
     "type": "about",
     "lang": "en",
@@ -744,6 +820,8 @@
     "description": "Artículos de Erwin Mongui sobre cómo elegir herramientas, formar ingenieros, medir la salud de los equipos, cuellos de botella y construir con IA.",
     "headline": "Artículos",
     "items": [
+      "es-post-speed-claims",
+      "es-post-best-practices-log",
       "es-post-kadabra",
       "es-post-kijiji-visits",
       "es-post-bank-marketing",
@@ -767,7 +845,7 @@
       ]
     ],
     "published": "2026-09-26",
-    "modified": "2026-10-04"
+    "modified": "2026-10-08"
   },
   {
     "key": "es-post-tools",
@@ -1150,6 +1228,80 @@
     ],
     "published": "2026-10-04",
     "modified": "2026-10-04"
+  },
+  {
+    "key": "es-post-speed-claims",
+    "type": "post",
+    "lang": "es",
+    "url": "/es/articulos/verifica-antes-de-creer-velocidad-web/",
+    "title": "Verifica antes de creer una puntuación de velocidad | Erwin Mongui",
+    "description": "Una demo headless frente a dos tiendas Shopify reales, 24 pruebas iguales: por qué las demos son rápidas, por qué una prueba engaña y trucos que sirven.",
+    "headline": "Verifica antes de creer: lo que una puntuación de velocidad perfecta no muestra",
+    "section": "Rendimiento",
+    "keywords": [
+      "velocidad web",
+      "Core Web Vitals",
+      "GTmetrix",
+      "Lighthouse",
+      "comercio headless",
+      "Shopify",
+      "desviación estándar",
+      "rendimiento web"
+    ],
+    "alternate": "post-speed-claims",
+    "breadcrumbs": [
+      [
+        "Inicio",
+        "/es/"
+      ],
+      [
+        "Artículos",
+        "/es/articulos/"
+      ],
+      [
+        "Verifica antes de creer",
+        "/es/articulos/verifica-antes-de-creer-velocidad-web/"
+      ]
+    ],
+    "published": "2026-10-08",
+    "modified": "2026-10-08"
+  },
+  {
+    "key": "es-post-best-practices-log",
+    "type": "post",
+    "lang": "es",
+    "url": "/es/articulos/registro-buenas-practicas-seo-geo-aeo/",
+    "title": "Mantener al día el SEO, GEO y AEO con IA | Erwin Mongui",
+    "description": "Las prácticas de SEO, GEO y AEO caducan. Un sistema sencillo: un registro con fecha, una revisión mensual con IA y un prompt reutilizable, y pruebas.",
+    "headline": "Las buenas prácticas caducan: mantener al día el SEO, GEO y AEO con IA",
+    "section": "SEO",
+    "keywords": [
+      "SEO",
+      "GEO",
+      "AEO",
+      "optimización para motores generativos",
+      "optimización para motores de respuesta",
+      "llms.txt",
+      "Core Web Vitals",
+      "prompt de IA"
+    ],
+    "alternate": "post-best-practices-log",
+    "breadcrumbs": [
+      [
+        "Inicio",
+        "/es/"
+      ],
+      [
+        "Artículos",
+        "/es/articulos/"
+      ],
+      [
+        "Las buenas prácticas caducan",
+        "/es/articulos/registro-buenas-practicas-seo-geo-aeo/"
+      ]
+    ],
+    "published": "2026-10-08",
+    "modified": "2026-10-08"
   },
   {
     "key": "privacy",

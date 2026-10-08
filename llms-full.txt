@@ -503,6 +503,235 @@ From data analyst to data engineerFinding delivery bottlenecks
 
 ---
 
+URL: https://erwinmongui.com/writing/check-before-you-believe-site-speed/
+Published 2026-10-08
+
+Performance · Testing
+
+# Check before you believe: what a perfect speed score leaves out.
+
+Near-perfect speed scores are easy to find on LinkedIn: a demo storefront, a screenshot of PageSpeed in the high 90s, and a promise that switching architecture will make your store fly. Some of those claims are true. Many leave out the part that matters. So instead of believing or dismissing them, I tested the idea: a public headless demo store against two large real stores, 24 runs under identical conditions. Here is what I found, how to test properly, and the speed tricks that work, with what they cost.
+
+In short
+
+A demo with mockup products and no tracking will almost always beat a real store, because a real store's weight comes from its pixels, apps, video and scripts. In my tests, a real headless store was no faster than a real theme-based one. And one test is not a measurement: the same page under the same conditions moved by up to 26 points between runs. Repeat every test, report the average and the standard deviation, count what the page loads, and give one person on your team ownership of performance.
+
+## Why demos are fast
+
+Headless storefronts, a fast JavaScript frontend on top of a commerce platform like Shopify, are a real and supported architecture. Demos of them are often genuinely well built. But a demo usually has mockup products, and no analytics, ad pixels, reviews, chat or testing tools. It is not a running business. So the useful question is not "is it fast?" but "fast compared with what?"
+
+## How I tested: same conditions, six runs each
+
+I used GTmetrix, which lets you fix the test conditions so every run is comparable:
+
+- Location: Quebec City, Canada
+
+- Browser: Chrome, simulating an iPhone 15/16
+
+- Connection: LTE (15/10 Mbps, 100 ms latency)
+
+- Runs: 6 per homepage, on October 8, 2026, interleaved so no site got a "quiet" time slot
+
+I tested three homepages: a public headless Shopify demo store, and two large, well-known brands on Shopify, one with a headless Next.js storefront and one on a Shopify theme. I'm not naming the stores, because the point is the comparison, not the brands, and any store's numbers change from week to week. A third real store timed out twice because it never stopped loading, so I left it out.
+
+This is a small test: homepages only, one location, one day. Treat it as an example of how to check a claim, not as a ranking.
+
+## What I found
+
+Average of 6 runs, ± standard deviation, with the range for the score. Lower is better for every metric except the score.
+
+Homepage (mobile, LTE) | Headless demo | Store A (real, headless) | Store B (real, Shopify theme)
+
+GTmetrix performance score | 82 ± 6 (72–87) | 39 ± 4 (34–44) | 43 ± 4 (37–47)
+
+Largest Contentful Paint | 1.9 ± 0.3 s | 3.6 ± 1.0 s | 3.0 ± 0.7 s
+
+Total Blocking Time | 26 ± 42 ms | 5,159 ± 1,987 ms | 2,136 ± 819 ms
+
+Cumulative Layout Shift | 0 | 0.03 | 0.03
+
+Fully loaded | 3.1 s | 29.4 s | 26.9 s
+
+Requests | 41 | 258 | 440
+
+Page weight | 0.3 MB | 17.7 MB | 7.0 MB
+
+Two things stand out.
+
+1. A demo is not a store. The demo loads 41 requests and 0.3 MB. The two real stores load 258 and 440 requests, and 7 to 18 MB: analytics, ad pixels, reviews, chat, personalisation, and on Store A's homepage a 7.8 MB video. Most of that doesn't come from the theme, and it doesn't disappear when you change the frontend.
+
+2. Headless alone didn't make the real store faster, in my tests. Store A, on the same architecture as the demo, averaged 39. Store B, on a theme, averaged 43. The difference is smaller than their run-to-run variation. With two stores I can't say what is true everywhere, but here, what decided speed was what each page loaded, not how its frontend was built.
+
+Going headless also adds work a demo doesn't show: a frontend to host and maintain, analytics and tracking to rebuild and verify, and apps that plug into the theme to reconnect or replace. None of this makes headless wrong. For some brands it is the right call. It means a demo score is not evidence for your store.
+
+## One test is not a measurement
+
+Look at the ranges. Under identical conditions:
+
+- The demo scored anywhere from 72 to 87.
+
+- Store A's Largest Contentful Paint went from 2.6 to 5.0 seconds.
+
+- I ran this website through the same setup six times as well. It scored from 71 to 97, and its Total Blocking Time went from 58 ms to 675 ms between two runs a few minutes apart.
+
+If you test once, you can "prove" almost anything. One run of my site (71) scored worse than one run of the demo (87). Run each six times and you can see that their scores overlap, so neither has shown it is faster on score.
+
+Not every number varies the same way. Request counts and page weight barely moved (under 5% variation). Most timings moved by 10% to 35%. Total Blocking Time moved the most, because it depends on what the CPU happens to be doing when scripts arrive. That tells you where to be careful.
+
+How to test properly:
+
+- Fix the conditions. Same tool, same location, same device, same connection. GTmetrix lets you set all four. PageSpeed Insights doesn't let you choose, so repeat it more.
+
+- Run each page at least five times, interleaving the pages you compare.
+
+- Report the average and the standard deviation, not the best run. The average tells you where a page usually lands. The standard deviation tells you how much to trust a single result.
+
+- Only call it a difference if it is bigger than the noise. If two pages' ranges overlap, you haven't shown that one is faster.
+
+- Check real-user data too. PageSpeed shows what Chrome users actually experienced when a site has enough traffic. Lab tests tell you why. Field data tells you whether it matters.
+
+## Five checks before believing any speed claim
+
+- Test the real page, not the screenshot, and repeat it, as above.
+
+- Count what it loads. In Chrome DevTools, open the Network tab and reload. Look at requests, total size and how many domains appear.
+
+- Look for the tags. Search the page source for what a real business needs: analytics, ad pixels, reviews, chat, A/B testing. If they're missing, the score measures a page customers will never get.
+
+- Compare like with like. A demo against a store with hundreds of requests is not a test of the architecture.
+
+- Ask what was left out. A headline score with no conditions, no repeat runs and no real-user data is a starting point, not evidence.
+
+## Speed tricks that work, and what they cost
+
+I applied these on this website. Some remove work. One mostly delays it, and that difference matters.
+
+Change | What it gains | What it costs
+
+Self-hosted, preloaded font instead of Google Fonts | Text appears without waiting for two extra connections | You update the font files yourself
+
+Analytics, ads, consent and heatmap tags load on the first scroll, tap, key press or mouse move, or after 4 seconds | Nothing from a third party competes with the first paint | Visitors who leave within about 4 seconds without interacting are not counted in analytics, and see no ads
+
+A third-party button loads only when the visitor scrolls near it | No extra script or cookie on first load | The button appears a moment later
+
+Hero text slides in without starting invisible | It counts as painted as soon as it appears | A slightly less dramatic animation
+
+Scroll effects measure the layout before changing styles, and animations only use transform | No forced reflows, smoother scrolling | More careful code to maintain
+
+Remove scripts nobody uses | Less to download and run, for every visitor | Someone has to ask what each script is for
+
+The second row deserves honesty. My tags still load, just later. GTmetrix waits long enough to see them, which is why its "fully loaded" time for my site was about 10 seconds while the main content appeared in about 1. It is also the most likely reason my Total Blocking Time jumped in some runs: the tags arrived while the test was still measuring. A test that doesn't wait, or a visitor who leaves in under 4 seconds, never loads them at all.
+
+For a personal site, that is an acceptable trade. For a store, it usually isn't. If an ad pixel doesn't fire, the ad platform can't attribute the sale and the campaign looks worse than it is. A/B testing tools usually need to run before the page appears, or visitors see the original version flash before the variant. Delaying them to win a score makes a store look faster and makes every decision based on its data less accurate. Sometimes slower and accurate is the better business decision.
+
+## No magic pill: give someone the job
+
+The pattern I see is companies waiting for the one change that fixes speed at once: a new platform, a new theme, a plugin. In my tests, two real stores on different architectures landed in about the same place, because both carry the same kind of weight. What works is slower and more reliable: someone who owns the problem, measures properly, changes one thing and measures again.
+
+If you have a tech team, make one person the expert in performance, and give them AI to multiply their testing:
+
+- Run more tests, faster. An AI assistant can start repeated runs, collect the results and compute averages and standard deviations. The 24 runs in this article were run and summarised that way.
+
+- Read the reports for you. Each report lists the scripts, images and requests that cost the most. An assistant can compare them across runs and pages.
+
+- Check claims before the team acts on them. An hour of proper testing beats a month spent on the wrong migration.
+
+- Keep the judgment human. AI is fast at measuring and can be confidently wrong. Deciding which trade-off is right for the business stays with the person.
+
+The rules change too: the metrics, how search engines rank pages, and how AI assistants pick which sources to cite. I wrote about how to keep track of those changes with AI in Best practices expire.
+
+A specialist who tests a lot will beat a magic pill every time, because they will know what the score is measuring, and how much it moves on its own.
+
+Erwin MonguiDirector of Technology at Cedar Planters and Certified AI Engineer, based in Toronto. More about me
+
+#### Related
+
+Best practices expire: keeping SEO, GEO and AEO current with AIFinding delivery bottlenecks with lead time and cycle timePick the tool your team can support
+
+---
+
+URL: https://erwinmongui.com/writing/seo-geo-aeo-best-practices-log/
+Published 2026-10-08
+
+SEO · AI
+
+# Best practices expire: keeping SEO, GEO and AEO current with AI.
+
+What worked for search last year may not work this year, and what gets your content cited by an AI assistant is still being figured out. The answer isn't to chase every new post. It's to give one person on your team a simple system: a log of what changed, a monthly AI-assisted review, and a test before every change.
+
+In short
+
+Keep a dated log of changes in search, AI answer engines and web performance. Once a month, use a detailed, reusable prompt to ask an AI assistant what changed, with official sources. Treat its answer as a list of things to check, not to do, and test every change before and after.
+
+## Why it changes so fast
+
+Every SEO and performance practice has a shelf life. The metrics themselves change: in 2024, Google replaced First Input Delay with Interaction to Next Paint as a Core Web Vital, and Lighthouse changes how it weighs its metrics between versions. And the way content gets found is changing faster than the metrics:
+
+- SEO, search engine optimisation: ranking in classic search results.
+
+- GEO, generative engine optimisation: being understood and cited by AI assistants that write answers from many sources.
+
+- AEO, answer engine optimisation: being the direct answer in featured snippets, voice assistants and AI overviews.
+
+They overlap, and they move at different speeds. On this site I already do things that didn't exist, or didn't matter, a few years ago: an llms.txt file that gives AI assistants a clean summary of every article, structured data that tells search engines what each page is (an article, its author, its breadcrumbs), and IndexNow, which tells Bing and other search engines the moment a page changes. Some of these will matter more next year. Some may stop mattering. I can't know which without checking.
+
+## A simple system
+
+That is why the person who owns performance and SEO needs a system, not a memory. A simple one works:
+
+- A log. One row per change in best practice: the date, the source, what changed, whether it affects your site, what you did, and what the numbers did afterwards.
+
+- A scheduled check with AI. Once a month, ask an AI assistant to review what has changed since the last entry, using official sources first, and propose new rows.
+
+- A test before every change. Nothing in the log changes the site until it has been measured, the same way I test speed claims: same conditions, repeated runs, before and after.
+
+Date | Source | What changed | Affects us? | Action | Result
+
+2024-03 | Google Search Central | INP replaced FID as a Core Web Vital | Yes | Measure INP on key pages, reduce long scripts | Track in real-user data
+
+… | … | … | … | … | …
+
+## Write your own prompt
+
+The AI is only as good as the prompt. Write your own, in detail, and reuse it every month so the results are comparable. Here is the one I would start from:
+
+```
+You are helping me keep my website's SEO, GEO (generative engine
+optimisation) and AEO (answer engine optimisation) practices up to date.
+
+My site: [URL]. Platform: [Shopify / WordPress / static / ...].
+What I already do: [list: structured data types, llms.txt, sitemap,
+IndexNow, Core Web Vitals targets, analytics setup, ...].
+Last review: [date]. Log of past changes: [paste the log].
+
+1. List changes since my last review in search, AI answer engines and
+   Core Web Vitals that could affect a site like mine. For each one, give
+   the date and a link to the official source (Google Search Central,
+   web.dev, Chrome, Bing Webmaster, the AI provider's own documentation).
+   If you can't find an official source, say so and mark it unconfirmed.
+2. Separate confirmed changes from opinions, rumours and vendor marketing.
+3. For each confirmed change, tell me whether it applies to my site, and
+   what I would need to check on my pages to know.
+4. Propose a test for each change: what to measure, how many runs, and
+   what result would prove it worked.
+5. Don't recommend removing anything that tracks revenue or conversions
+   without explaining what I would lose.
+6. Return new rows for my log in this format:
+   Date | Source | What changed | Affects us? | Proposed action | How to measure
+```
+
+## Two rules
+
+Two rules keep this honest. First, the AI's answer is a list of things to check, not a list of things to do: verify every source yourself, because assistants can be confidently wrong about what changed and when. Second, the log is worth more than any single answer. After a year, it shows which changes actually moved your numbers, and that history is what lets the expert keep the site on top while everyone else is chasing the latest post.
+
+Erwin MonguiDirector of Technology at Cedar Planters and Certified AI Engineer, based in Toronto. More about me
+
+#### Related
+
+Check before you believe: what a perfect speed score leaves outFinding delivery bottlenecks with lead time and cycle timeJSON as the contract between your systems and AI
+
+---
+
 URL: https://erwinmongui.com/writing/kadabra-movie-recognition-bot-review/
 Published 2026-10-04
 

@@ -1,0 +1,70 @@
+<header class="doc-head stage-dark">
+    <nav class="crumbs" aria-label="Breadcrumb"><a href="/">Home</a><span>/</span><a href="/writing/">Writing</a><span>/</span><span>SEO</span></nav>
+    <p class="eyebrow">SEO · AI</p>
+    <h1>Best practices expire: keeping SEO, GEO and AEO current with AI.</h1>
+    <p class="summary">What worked for search last year may not work this year, and what gets your content cited by an AI assistant is still being figured out. The answer isn't to chase every new post. It's to give one person on your team a simple system: a log of what changed, a monthly AI-assisted review, and a test before every change.</p>
+    <div class="byline"><span>By Erwin Mongui</span><span>October 8, 2026</span><span>4 min read</span><a class="link" href="/es/articulos/registro-buenas-practicas-seo-geo-aeo/" hreflang="es" lang="es">Leer en español</a></div>
+  </header>
+  <section class="doc">
+    <div class="doc-grid">
+      <div class="prose">
+        <div class="inshort"><b>In short</b><p>Keep a dated log of changes in search, AI answer engines and web performance. Once a month, use a detailed, reusable prompt to ask an AI assistant what changed, with official sources. Treat its answer as a list of things to check, not to do, and test every change before and after.</p></div>
+
+        <h2>Why it changes so fast</h2>
+        <p>Every SEO and performance practice has a shelf life. The metrics themselves change: in 2024, Google replaced First Input Delay with Interaction to Next Paint as a Core Web Vital, and Lighthouse changes how it weighs its metrics between versions. And the way content gets found is changing faster than the metrics:</p>
+        <ul>
+          <li><strong>SEO</strong>, search engine optimisation: ranking in classic search results.</li>
+          <li><strong>GEO</strong>, generative engine optimisation: being understood and cited by AI assistants that write answers from many sources.</li>
+          <li><strong>AEO</strong>, answer engine optimisation: being the direct answer in featured snippets, voice assistants and AI overviews.</li>
+        </ul>
+        <p>They overlap, and they move at different speeds. On this site I already do things that didn't exist, or didn't matter, a few years ago: an <code>llms.txt</code> file that gives AI assistants a clean summary of every article, structured data that tells search engines what each page is (an article, its author, its breadcrumbs), and IndexNow, which tells Bing and other search engines the moment a page changes. Some of these will matter more next year. Some may stop mattering. I can't know which without checking.</p>
+
+        <h2>A simple system</h2>
+        <p>That is why the person who owns performance and SEO needs a system, not a memory. A simple one works:</p>
+        <ol>
+          <li><strong>A log.</strong> One row per change in best practice: the date, the source, what changed, whether it affects your site, what you did, and what the numbers did afterwards.</li>
+          <li><strong>A scheduled check with AI.</strong> Once a month, ask an AI assistant to review what has changed since the last entry, using official sources first, and propose new rows.</li>
+          <li><strong>A test before every change.</strong> Nothing in the log changes the site until it has been measured, the same way I <a class="link" href="/writing/check-before-you-believe-site-speed/">test speed claims</a>: same conditions, repeated runs, before and after.</li>
+        </ol>
+        <div class="table-wrap">
+          <table>
+            <thead><tr><th>Date</th><th>Source</th><th>What changed</th><th>Affects us?</th><th>Action</th><th>Result</th></tr></thead>
+            <tbody>
+              <tr><td>2024-03</td><td>Google Search Central</td><td>INP replaced FID as a Core Web Vital</td><td>Yes</td><td>Measure INP on key pages, reduce long scripts</td><td>Track in real-user data</td></tr>
+              <tr><td>…</td><td>…</td><td>…</td><td>…</td><td>…</td><td>…</td></tr>
+            </tbody>
+          </table>
+        </div>
+
+        <h2>Write your own prompt</h2>
+        <p>The AI is only as good as the prompt. Write your own, in detail, and reuse it every month so the results are comparable. Here is the one I would start from:</p>
+<pre><code>You are helping me keep my website's SEO, GEO (generative engine
+optimisation) and AEO (answer engine optimisation) practices up to date.
+
+My site: [URL]. Platform: [Shopify / WordPress / static / ...].
+What I already do: [list: structured data types, llms.txt, sitemap,
+IndexNow, Core Web Vitals targets, analytics setup, ...].
+Last review: [date]. Log of past changes: [paste the log].
+
+1. List changes since my last review in search, AI answer engines and
+   Core Web Vitals that could affect a site like mine. For each one, give
+   the date and a link to the official source (Google Search Central,
+   web.dev, Chrome, Bing Webmaster, the AI provider's own documentation).
+   If you can't find an official source, say so and mark it unconfirmed.
+2. Separate confirmed changes from opinions, rumours and vendor marketing.
+3. For each confirmed change, tell me whether it applies to my site, and
+   what I would need to check on my pages to know.
+4. Propose a test for each change: what to measure, how many runs, and
+   what result would prove it worked.
+5. Don't recommend removing anything that tracks revenue or conversions
+   without explaining what I would lose.
+6. Return new rows for my log in this format:
+   Date | Source | What changed | Affects us? | Proposed action | How to measure</code></pre>
+
+        <h2>Two rules</h2>
+        <p>Two rules keep this honest. First, the AI's answer is a list of things to check, not a list of things to do: verify every source yourself, because assistants can be confidently wrong about what changed and when. Second, the log is worth more than any single answer. After a year, it shows which changes actually moved your numbers, and that history is what lets the expert keep the site on top while everyone else is chasing the latest post.</p>
+        <div class="author"><svg aria-hidden="true" viewBox="0 0 189 190"><path fill="#0071e3" d="__MARK__"/></svg><p><b>Erwin Mongui</b>Director of Technology at Cedar Planters and Certified AI Engineer, based in Toronto. <a class="link" href="/about/">More about me</a></p></div>
+      </div>
+      <aside class="aside"><div class="related"><h4>Related</h4><a href="/writing/check-before-you-believe-site-speed/">Check before you believe: what a perfect speed score leaves out</a><a href="/writing/lead-time-cycle-time-bottlenecks/">Finding delivery bottlenecks with lead time and cycle time</a><a href="/writing/ai-applications-json/">JSON as the contract between your systems and AI</a></div></aside>
+    </div>
+  </section>

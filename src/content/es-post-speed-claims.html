@@ -1,0 +1,108 @@
+<header class="doc-head stage-dark">
+    <nav class="crumbs" aria-label="Ruta de navegación"><a href="/es/">Inicio</a><span>/</span><a href="/es/articulos/">Artículos</a><span>/</span><span>Rendimiento</span></nav>
+    <p class="eyebrow">Rendimiento · Pruebas</p>
+    <h1>Verifica antes de creer: lo que una puntuación de velocidad perfecta no muestra.</h1>
+    <p class="summary">En LinkedIn es fácil encontrar puntuaciones de velocidad casi perfectas: una tienda de demostración, una captura de PageSpeed por encima de 95 y la promesa de que cambiar de arquitectura hará volar tu tienda. Algunas de esas afirmaciones son ciertas. Muchas dejan fuera lo que importa. Así que, en lugar de creerlas o descartarlas, puse a prueba la idea: una tienda de demostración headless pública frente a dos grandes tiendas reales, 24 pruebas en condiciones idénticas. Esto es lo que encontré, cómo probar bien y los trucos de velocidad que funcionan, con lo que cuestan.</p>
+    <div class="byline"><span>Por Erwin Mongui</span><span>8 de octubre de 2026</span><span>8 min de lectura</span><a class="link" href="/writing/check-before-you-believe-site-speed/" hreflang="en" lang="en">Read in English</a></div>
+  </header>
+  <section class="doc">
+    <div class="doc-grid">
+      <div class="prose">
+        <div class="inshort"><b>En resumen</b><p>Una demostración con productos de muestra y sin seguimiento casi siempre le gana a una tienda real, porque el peso de una tienda real viene de sus píxeles, aplicaciones, videos y scripts. En mis pruebas, una tienda headless real no fue más rápida que una basada en un tema. Y una prueba no es una medición: la misma página en las mismas condiciones varió hasta 26 puntos entre pruebas. Repite cada prueba, reporta el promedio y la desviación estándar, cuenta lo que carga la página y dale a una persona de tu equipo la responsabilidad del rendimiento.</p></div>
+
+        <h2>Por qué las demostraciones son rápidas</h2>
+        <p>Las tiendas headless, un frontend rápido en JavaScript sobre una plataforma de comercio como Shopify, son una arquitectura real y con soporte. Sus demostraciones suelen estar bien construidas. Pero una demostración normalmente tiene productos de muestra y no tiene analítica, píxeles de anuncios, reseñas, chat ni herramientas de pruebas. No es un negocio en funcionamiento. Así que la pregunta útil no es "¿es rápida?", sino "¿rápida comparada con qué?"</p>
+
+        <h2>Cómo probé: mismas condiciones, seis pruebas por página</h2>
+        <p>Usé GTmetrix, que permite fijar las condiciones de prueba para que cada ejecución sea comparable:</p>
+        <ul>
+          <li><strong>Ubicación:</strong> Quebec, Canadá</li>
+          <li><strong>Navegador:</strong> Chrome, simulando un iPhone 15/16</li>
+          <li><strong>Conexión:</strong> LTE (15/10 Mbps, 100 ms de latencia)</li>
+          <li><strong>Pruebas:</strong> 6 por página de inicio, el 8 de octubre de 2026, intercaladas para que ningún sitio tuviera un momento "tranquilo"</li>
+        </ul>
+        <p>Probé tres páginas de inicio: una tienda de demostración headless pública en Shopify y dos marcas grandes y conocidas en Shopify, una con un frontend headless en Next.js y otra con un tema de Shopify. No nombro las tiendas, porque lo importante es la comparación, no las marcas, y los números de cualquier tienda cambian de una semana a otra. Una tercera tienda real superó el tiempo límite dos veces porque nunca terminaba de cargar, así que la dejé fuera.</p>
+        <p>Es una prueba pequeña: solo páginas de inicio, una ubicación, un día. Tómala como un ejemplo de cómo verificar una afirmación, no como un ranking.</p>
+
+        <h2>Qué encontré</h2>
+        <p>Promedio de 6 pruebas, ± desviación estándar, con el rango de la puntuación. Menos es mejor en todas las métricas excepto la puntuación.</p>
+        <div class="table-wrap">
+          <table>
+            <thead><tr><th>Página de inicio (móvil, LTE)</th><th>Demostración headless</th><th>Tienda A (real, headless)</th><th>Tienda B (real, tema de Shopify)</th></tr></thead>
+            <tbody>
+              <tr><td>Puntuación de rendimiento de GTmetrix</td><td>82 ± 6 (72–87)</td><td>39 ± 4 (34–44)</td><td>43 ± 4 (37–47)</td></tr>
+              <tr><td>Largest Contentful Paint</td><td>1.9 ± 0.3 s</td><td>3.6 ± 1.0 s</td><td>3.0 ± 0.7 s</td></tr>
+              <tr><td>Total Blocking Time</td><td>26 ± 42 ms</td><td>5,159 ± 1,987 ms</td><td>2,136 ± 819 ms</td></tr>
+              <tr><td>Cumulative Layout Shift</td><td>0</td><td>0.03</td><td>0.03</td></tr>
+              <tr><td>Carga completa</td><td>3.1 s</td><td>29.4 s</td><td>26.9 s</td></tr>
+              <tr><td>Solicitudes</td><td>41</td><td>258</td><td>440</td></tr>
+              <tr><td>Peso de la página</td><td>0.3 MB</td><td>17.7 MB</td><td>7.0 MB</td></tr>
+            </tbody>
+          </table>
+        </div>
+        <p>Destacan dos cosas.</p>
+        <p><strong>1. Una demostración no es una tienda.</strong> La demostración carga 41 solicitudes y 0.3 MB. Las dos tiendas reales cargan 258 y 440 solicitudes, y de 7 a 18 MB: analítica, píxeles de anuncios, reseñas, chat, personalización y, en la página de inicio de la Tienda A, un video de 7.8 MB. Casi nada de eso viene del tema, y no desaparece al cambiar el frontend.</p>
+        <p><strong>2. Ser headless no hizo más rápida a la tienda real, en mis pruebas.</strong> La Tienda A, con la misma arquitectura que la demostración, promedió 39. La Tienda B, con un tema, promedió 43. La diferencia es menor que su variación entre pruebas. Con dos tiendas no puedo decir qué es cierto en general, pero aquí lo que decidió la velocidad fue lo que cargaba cada página, no cómo estaba construido su frontend.</p>
+        <p>Pasar a headless también añade trabajo que una demostración no muestra: un frontend que alojar y mantener, analítica y seguimiento que reconstruir y verificar, y aplicaciones que se conectan al tema y hay que reconectar o reemplazar. Nada de esto hace que headless sea un error. Para algunas marcas es la decisión correcta. Significa que la puntuación de una demostración no es evidencia para tu tienda.</p>
+
+        <h2>Una prueba no es una medición</h2>
+        <p>Mira los rangos. En condiciones idénticas:</p>
+        <ul>
+          <li>La demostración obtuvo entre 72 y 87.</li>
+          <li>El Largest Contentful Paint de la Tienda A fue de 2.6 a 5.0 segundos.</li>
+          <li>También pasé este sitio por la misma configuración seis veces. Obtuvo entre 71 y 97, y su Total Blocking Time pasó de 58 ms a 675 ms entre dos pruebas hechas con pocos minutos de diferencia.</li>
+        </ul>
+        <p>Si pruebas una sola vez, puedes "demostrar" casi cualquier cosa. Una prueba de mi sitio (71) salió peor que una de la demostración (87). Al repetir cada una seis veces se ve que sus puntuaciones se solapan, así que ninguna ha demostrado ser más rápida en puntuación.</p>
+        <p>No todos los números varían igual. El número de solicitudes y el peso de la página casi no cambiaron (menos de 5% de variación). La mayoría de los tiempos variaron entre 10% y 35%. El Total Blocking Time fue el que más varió, porque depende de lo que esté haciendo la CPU cuando llegan los scripts. Eso te dice dónde tener cuidado.</p>
+        <p>Cómo probar bien:</p>
+        <ol>
+          <li><strong>Fija las condiciones.</strong> Misma herramienta, misma ubicación, mismo dispositivo, misma conexión. GTmetrix permite fijar las cuatro. PageSpeed Insights no te deja elegir, así que repítelo más veces.</li>
+          <li><strong>Prueba cada página al menos cinco veces</strong>, intercalando las páginas que comparas.</li>
+          <li><strong>Reporta el promedio y la desviación estándar</strong>, no la mejor prueba. El promedio dice dónde suele quedar una página. La desviación estándar dice cuánto confiar en un resultado aislado.</li>
+          <li><strong>Solo llámalo diferencia si es mayor que el ruido.</strong> Si los rangos de dos páginas se solapan, no has demostrado que una sea más rápida.</li>
+          <li><strong>Revisa también los datos de usuarios reales.</strong> PageSpeed muestra lo que vivieron los usuarios de Chrome cuando un sitio tiene suficiente tráfico. Las pruebas de laboratorio dicen por qué. Los datos de campo dicen si importa.</li>
+        </ol>
+
+        <h2>Cinco comprobaciones antes de creer cualquier afirmación sobre velocidad</h2>
+        <ol>
+          <li><strong>Prueba la página real, no la captura</strong>, y repítela, como arriba.</li>
+          <li><strong>Cuenta lo que carga.</strong> En las DevTools de Chrome, abre la pestaña Network y recarga. Mira las solicitudes, el tamaño total y cuántos dominios aparecen.</li>
+          <li><strong>Busca las etiquetas.</strong> Busca en el código de la página lo que necesita un negocio real: analítica, píxeles de anuncios, reseñas, chat, pruebas A/B. Si faltan, la puntuación mide una página que tus clientes nunca verán.</li>
+          <li><strong>Compara cosas comparables.</strong> Una demostración frente a una tienda con cientos de solicitudes no es una prueba de la arquitectura.</li>
+          <li><strong>Pregunta qué quedó fuera.</strong> Una puntuación sin condiciones, sin pruebas repetidas y sin datos de usuarios reales es un punto de partida, no una evidencia.</li>
+        </ol>
+
+        <h2>Trucos de velocidad que funcionan, y lo que cuestan</h2>
+        <p>Apliqué estos en este sitio. Algunos eliminan trabajo. Uno sobre todo lo retrasa, y esa diferencia importa.</p>
+        <div class="table-wrap">
+          <table>
+            <thead><tr><th>Cambio</th><th>Qué gana</th><th>Qué cuesta</th></tr></thead>
+            <tbody>
+              <tr><td>Fuente alojada en el propio sitio y precargada, en lugar de Google Fonts</td><td>El texto aparece sin esperar dos conexiones extra</td><td>Tú mismo actualizas los archivos de la fuente</td></tr>
+              <tr><td>Las etiquetas de analítica, anuncios, consentimiento y mapas de calor cargan con el primer desplazamiento, toque, tecla o movimiento del ratón, o a los 4 segundos</td><td>Nada de terceros compite con la primera pintura</td><td>Los visitantes que se van en unos 4 segundos sin interactuar no se cuentan en la analítica y no ven anuncios</td></tr>
+              <tr><td>Un botón de terceros carga solo cuando el visitante se acerca a él</td><td>Ningún script ni cookie extra en la primera carga</td><td>El botón aparece un momento después</td></tr>
+              <tr><td>El texto principal entra con una animación sin empezar invisible</td><td>Cuenta como pintado en cuanto aparece</td><td>Una animación un poco menos llamativa</td></tr>
+              <tr><td>Los efectos de desplazamiento miden el diseño antes de cambiar estilos, y las animaciones solo usan <code>transform</code></td><td>Sin recálculos forzados, desplazamiento más fluido</td><td>Código más cuidadoso que mantener</td></tr>
+              <tr><td>Quitar los scripts que nadie usa</td><td>Menos que descargar y ejecutar, para cada visitante</td><td>Alguien tiene que preguntar para qué sirve cada script</td></tr>
+            </tbody>
+          </table>
+        </div>
+        <p>La segunda fila merece honestidad. Mis etiquetas siguen cargando, solo que más tarde. GTmetrix espera lo suficiente para verlas, por eso su tiempo de "carga completa" para mi sitio fue de unos 10 segundos, mientras que el contenido principal apareció en alrededor de 1. Es también la razón más probable de que mi Total Blocking Time subiera en algunas pruebas: las etiquetas llegaron mientras la prueba seguía midiendo. Una prueba que no espera, o un visitante que se va en menos de 4 segundos, nunca las carga.</p>
+        <p>Para un sitio personal, es un intercambio aceptable. Para una tienda, normalmente no. Si un píxel de anuncios no se dispara, la plataforma no puede atribuir la venta y la campaña parece peor de lo que es. Las herramientas de pruebas A/B suelen necesitar ejecutarse antes de que aparezca la página, o los visitantes ven la versión original un instante antes de la variante. Retrasarlas para ganar puntuación hace que la tienda parezca más rápida y que cada decisión basada en sus datos sea menos precisa. A veces, más lento y preciso es la mejor decisión de negocio.</p>
+
+        <h2>No hay píldora mágica: dale el trabajo a alguien</h2>
+        <p>El patrón que veo son empresas esperando el único cambio que arregle la velocidad de una vez: una nueva plataforma, un nuevo tema, un plugin. En mis pruebas, dos tiendas reales con arquitecturas distintas quedaron más o menos en el mismo lugar, porque las dos cargan el mismo tipo de peso. Lo que funciona es más lento y más fiable: alguien que se haga cargo del problema, mida bien, cambie una cosa y vuelva a medir.</p>
+        <p>Si tienes un equipo técnico, haz que una persona sea la experta en rendimiento, y dale IA para multiplicar sus pruebas:</p>
+        <ul>
+          <li><strong>Más pruebas, más rápido.</strong> Un asistente de IA puede lanzar pruebas repetidas, reunir los resultados y calcular promedios y desviaciones estándar. Las 24 pruebas de este artículo se hicieron y resumieron así.</li>
+          <li><strong>Leer los informes por ti.</strong> Cada informe lista los scripts, imágenes y solicitudes que más cuestan. Un asistente puede compararlos entre pruebas y páginas.</li>
+          <li><strong>Verificar las afirmaciones antes de que el equipo actúe.</strong> Una hora de pruebas bien hechas vale más que un mes en la migración equivocada.</li>
+          <li><strong>Mantener el criterio humano.</strong> La IA es rápida midiendo y puede equivocarse con seguridad. Decidir qué intercambio conviene al negocio sigue siendo trabajo de la persona.</li>
+        </ul>
+        <p>Las reglas también cambian: las métricas, cómo los buscadores ordenan las páginas y cómo los asistentes de IA eligen qué fuentes citar. Escribí sobre cómo seguir esos cambios con IA en <a class="link" href="/es/articulos/registro-buenas-practicas-seo-geo-aeo/">Las buenas prácticas caducan</a>.</p>
+        <p>Una persona especialista que prueba mucho le ganará siempre a una píldora mágica, porque sabrá qué mide la puntuación y cuánto se mueve por sí sola.</p>
+        <div class="author"><svg aria-hidden="true" viewBox="0 0 189 190"><path fill="#0071e3" d="__MARK__"/></svg><p><b>Erwin Mongui</b>Director de Tecnología en Cedar Planters e ingeniero certificado en Inteligencia Artificial, en Toronto.</p></div>
+      </div>
+      <aside class="aside"><div class="related"><h4>Relacionado</h4><a href="/es/articulos/registro-buenas-practicas-seo-geo-aeo/">Las buenas prácticas caducan: mantener al día el SEO, GEO y AEO con IA</a><a href="/es/articulos/cuellos-de-botella-lead-time-cycle-time/">Encontrar cuellos de botella en la entrega con lead time y cycle time</a><a href="/es/articulos/elegir-herramientas-que-tu-equipo-pueda-sostener/">Elige la herramienta que tu equipo puede sostener</a></div></aside>
+    </div>
+  </section>

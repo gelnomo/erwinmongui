@@ -8,6 +8,22 @@
   <language>en</language>
   <lastBuildDate>Thu, 08 Oct 2026 12:00:00 +0000</lastBuildDate>
   <item>
+    <title>Check before you believe: what a perfect speed score leaves out</title>
+    <link>https://erwinmongui.com/writing/check-before-you-believe-site-speed/</link>
+    <guid isPermaLink="true">https://erwinmongui.com/writing/check-before-you-believe-site-speed/</guid>
+    <pubDate>Thu, 08 Oct 2026 12:00:00 +0000</pubDate>
+    <category>Performance</category>
+    <description>A headless demo against two real Shopify stores, 24 runs under identical conditions: why demos are fast, why one test misleads, and tricks that work.</description>
+  </item>
+  <item>
+    <title>Best practices expire: keeping SEO, GEO and AEO current with AI</title>
+    <link>https://erwinmongui.com/writing/seo-geo-aeo-best-practices-log/</link>
+    <guid isPermaLink="true">https://erwinmongui.com/writing/seo-geo-aeo-best-practices-log/</guid>
+    <pubDate>Thu, 08 Oct 2026 12:00:00 +0000</pubDate>
+    <category>SEO</category>
+    <description>SEO, GEO and AEO practices expire. A simple system: a dated log, a monthly AI-assisted review with a reusable prompt, and a test before every change.</description>
+  </item>
+  <item>
     <title>The threshold mattered more than the model: revisiting a bank marketing classifier</title>
     <link>https://erwinmongui.com/writing/bank-marketing-model-threshold-over-model/</link>
     <guid isPermaLink="true">https://erwinmongui.com/writing/bank-marketing-model-threshold-over-model/</guid>
