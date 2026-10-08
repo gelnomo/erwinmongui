@@ -2,6 +2,17 @@
 
 Notable changes to erwinmongui.com. Each version has a `## vX.Y.Z` heading; pushing a matching tag, or running the Release workflow from the Actions tab with that version, publishes the section as a GitHub release (see `.github/workflows/release.yml`).
 
+## v1.11.0 (2026-10-08)
+
+### Performance
+
+- Google Analytics, AdSense, the consent message, Microsoft Clarity and Ahrefs now load on the visitor's first scroll, tap, key press or mouse move, or 4 seconds after the page has loaded, whichever comes first. Nothing from a third party is requested while the page first paints. Google Analytics calls made before then are queued and sent when the tag arrives.
+- Removed the preconnect to `www.googletagmanager.com`, which the first paint no longer needs.
+
+### Analytics
+
+- Visitors who leave within about 4 seconds without interacting are no longer counted in Google Analytics, Clarity or Ahrefs, and see no ads.
+
 ## v1.10.1 (2026-10-08)
 
 ### Performance

@@ -2,7 +2,7 @@
 
 erwinmongui.com sends events to Google Analytics 4 property `G-LKD2WCNDV1`.
 
-- The gtag.js snippet is in the `<head>` of every page: `index.html` for the homepage (the Spanish homepage is generated from it), and `src/build.py` for every other page.
+- The gtag.js snippet is in the `<head>` of every page: `index.html` for the homepage (the Spanish homepage is generated from it), and `src/build.py` for every other page. `gtag.js` itself is requested on the visitor's first scroll, tap, key press or mouse move, or 4 seconds after the page has loaded, whichever comes first (`loadLater()` in `src/build.py`). Calls to `gtag()` made before then wait in `dataLayer` and are sent when it arrives. A visitor who leaves within those 4 seconds without interacting is not counted.
 - The snippet defines `window.siteContext` and passes it to `gtag('config')`, so every hit carries three page facts:
   - `content_group`: GA's built-in content group. It is `Home`, `Case study`, `Article`, `Listing` (the case study and writing indexes), `About` or `Not found`.
   - `content_id`: the page, the same in both languages (`case-crm` for the English and Spanish CRM case study, `home` for both homepages).

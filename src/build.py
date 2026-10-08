@@ -251,20 +251,37 @@ CONSENT_REGIONS = ["AT", "BE", "BG", "HR", "CY", "CZ", "DK", "EE", "FI", "FR", "
 # after the stylesheet.
 FONT_PRELOAD = '<link rel="preload" href="/assets/fonts/manrope-latin.woff2" as="font" type="font/woff2" crossorigin>'
 
-# Third-party tags that are not needed to show the page (ads, the consent message,
-# Clarity, Ahrefs, Google's preferred sources button) load once the page has
-# finished loading, so they do not compete with its text, font and styles.
+# Third-party tags are not needed to show the page (Google Analytics, ads, the
+# consent message, Clarity, Ahrefs, Google's preferred sources button), so they
+# wait for the visitor's first scroll, tap, key press or mouse move, or for 4
+# seconds after the page has loaded, whichever comes first. They then load in
+# the order they were requested. gtag() calls made before that are queued in
+# dataLayer and sent when Google's script arrives.
 LOAD_LATER_JS = """<script>
-  window.loadLater = function (src, attrs) {
-    function add() {
+  window.loadLater = (function () {
+    var queue = [], started = false;
+    var events = ['scroll', 'pointerdown', 'keydown', 'touchstart', 'mousemove'];
+    function add(src, attrs) {
       var s = document.createElement('script');
       s.async = true;
       s.src = src;
       for (var k in attrs || {}) s.setAttribute(k, attrs[k]);
       document.head.appendChild(s);
     }
-    if (document.readyState === 'complete') add(); else window.addEventListener('load', add);
-  };
+    function start() {
+      if (started) return;
+      started = true;
+      events.forEach(function (e) { window.removeEventListener(e, start); });
+      queue.forEach(function (item) { add(item[0], item[1]); });
+      queue = null;
+    }
+    events.forEach(function (e) { window.addEventListener(e, start, {passive: true}); });
+    function arm() { setTimeout(start, 4000); }
+    if (document.readyState === 'complete') arm(); else window.addEventListener('load', arm);
+    return function (src, attrs) {
+      if (started) add(src, attrs); else queue.push([src, attrs]);
+    };
+  })();
   /* Loads a script once the element matching selector comes within about a
      screen of the viewport, so a widget near the bottom of the page costs
      nothing until the visitor scrolls towards it. */
@@ -307,8 +324,8 @@ def tracking(context_js, ads=False):
 {LOAD_LATER_JS}
 {ADSENSE_JS if ads else CMP_JS}
 <!-- Google tag (gtag.js) -->
-<script async src="https://www.googletagmanager.com/gtag/js?id=G-LKD2WCNDV1"></script>
 <script>
+  loadLater('https://www.googletagmanager.com/gtag/js?id=G-LKD2WCNDV1');
   gtag('js', new Date());
   window.siteContext = {context_js};
   gtag('config', 'G-LKD2WCNDV1', window.siteContext);
