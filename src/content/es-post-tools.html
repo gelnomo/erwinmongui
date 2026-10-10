@@ -2,13 +2,13 @@
     <nav class="crumbs" aria-label="Ruta de navegación"><a href="/es/">Inicio</a><span>/</span><a href="/es/articulos/">Artículos</a><span>/</span><span>Arquitectura</span></nav>
     <p class="eyebrow">Arquitectura</p>
     <h1>Elige la herramienta que tu equipo puede sostener, no la que encabeza la lista.</h1>
-    <p class="summary">Durante una gran migración de plataforma elegimos Keycloak para el inicio de sesión único. En el papel era una herramienta sólida, pero era nueva para el equipo y estaba construida sobre un stack que no conocíamos, y esa parte del trabajo tomó seis veces más de lo planeado. Esto fue lo que salió mal, la matriz de evaluación que usamos después y cómo los asistentes de IA cambian la decisión hoy.</p>
-    <div class="byline"><span>Por Erwin Mongui</span><span>21 de septiembre de 2026</span><span>7 min de lectura</span><a class="link" href="/writing/choose-tools-your-team-can-support/" hreflang="en" lang="en">Read in English</a></div>
+    <p class="summary">Durante una gran migración de plataforma elegimos Keycloak para el inicio de sesión único. En el papel era una herramienta sólida, pero era nueva para el equipo y estaba construida sobre un stack que no conocíamos, y esa parte del trabajo tomó seis veces más de lo planeado. Esto fue lo que salió mal, la matriz de evaluación que usamos después y cómo la IA cambia la decisión hoy, incluido cuándo construir con IA y cómo elegir las propias herramientas de IA.</p>
+    <div class="byline"><span>Por Erwin Mongui</span><span>Publicado el 21 de septiembre de 2026</span><span>Actualizado el 10 de octubre de 2026</span><span>9 min de lectura</span><a class="link" href="/writing/choose-tools-your-team-can-support/" hreflang="en" lang="en">Read in English</a></div>
   </header>
   <section class="doc">
     <div class="doc-grid">
       <div class="prose">
-        <div class="inshort"><b>En resumen</b><p>Para sistemas críticos como la autenticación, evalúa cada opción según qué tanto la conoce el equipo, su documentación, su soporte y la carga operativa, no solo por sus funcionalidades. Haz una prueba de concepto corta y con tiempo límite antes de comprometerte. Los asistentes de IA facilitan aprender herramientas desconocidas, pero no eliminan la necesidad de que alguien sea dueño de la herramienta en producción.</p></div>
+        <div class="inshort"><b>En resumen</b><p>Para sistemas críticos como la autenticación, evalúa cada opción según qué tanto la conoce el equipo, su documentación, su soporte y la carga operativa, no solo por sus funcionalidades. Haz una prueba de concepto corta y con tiempo límite antes de comprometerte. La IA facilita aprender herramientas desconocidas y abarata mucho construir las propias, pero no elimina la necesidad de que alguien sea dueño de la herramienta en producción. Y las propias herramientas de IA merecen la misma matriz.</p></div>
 
         <h2>Qué pasó</h2>
         <p>En Fincaraiz estábamos migrando un monolito ASP.NET heredado a microservicios con Django y React, para una plataforma con más de 5 millones de visitas al mes. El sistema viejo y el nuevo tenían que funcionar en paralelo, así que necesitábamos una sola capa de identidad que ambos pudieran compartir. Keycloak era una elección razonable: código abierto, completo y muy usado para inicio de sesión único.</p>
@@ -30,10 +30,13 @@
               <tr><td>Soporte</td><td>¿Hay una comunidad activa, soporte pago o ambos? ¿Qué tan rápido se responden los problemas?</td></tr>
               <tr><td>Carga operativa</td><td>¿Quién la parcha, la actualiza y la monitorea, y cuánto tiempo toma cada mes?</td></tr>
               <tr><td>Esfuerzo de integración</td><td>¿Cuánto código a la medida necesita para funcionar con nuestros sistemas?</td></tr>
+              <tr><td>Encaje con la IA</td><td>¿Qué tan bien la conocen los asistentes de IA? ¿Es muy usada o de código abierto, con documentación pública clara, o incluso con un servidor MCP al que puedan conectarse nuestros asistentes?</td></tr>
+              <tr><td>Exposición de datos</td><td>¿Qué datos enviaría la herramienta, o las funciones de IA que trae incorporadas, fuera de nuestros sistemas, y tenemos permiso para enviarlos?</td></tr>
             </tbody>
           </table>
         </div>
         <p>Una herramienta con puntaje bajo en encaje y experiencia del equipo todavía puede ganar, pero solo si el plan incluye el tiempo y la formación para aprenderla, y un responsable con nombre propio.</p>
+        <p>Las dos últimas filas no existían cuando elegimos Keycloak. El encaje con la IA importa porque hoy un equipo aprende una herramienta nueva en parte a través de sus asistentes: una herramienta muy usada y con buena documentación pública recibe ayuda precisa, mientras que una poco común recibe suposiciones dichas con seguridad. La exposición de datos importa porque cada vez más herramientas traen funciones de IA que envían tus datos a un proveedor de modelos, a veces activadas por defecto.</p>
 
         <h2>Construir, alojar o comprar</h2>
         <p>En el caso de la identidad, las opciones hoy se dividen en dos grupos, y la elección correcta depende tanto de tu equipo como de tus requisitos:</p>
@@ -49,15 +52,43 @@
           <li><strong>Aprender un stack desconocido es más rápido.</strong> Asistentes como Claude Code, Cursor o GitHub Copilot pueden explicar un código en Java que no conoces, guiarte por la configuración y escribir un primer borrador del código de integración. La penalidad de "no conocemos este lenguaje" es menor que antes.</li>
           <li><strong>Las pruebas de concepto son más baratas.</strong> Un prototipo funcional muchas veces se puede construir en días en lugar de semanas, así que no hay excusa para saltárselo con una herramienta crítica.</li>
           <li><strong>Los vacíos de documentación son más fáciles de cubrir.</strong> Un asistente puede leer el código fuente y el registro de incidencias cuando la documentación se queda corta.</li>
+          <li><strong>Los agentes pueden hacer la primera ronda de la evaluación.</strong> Los agentes de programación con IA ya pueden instalar una herramienta en un entorno aislado, configurarla, escribir pruebas de integración y reportar qué falló, muchas veces en una tarde. Eso hace realista una prueba de concepto pequeña sobre dos o tres opciones en lugar de una.</li>
           <li><strong>Pero la responsabilidad sigue siendo humana.</strong> La IA puede ayudarte a configurar una herramienta. No puede estar de guardia por ella, y en configuraciones poco comunes puede equivocarse con total seguridad. En sistemas críticos para la seguridad, cada cambio sugerido por IA necesita la revisión de alguien que lo entienda.</li>
         </ul>
+
+        <h2>Una cuarta opción: construirla con IA</h2>
+        <p>Construir, alojar o comprar tenía un sesgo evidente: construir era caro, así que se compraba o se autoalojaba. Los asistentes de programación con IA cambiaron eso. Una herramienta interna pequeña, una integración o una pantalla de administración que antes tomaba semanas ahora se puede generar en días.</p>
+        <p>Eso hace tentador construir, y a veces es lo correcto. Pero el código generado tiene el mismo dueño que el código escrito a mano: tú. Alguien tiene que entenderlo, probarlo, parcharlo y mantenerlo funcionando cuando la persona que escribió el prompt ya no esté.</p>
+        <p>Mi regla general:</p>
+        <div class="table-wrap">
+          <table>
+            <thead><tr><th>Tipo de sistema</th><th>¿Construirlo con IA?</th></tr></thead>
+            <tbody>
+              <tr><td>Herramientas internas pequeñas, scripts, pantallas de administración, integraciones puntuales</td><td>Muchas veces sí. Barato de construir, de bajo riesgo y fácil de reemplazar.</td></tr>
+              <tr><td>Funcionalidades centrales del producto que el equipo hará evolucionar durante años</td><td>Sí, si el equipo revisa y entiende cada cambio.</td></tr>
+              <tr><td>Infraestructura crítica para la seguridad: autenticación, pagos, cifrado</td><td>No. Usa un producto o servicio probado. Que sea barato de generar no lo hace seguro de mantener.</td></tr>
+            </tbody>
+          </table>
+        </div>
+        <p>La identidad está en la última fila. La IA habría hecho más rápida nuestra integración con Keycloak. No habría hecho que escribir nuestro propio proveedor de identidad fuera una buena idea.</p>
+
+        <h2>Las herramientas de IA también necesitan una matriz</h2>
+        <p>El mismo error que cometimos con Keycloak es fácil de repetir con la propia IA: elegir un modelo, un asistente o una plataforma de agentes por una demostración, sin preguntar quién se hará responsable. La matriz anterior sigue aplicando, con algunas preguntas más:</p>
+        <ul>
+          <li><strong>Evaluaciones.</strong> ¿Podemos medir si funciona en nuestras tareas reales, con un conjunto de pruebas, y no solo en una demostración?</li>
+          <li><strong>Costo a escala.</strong> ¿Cuánto cuesta por uso cuando todo el equipo, o cada cliente, lo usa todos los días?</li>
+          <li><strong>Ritmo de cambio.</strong> Los modelos y las herramientas cambian cada pocos meses. ¿Podemos fijar una versión, y quién revisa que una actualización no rompió nada?</li>
+          <li><strong>Manejo de datos.</strong> ¿A dónde van los prompts y las respuestas, se guardan, y se usan para entrenar?</li>
+          <li><strong>Plan de salida.</strong> Si el proveedor cambia precios o condiciones, ¿qué tan difícil es cambiarse?</li>
+        </ul>
+        <p>Las herramientas de IA avanzan más rápido que cualquier otra parte del stack, y eso hace más importante, no menos, tener un responsable con nombre propio.</p>
 
         <h2>Un proceso simple para tu próxima decisión</h2>
         <ol>
           <li>Escribe los requisitos, incluido quién va a operar la herramienta.</li>
-          <li>Preselecciona dos o tres opciones, incluida al menos una que el equipo ya conozca.</li>
-          <li>Califica cada opción con la matriz anterior.</li>
-          <li>Haz una prueba de concepto con tiempo límite sobre la mejor opción, usando asistentes de IA para avanzar rápido.</li>
+          <li>Preselecciona dos o tres opciones, incluida al menos una que el equipo ya conozca, y considera si construirla con IA es una opción real.</li>
+          <li>Califica cada opción con la matriz anterior, incluidos el encaje con la IA y la exposición de datos.</li>
+          <li>Haz una prueba de concepto con tiempo límite sobre las mejores opciones, usando agentes de IA para avanzar rápido. Pide a un asistente que argumente en contra de tu opción favorita y luego verifica lo que dice.</li>
           <li>Decide, nombra un responsable y deja por escrito las razones para que el próximo equipo entienda la elección.</li>
         </ol>
 

@@ -2,13 +2,13 @@
     <nav class="crumbs" aria-label="Breadcrumb"><a href="/">Home</a><span>/</span><a href="/writing/">Writing</a><span>/</span><span>Architecture</span></nav>
     <p class="eyebrow">Architecture</p>
     <h1>Pick the tool your team can support, not the one on the shortlist.</h1>
-    <p class="summary">During a large platform migration we chose Keycloak for single sign-on. It was a strong tool on paper, but it was new to the team and built on a stack we didn't know, and that piece of work took six times longer than planned. Here is what went wrong, the scorecard we used afterwards, and how AI assistants change the trade-off today.</p>
-    <div class="byline"><span>By Erwin Mongui</span><span>September 21, 2026</span><span>7 min read</span><a class="link" href="/es/articulos/elegir-herramientas-que-tu-equipo-pueda-sostener/" hreflang="es" lang="es">Leer en español</a></div>
+    <p class="summary">During a large platform migration we chose Keycloak for single sign-on. It was a strong tool on paper, but it was new to the team and built on a stack we didn't know, and that piece of work took six times longer than planned. Here is what went wrong, the scorecard we used afterwards, and how AI changes the trade-off today, including when to build with AI and how to choose AI tools themselves.</p>
+    <div class="byline"><span>By Erwin Mongui</span><span>First published September 21, 2026</span><span>Updated October 10, 2026</span><span>9 min read</span><a class="link" href="/es/articulos/elegir-herramientas-que-tu-equipo-pueda-sostener/" hreflang="es" lang="es">Leer en español</a></div>
   </header>
   <section class="doc">
     <div class="doc-grid">
       <div class="prose">
-        <div class="inshort"><b>In short</b><p>For mission-critical systems like authentication, score every option on team familiarity, documentation, support and operational load, not only on features. Run a short, time-boxed proof of concept before you commit. AI assistants make unfamiliar tools easier to learn, but they don't remove the need for someone to own the tool in production.</p></div>
+        <div class="inshort"><b>In short</b><p>For mission-critical systems like authentication, score every option on team familiarity, documentation, support and operational load, not only on features. Run a short, time-boxed proof of concept before you commit. AI makes unfamiliar tools easier to learn and makes building your own far cheaper, but it doesn't remove the need for someone to own the tool in production. And the AI tools themselves deserve the same scorecard.</p></div>
 
         <h2>What happened</h2>
         <p>At Fincaraiz we were moving a legacy ASP.NET monolith to Django and React microservices, for a platform with more than 5 million monthly visits. The old and new systems had to run side by side, so we needed one identity layer both could share. Keycloak was a sensible choice: open source, full-featured and widely used for single sign-on.</p>
@@ -30,10 +30,13 @@
               <tr><td>Support</td><td>Is there an active community, paid support, or both? How fast do issues get answered?</td></tr>
               <tr><td>Operational load</td><td>Who patches, upgrades and monitors it, and how much time does that take each month?</td></tr>
               <tr><td>Integration effort</td><td>How much custom code does it need to work with our systems?</td></tr>
+              <tr><td>AI fit</td><td>How well do AI assistants know it? Is it widely used or open source, with clear public docs, or even an MCP server our assistants can connect to?</td></tr>
+              <tr><td>Data exposure</td><td>What data would the tool, or the AI features built into it, send outside our systems, and are we allowed to send it?</td></tr>
             </tbody>
           </table>
         </div>
         <p>A tool that scores low on stack fit and team experience can still win, but only if the plan includes the time and training to learn it, and a named owner.</p>
+        <p>The last two rows didn't exist when we chose Keycloak. AI fit matters because a team now learns a new tool partly through its assistants: a widely used tool with good public docs gets accurate help, while a niche one gets confident guesses. Data exposure matters because more tools now ship with AI features that send your data to a model provider, sometimes switched on by default.</p>
 
         <h2>Build, host or buy</h2>
         <p>For identity specifically, the options today fall into two groups, and the right choice depends on your team as much as your requirements:</p>
@@ -49,15 +52,43 @@
           <li><strong>Learning an unfamiliar stack is faster.</strong> Assistants like Claude Code, Cursor or GitHub Copilot can explain an unfamiliar Java codebase, walk through configuration, and draft integration code. The "we don't know this language" penalty is smaller than it was.</li>
           <li><strong>Proofs of concept are cheaper.</strong> A working spike can often be built in days instead of weeks, so there is no excuse to skip one for a critical tool.</li>
           <li><strong>Documentation gaps are easier to bridge.</strong> An assistant can read the source code and the issue tracker when the docs fall short.</li>
+          <li><strong>Agents can do the first pass of the evaluation.</strong> AI coding agents can now install a tool in a sandbox, configure it, write integration tests and report what broke, often in an afternoon. That makes it realistic to run a small proof of concept on two or three options instead of one.</li>
           <li><strong>But ownership stays human.</strong> AI can help you set a tool up. It can't be on call for it, and for niche configuration it can be confidently wrong. For security-critical systems, every AI-suggested change still needs review by someone who understands it.</li>
         </ul>
+
+        <h2>A fourth option: build it with AI</h2>
+        <p>Build, host or buy used to have an obvious bias: building was expensive, so you bought or self-hosted. AI coding assistants have changed that. A small internal tool, an integration or an admin screen that once took weeks can now be generated in days.</p>
+        <p>That makes building tempting, and sometimes right. But generated code has the same owner as handwritten code: you. Someone has to understand it, test it, patch it and keep it running after the person who prompted it moves on.</p>
+        <p>My rule of thumb:</p>
+        <div class="table-wrap">
+          <table>
+            <thead><tr><th>Kind of system</th><th>Build with AI?</th></tr></thead>
+            <tbody>
+              <tr><td>Small internal tools, scripts, admin screens, one-off integrations</td><td>Often yes. Cheap to build, low risk, easy to replace.</td></tr>
+              <tr><td>Core product features your team will evolve for years</td><td>Yes, if the team reviews and understands every change.</td></tr>
+              <tr><td>Security-critical infrastructure: authentication, payments, encryption</td><td>No. Use a proven product or service. Being cheap to generate doesn't make it safe to own.</td></tr>
+            </tbody>
+          </table>
+        </div>
+        <p>Identity is in the last row. AI would have made our Keycloak integration faster. It would not have made writing our own identity provider a good idea.</p>
+
+        <h2>The AI tools need a scorecard too</h2>
+        <p>The same mistake we made with Keycloak is easy to repeat with AI itself: choosing a model, an assistant or an agent platform because of a demo, without asking who will own it. The scorecard above still applies, with a few additions:</p>
+        <ul>
+          <li><strong>Evaluations.</strong> Can we measure whether it works on our real tasks, with a test set, not only in a demo?</li>
+          <li><strong>Cost at scale.</strong> What does it cost per use when the whole team, or every customer, uses it every day?</li>
+          <li><strong>Change rate.</strong> Models and tools change every few months. Can we pin a version, and who checks that an update didn't break anything?</li>
+          <li><strong>Data handling.</strong> Where do prompts and outputs go, are they retained, and are they used for training?</li>
+          <li><strong>Exit plan.</strong> If the provider changes price or terms, how hard is it to switch?</li>
+        </ul>
+        <p>AI tools are moving faster than anything else in the stack, which makes a named owner more important, not less.</p>
 
         <h2>A simple process for your next decision</h2>
         <ol>
           <li>Write down the requirements, including who will operate the tool.</li>
-          <li>Shortlist two or three options, including at least one the team already knows.</li>
-          <li>Score each option with the scorecard above.</li>
-          <li>Run a time-boxed proof of concept on the top option, using AI assistants to move fast.</li>
+          <li>Shortlist two or three options, including at least one the team already knows, and consider whether building it with AI is a real option.</li>
+          <li>Score each option with the scorecard above, including AI fit and data exposure.</li>
+          <li>Run a time-boxed proof of concept on the top options, using AI agents to move fast. Ask an assistant to argue against your favourite option, then check its claims.</li>
           <li>Decide, name an owner, and record the reasons so the next team understands the choice.</li>
         </ol>
 

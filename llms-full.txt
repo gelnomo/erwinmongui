@@ -1491,17 +1491,17 @@ Case study: data platform from zeroWhat new graduates need for a career in AIHow
 ---
 
 URL: https://erwinmongui.com/writing/choose-tools-your-team-can-support/
-Published 2026-09-21
+Published 2026-09-21, updated 2026-10-10
 
 Architecture
 
 # Pick the tool your team can support, not the one on the shortlist.
 
-During a large platform migration we chose Keycloak for single sign-on. It was a strong tool on paper, but it was new to the team and built on a stack we didn't know, and that piece of work took six times longer than planned. Here is what went wrong, the scorecard we used afterwards, and how AI assistants change the trade-off today.
+During a large platform migration we chose Keycloak for single sign-on. It was a strong tool on paper, but it was new to the team and built on a stack we didn't know, and that piece of work took six times longer than planned. Here is what went wrong, the scorecard we used afterwards, and how AI changes the trade-off today, including when to build with AI and how to choose AI tools themselves.
 
 In short
 
-For mission-critical systems like authentication, score every option on team familiarity, documentation, support and operational load, not only on features. Run a short, time-boxed proof of concept before you commit. AI assistants make unfamiliar tools easier to learn, but they don't remove the need for someone to own the tool in production.
+For mission-critical systems like authentication, score every option on team familiarity, documentation, support and operational load, not only on features. Run a short, time-boxed proof of concept before you commit. AI makes unfamiliar tools easier to learn and makes building your own far cheaper, but it doesn't remove the need for someone to own the tool in production. And the AI tools themselves deserve the same scorecard.
 
 ## What happened
 
@@ -1533,7 +1533,13 @@ Operational load | Who patches, upgrades and monitors it, and how much time does
 
 Integration effort | How much custom code does it need to work with our systems?
 
+AI fit | How well do AI assistants know it? Is it widely used or open source, with clear public docs, or even an MCP server our assistants can connect to?
+
+Data exposure | What data would the tool, or the AI features built into it, send outside our systems, and are we allowed to send it?
+
 A tool that scores low on stack fit and team experience can still win, but only if the plan includes the time and training to learn it, and a named owner.
+
+The last two rows didn't exist when we chose Keycloak. AI fit matters because a team now learns a new tool partly through its assistants: a widely used tool with good public docs gets accurate help, while a niche one gets confident guesses. Data exposure matters because more tools now ship with AI features that send your data to a model provider, sometimes switched on by default.
 
 ## Build, host or buy
 
@@ -1555,17 +1561,53 @@ If we faced the same decision today, AI tools would help in three ways, and leav
 
 - Documentation gaps are easier to bridge. An assistant can read the source code and the issue tracker when the docs fall short.
 
+- Agents can do the first pass of the evaluation. AI coding agents can now install a tool in a sandbox, configure it, write integration tests and report what broke, often in an afternoon. That makes it realistic to run a small proof of concept on two or three options instead of one.
+
 - But ownership stays human. AI can help you set a tool up. It can't be on call for it, and for niche configuration it can be confidently wrong. For security-critical systems, every AI-suggested change still needs review by someone who understands it.
+
+## A fourth option: build it with AI
+
+Build, host or buy used to have an obvious bias: building was expensive, so you bought or self-hosted. AI coding assistants have changed that. A small internal tool, an integration or an admin screen that once took weeks can now be generated in days.
+
+That makes building tempting, and sometimes right. But generated code has the same owner as handwritten code: you. Someone has to understand it, test it, patch it and keep it running after the person who prompted it moves on.
+
+My rule of thumb:
+
+Kind of system | Build with AI?
+
+Small internal tools, scripts, admin screens, one-off integrations | Often yes. Cheap to build, low risk, easy to replace.
+
+Core product features your team will evolve for years | Yes, if the team reviews and understands every change.
+
+Security-critical infrastructure: authentication, payments, encryption | No. Use a proven product or service. Being cheap to generate doesn't make it safe to own.
+
+Identity is in the last row. AI would have made our Keycloak integration faster. It would not have made writing our own identity provider a good idea.
+
+## The AI tools need a scorecard too
+
+The same mistake we made with Keycloak is easy to repeat with AI itself: choosing a model, an assistant or an agent platform because of a demo, without asking who will own it. The scorecard above still applies, with a few additions:
+
+- Evaluations. Can we measure whether it works on our real tasks, with a test set, not only in a demo?
+
+- Cost at scale. What does it cost per use when the whole team, or every customer, uses it every day?
+
+- Change rate. Models and tools change every few months. Can we pin a version, and who checks that an update didn't break anything?
+
+- Data handling. Where do prompts and outputs go, are they retained, and are they used for training?
+
+- Exit plan. If the provider changes price or terms, how hard is it to switch?
+
+AI tools are moving faster than anything else in the stack, which makes a named owner more important, not less.
 
 ## A simple process for your next decision
 
 - Write down the requirements, including who will operate the tool.
 
-- Shortlist two or three options, including at least one the team already knows.
+- Shortlist two or three options, including at least one the team already knows, and consider whether building it with AI is a real option.
 
-- Score each option with the scorecard above.
+- Score each option with the scorecard above, including AI fit and data exposure.
 
-- Run a time-boxed proof of concept on the top option, using AI assistants to move fast.
+- Run a time-boxed proof of concept on the top options, using AI agents to move fast. Ask an assistant to argue against your favourite option, then check its claims.
 
 - Decide, name an owner, and record the reasons so the next team understands the choice.
 

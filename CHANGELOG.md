@@ -2,6 +2,12 @@
 
 Notable changes to erwinmongui.com. Each version has a `## vX.Y.Z` heading; pushing a matching tag, or running the Release workflow from the Actions tab with that version, publishes the section as a GitHub release (see `.github/workflows/release.yml`).
 
+## v1.14.0 (2026-10-10)
+
+### Writing
+
+- "Pick the tool your team can support, not the one on the shortlist" is updated for AI, in English and Spanish (`/writing/choose-tools-your-team-can-support/`, `/es/articulos/elegir-herramientas-que-tu-equipo-pueda-sostener/`). The scorecard has two new criteria, AI fit and data exposure. New sections: "A fourth option: build it with AI", with a table of when building with AI makes sense, and "The AI tools need a scorecard too", on choosing models, assistants and agent platforms. The AI section notes that agents can run the first pass of an evaluation, and the decision process now covers building with AI. Both versions show "Updated October 10, 2026".
+
 ## v1.13.0 (2026-10-08)
 
 ### Writing
